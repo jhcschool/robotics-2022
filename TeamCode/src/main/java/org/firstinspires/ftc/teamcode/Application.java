@@ -10,13 +10,14 @@ import java.util.ArrayList;
 public abstract class Application extends OpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
+    private Hardware hardware;
 
     @Override
     public void init() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        Hardware.getInstance().init(hardwareMap);
+        hardware = new Hardware(hardwareMap);
     }
 
     @Override
@@ -28,16 +29,17 @@ public abstract class Application extends OpMode {
         runtime.reset();
     }
 
-    double time = runtime.milliseconds();
+
+    private double time;
 
     @Override
     public void loop() {
 
         FrameInfo frameInfo = new FrameInfo();
         {
-            double newTime = runtime.milliseconds();
-            frameInfo.deltaTime = newTime - time;
-            time = newTime;
+            frameInfo.time = runtime.milliseconds();
+            frameInfo.deltaTime = frameInfo.time - time;
+            time = frameInfo.time;
 
             for (Layer layer : layers) {
                 layer.tick(frameInfo);
@@ -46,18 +48,21 @@ public abstract class Application extends OpMode {
 
         }
 
-        Hardware.getInstance().update(telemetry);
-
+        hardware.update(telemetry);
 
     }
 
     public void addLayer(Layer layer) {
         layers.add(layer);
-        layer.init();
+
+        LayerInitInfo info = new LayerInitInfo();
+        info.hardwareMap = hardwareMap;
+
+        layer.init(info);
     }
 
     public void removeLayer(Layer layer) {
-        layers.remove(layer)
+        layers.remove(layer);
     }
 
     ArrayList<Layer> layers = new ArrayList<Layer>();
