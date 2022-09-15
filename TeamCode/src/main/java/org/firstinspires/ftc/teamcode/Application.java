@@ -39,6 +39,7 @@ public abstract class Application extends OpMode {
         {
             frameInfo.time = runtime.milliseconds();
             frameInfo.deltaTime = frameInfo.time - time;
+
             time = frameInfo.time;
 
             for (Layer layer : layers) {
@@ -57,6 +58,8 @@ public abstract class Application extends OpMode {
 
         LayerInitInfo info = new LayerInitInfo();
         info.hardwareMap = hardwareMap;
+        info.hardware = hardware;
+        info.telemetry = telemetry;
 
         layer.init(info);
     }

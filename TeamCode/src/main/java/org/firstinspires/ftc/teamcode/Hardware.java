@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
 
 public class Hardware {
@@ -15,7 +16,7 @@ public class Hardware {
     public DcMotor backLeftMotor;
     public DcMotor backRightMotor;
 
-    public Camera camera;
+    public WebcamName webcamName;
 
     public Gamepad gamepad;
 
@@ -25,7 +26,7 @@ public class Hardware {
         frontRightMotor = map.get(frontRightMotor.getClass(), "frontRightMotor");
         backRightMotor = map.get(backRightMotor.getClass(), "backRightMotor");
 
-        camera = map.get(camera.getClass(), "camera");
+        webcamName = map.get(webcamName.getClass(), "webcam");
 
         gamepad = map.get(gamepad.getClass(), "gamepad");
     }
