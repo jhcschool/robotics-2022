@@ -25,7 +25,6 @@ public class ContourPipeline extends OpenCvPipeline {
     private String[] labels;
 
     public ContourPipeline() {
-
     }
 
     public ContourPipeline(Scalar[] lowerBounds, Scalar[] upperBounds, String[] labels) {

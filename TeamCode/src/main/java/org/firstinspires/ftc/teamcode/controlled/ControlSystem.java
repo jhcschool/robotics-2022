@@ -12,8 +12,8 @@ public class ControlSystem {
 
     public void tick(Gamepad gamepad, Hardware hardware) {
 
-        int left = 0;
-        int right = 0;
+        double left = 0;
+        double right = 0;
 
         left += gamepad.left_stick_y;
         right += gamepad.left_stick_y;
@@ -24,10 +24,13 @@ public class ControlSystem {
         left = Math.min(1, Math.max(-1, left));
         right = Math.min(1, Math.max(-1, right));
 
-        hardware.frontLeftMotor.setPower(left);
-        hardware.backLeftMotor.setPower(left);
-        hardware.frontRightMotor.setPower(right);
-        hardware.backRightMotor.setPower(right);
+        double frontLeft = left - gamepad.left_stick_x;
+        double backLeft = left + gamepad.left_stick_x;
+
+        double frontRight = right + gamepad.left_stick_x;
+        double backRight = right - gamepad.left_stick_x;
+
+        hardware.drive.setMotorPowers(frontLeft, backLeft, frontRight, backRight);
     }
 
 }
