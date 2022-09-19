@@ -29,7 +29,10 @@ public class OpenObjectDetector implements ObjectDetector {
         this.pipeline = pipeline;
 
         camera.setPipeline(pipeline);
+    }
 
+    @Override
+    public void start() {
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
             @Override
@@ -44,6 +47,11 @@ public class OpenObjectDetector implements ObjectDetector {
                 // Handle error
             }
         });
+    }
+
+    @Override
+    public void stop() {
+        camera.stopStreaming();
     }
 
     public Recognition[] getRecognitions() {

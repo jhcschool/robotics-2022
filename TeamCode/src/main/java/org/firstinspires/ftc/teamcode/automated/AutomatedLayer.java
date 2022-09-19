@@ -15,6 +15,11 @@ import org.opencv.core.Scalar;
 
 public class AutomatedLayer extends Layer {
 
+    enum CustomSleeve {
+        RED,
+        GREEN,
+        BLUE,
+    }
 
     private static final String[] LABELS = {"Red", "Green", "Blue"};
     private static final Scalar[] lowerBounds = {new Scalar(0, 0, 0), new Scalar(0, 0, 0), new Scalar(0, 0, 0)};
@@ -24,6 +29,7 @@ public class AutomatedLayer extends Layer {
     Hardware hardware;
 
     ObjectDetector objectDetector;
+    CustomSleeve sleeveColor;
 
     @Override
     public void init(LayerInitInfo initInfo) {
@@ -40,9 +46,29 @@ public class AutomatedLayer extends Layer {
         pipeline.setUpperBounds(upperBounds);
 
         objectDetector = new OpenObjectDetector(viewId, hardware.webcamName, pipeline, 1280, 720);
-        // objectDetector = new TensorflowObjectDetector(viewId, hardware.webcamName, "CustomDetector.tflite", LABELS);
+        // objectDetector = new TensorflowObjectDetector(viewId, hardware.webcamName, "CustomSleeve.tflite", LABELS);
 
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        objectDetector.start();
+
+        Recognition[] recognitions = objectDetector.getRecognitions();
+
+        float maxConfidence = 0;
+        for (Recognition recognition : recognitions) {
+            telemetry.addData(recognition.getLabel(), recognition.getConfidence());
+            if (recognition.getConfidence() > maxConfidence) {
+                maxConfidence = recognition.getConfidence();
+                sleeveColor = CustomSleeve.valueOf(recognition.getLabel().toUpperCase());
+            }
+        }
+
+        telemetry.addData("Sleeve Color", sleeveColor);
     }
 
     @Override
@@ -63,6 +89,7 @@ public class AutomatedLayer extends Layer {
     public void onEnd() {
         super.onEnd();
 
+        objectDetector.stop();
         PoseStorage.robotPose = hardware.drive.getPoseEstimate();
     }
 }

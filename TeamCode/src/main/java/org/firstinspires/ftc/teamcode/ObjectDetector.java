@@ -4,4 +4,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
 public interface ObjectDetector {
     public Recognition[] getRecognitions();
+
+    public void start();
+    public void stop();
 }

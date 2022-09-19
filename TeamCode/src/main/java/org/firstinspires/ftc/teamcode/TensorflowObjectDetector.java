@@ -47,4 +47,13 @@ public class TensorflowObjectDetector implements ObjectDetector {
         return tfod.getRecognitions().toArray(new Recognition[0]);
     }
 
+    @Override
+    public void start() {
+        tfod.activate();
+    }
+
+    @Override
+    public void stop() {
+        tfod.shutdown();
+    }
 }
