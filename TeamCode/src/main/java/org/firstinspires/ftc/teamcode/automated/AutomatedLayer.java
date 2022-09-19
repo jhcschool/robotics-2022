@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.teamcode.Layer;
 import org.firstinspires.ftc.teamcode.LayerInitInfo;
 import org.firstinspires.ftc.teamcode.ObjectDetector;
+import org.firstinspires.ftc.teamcode.PoseStorage;
 import org.firstinspires.ftc.teamcode.TensorflowObjectDetector;
 import org.firstinspires.ftc.teamcode.opencv.ContourPipeline;
 import org.firstinspires.ftc.teamcode.opencv.OpenObjectDetector;
@@ -14,9 +15,10 @@ import org.opencv.core.Scalar;
 
 public class AutomatedLayer extends Layer {
 
-    static final String[] LABELS = {"Red", "Green", "Blue"};
-    static final Scalar[] lowerBounds = {new Scalar(0, 0, 0), new Scalar(0, 0, 0), new Scalar(0, 0, 0)};
-    static final Scalar[] upperBounds = {new Scalar(0, 0, 0), new Scalar(0, 0, 0), new Scalar(0, 0, 0)};
+
+    private static final String[] LABELS = {"Red", "Green", "Blue"};
+    private static final Scalar[] lowerBounds = {new Scalar(0, 0, 0), new Scalar(0, 0, 0), new Scalar(0, 0, 0)};
+    private static final Scalar[] upperBounds = {new Scalar(0, 0, 0), new Scalar(0, 0, 0), new Scalar(0, 0, 0)};
 
     Telemetry telemetry;
     Hardware hardware;
@@ -55,5 +57,12 @@ public class AutomatedLayer extends Layer {
         }
 
         telemetry.addData("Recognitions", recognitions.length);
+    }
+
+    @Override
+    public void onEnd() {
+        super.onEnd();
+
+        PoseStorage.robotPose = hardware.drive.getPoseEstimate();
     }
 }

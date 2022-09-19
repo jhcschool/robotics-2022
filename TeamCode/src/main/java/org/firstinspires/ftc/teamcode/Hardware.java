@@ -33,6 +33,7 @@ public class Hardware {
     }
 
     public void update(Telemetry telemetry) {
+        drive.update();
         telemetry.update();
     }
 }

@@ -13,4 +13,7 @@ public class Layer {
 
     public void tick(FrameInfo frameInfo) {
     }
+
+    public void onEnd() {
+    }
 }

@@ -21,7 +21,7 @@ public abstract class Application extends LinearOpMode {
         onInit();
         waitForStart();
         onStart();
-        while (opModeIsActive()) {
+        while (opModeIsActive() && !isStopRequested()) {
             tick();
         }
     }
@@ -62,6 +62,12 @@ public abstract class Application extends LinearOpMode {
 
         hardware.update(telemetry);
 
+    }
+
+    public void onEnd() {
+        for (Layer layer : layers) {
+            layer.onEnd();
+        }
     }
 
     public void addLayer(Layer layer) {
