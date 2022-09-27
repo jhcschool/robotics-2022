@@ -1,35 +1,32 @@
 package org.firstinspires.ftc.teamcode.automated;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.ArmSystem;
 import org.firstinspires.ftc.teamcode.FrameInfo;
 import org.firstinspires.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.teamcode.Layer;
 import org.firstinspires.ftc.teamcode.LayerInitInfo;
-import org.firstinspires.ftc.teamcode.ObjectDetector;
+import org.firstinspires.ftc.teamcode.LaneSystem;
 import org.firstinspires.ftc.teamcode.PoseStorage;
-import org.firstinspires.ftc.teamcode.TensorflowObjectDetector;
-import org.firstinspires.ftc.teamcode.opencv.ContourPipeline;
-import org.firstinspires.ftc.teamcode.opencv.OpenObjectDetector;
-import org.opencv.core.Scalar;
+import org.firstinspires.ftc.teamcode.game.GameConstants;
 
 public class AutomatedLayer extends Layer {
 
-    enum CustomSleeve {
-        RED,
-        GREEN,
-        BLUE,
-    }
+    private Telemetry telemetry;
+    private Hardware hardware;
 
-    private static final String[] LABELS = {"Red", "Green", "Blue"};
-    private static final Scalar[] lowerBounds = {new Scalar(0, 0, 0), new Scalar(0, 0, 0), new Scalar(0, 0, 0)};
-    private static final Scalar[] upperBounds = {new Scalar(0, 0, 0), new Scalar(0, 0, 0), new Scalar(0, 0, 0)};
+    private SleeveDetector.CustomSleeve sleeveColor;
+    private SleeveDetector sleeveDetector;
 
-    Telemetry telemetry;
-    Hardware hardware;
+    private LaneSystem laneSystem;
+    private ArmSystem armSystem;
 
-    ObjectDetector objectDetector;
-    CustomSleeve sleeveColor;
+    private static final Pose2d STARTING_POSE = new Pose2d(0, 0, Math.toRadians(0));
 
     @Override
     public void init(LayerInitInfo initInfo) {
@@ -40,56 +37,73 @@ public class AutomatedLayer extends Layer {
 
         int viewId = initInfo.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", initInfo.hardwareMap.appContext.getPackageName());
 
-        ContourPipeline pipeline = new ContourPipeline();
-        pipeline.setLabels(LABELS);
-        pipeline.setLowerBounds(lowerBounds);
-        pipeline.setUpperBounds(upperBounds);
-
-        objectDetector = new OpenObjectDetector(viewId, hardware.webcamName, pipeline, 1280, 720);
-        // objectDetector = new TensorflowObjectDetector(viewId, hardware.webcamName, "CustomSleeve.tflite", LABELS);
-
-
+        sleeveDetector = new SleeveDetector(viewId, hardware);
+        laneSystem = new LaneSystem(hardware.drive, GameConstants.LANE_COORDINATES);
     }
 
     @Override
     public void onStart() {
         super.onStart();
 
-        objectDetector.start();
+        hardware.drive.setPoseEstimate(STARTING_POSE);
 
-        Recognition[] recognitions = objectDetector.getRecognitions();
-
-        float maxConfidence = 0;
-        for (Recognition recognition : recognitions) {
-            telemetry.addData(recognition.getLabel(), recognition.getConfidence());
-            if (recognition.getConfidence() > maxConfidence) {
-                maxConfidence = recognition.getConfidence();
-                sleeveColor = CustomSleeve.valueOf(recognition.getLabel().toUpperCase());
-            }
-        }
-
-        telemetry.addData("Sleeve Color", sleeveColor);
+        sleeveColor = sleeveDetector.getSingleDetection();
     }
 
     @Override
     public void tick(FrameInfo frameInfo) {
         super.tick(frameInfo);
 
-        Recognition[] recognitions = objectDetector.getRecognitions();
-        String[] labels = new String[recognitions.length];
-
-        for (int i = 0; i < recognitions.length; i++) {
-            labels[i] = recognitions[i].getLabel();
-        }
-
-        telemetry.addData("Recognitions", recognitions.length);
+        laneSystem.tick();
+        armSystem.tick();
     }
 
     @Override
     public void onEnd() {
         super.onEnd();
 
-        objectDetector.stop();
         PoseStorage.robotPose = hardware.drive.getPoseEstimate();
     }
+
+    private void onJunctionArrival() {
+
+    }
+
+    private void navigateToNearestJunction() {
+        Pose2d pose = hardware.drive.getPoseEstimate();
+
+        Vector2d nearestJunction = GameConstants.HIGH_JUNCTIONS[0];
+
+        for (Vector2d junction: GameConstants.HIGH_JUNCTIONS) {
+
+            double distance = pose.vec().distTo(junction);
+            if (distance < pose.vec().distTo(nearestJunction)) {
+                nearestJunction = junction;
+            }
+        }
+
+        float endDistance = laneSystem.beginNavigatingTo(nearestJunction, 0, this::onJunctionArrival);
+
+//        double angleToNearestJunction = Math.atan2(nearestJunction.getY() - pose.getY(), nearestJunction.getX() - pose.getX());
+//        // go to 10 inches away from the junction
+//        distanceToNearestJunction -= 10;
+//        Pose2d target = new Pose2d(Math.cos(angleToNearestJunction) * distanceToNearestJunction, Math.sin(angleToNearestJunction) * distanceToNearestJunction, angleToNearestJunction);
+//
+//        Trajectory trajectory = hardware.drive.trajectoryBuilder(pose).lineToSplineHeading(target).addDisplacementMarker(this::onJunctionArrival).build();
+    }
+
+    private Trajectory navigateToSignalZone() {
+        Pose2d pose = hardware.drive.getPoseEstimate();
+        TrajectoryBuilder builder = hardware.drive.trajectoryBuilder(pose).lineToSplineHeading(STARTING_POSE);
+
+        if (sleeveColor == SleeveDetector.CustomSleeve.RED) {
+            builder.strafeLeft(10);
+
+        } else if (sleeveColor == SleeveDetector.CustomSleeve.BLUE) {
+            builder.strafeRight(10);
+        }
+
+        return builder.build();
+    }
+
 }

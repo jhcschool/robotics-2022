@@ -46,6 +46,8 @@ public abstract class Application extends LinearOpMode {
 
     public void tick() {
 
+        hardware.update(telemetry);
+
         FrameInfo frameInfo = new FrameInfo();
         {
             frameInfo.time = runtime.milliseconds();
@@ -59,9 +61,6 @@ public abstract class Application extends LinearOpMode {
 
 
         }
-
-        hardware.update(telemetry);
-
     }
 
     public void onEnd() {
@@ -85,5 +84,5 @@ public abstract class Application extends LinearOpMode {
         layers.remove(layer);
     }
 
-    ArrayList<Layer> layers = new ArrayList<Layer>();
+    private ArrayList<Layer> layers = new ArrayList<Layer>();
 }

@@ -17,9 +17,9 @@ public class OpenObjectDetector implements ObjectDetector {
     private int cameraWidth;
     private int cameraHeight;
 
-    private ContourPipeline pipeline;
+    private OpenPipeline pipeline;
 
-    public OpenObjectDetector(int viewId, WebcamName webcamName, ContourPipeline pipeline, int cameraWidth, int cameraHeight) {
+    public OpenObjectDetector(int viewId, WebcamName webcamName, OpenPipeline pipeline, int cameraWidth, int cameraHeight) {
         camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, viewId);
         camera.setPipeline(pipeline);
 

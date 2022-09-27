@@ -10,7 +10,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
 
-public class ContourPipeline extends OpenCvPipeline {
+public class ContourPipeline extends OpenPipeline {
 
     private ArrayList<OpenRecognition> recognitions = new ArrayList<>();
 
@@ -45,6 +45,7 @@ public class ContourPipeline extends OpenCvPipeline {
         this.labels = labels;
     }
 
+    @Override
     public Recognition[] getRecognitions() {
         synchronized (sync) {
             return recognitions.toArray(new Recognition[0]);

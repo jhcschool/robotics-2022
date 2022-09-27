@@ -21,16 +21,22 @@ public class ControlSystem {
         left += gamepad.right_stick_x;
         right -= gamepad.right_stick_x;
 
-        left = Math.min(1, Math.max(-1, left));
-        right = Math.min(1, Math.max(-1, right));
-
         double frontLeft = left - gamepad.left_stick_x;
         double backLeft = left + gamepad.left_stick_x;
 
         double frontRight = right + gamepad.left_stick_x;
         double backRight = right - gamepad.left_stick_x;
 
+        frontLeft = withinRange(frontLeft);
+        backLeft = withinRange(backLeft);
+        frontRight = withinRange(frontRight);
+        backRight = withinRange(backRight);
+
         hardware.drive.setMotorPowers(frontLeft, backLeft, frontRight, backRight);
+    }
+
+    private double withinRange(double input) {
+        return Math.max(-1, Math.min(1, input));
     }
 
 }
