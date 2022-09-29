@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.Application;
 
-@Autonomous(name="Automated", group="Iterative Opmode")
+@Autonomous(name = "Automated", group = "Iterative Opmode")
 public class AutomatedApplication extends Application {
 
     @Override

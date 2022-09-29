@@ -7,15 +7,15 @@ import org.firstinspires.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.teamcode.Layer;
 import org.firstinspires.ftc.teamcode.LayerInitInfo;
 
-@TeleOp(name="Controlled", group="Iterative Opmode")
+@TeleOp(name = "Controlled", group = "Iterative Opmode")
 public class ControlledLayer extends Layer {
 
-        private ControlSystem controlSystem;
-        private Hardware hardware;
+    private ControlSystem controlSystem;
+    private Hardware hardware;
 
-        public ControlledLayer() {
-            controlSystem = new ControlSystem();
-        }
+    public ControlledLayer() {
+        controlSystem = new ControlSystem();
+    }
 
     @Override
     public void init(LayerInitInfo info) {
@@ -25,6 +25,6 @@ public class ControlledLayer extends Layer {
 
     @Override
     public void tick(FrameInfo frameInfo) {
-            controlSystem.tick(hardware.gamepad, hardware);
-        }
+        controlSystem.tick(hardware.gamepad, hardware);
+    }
 }

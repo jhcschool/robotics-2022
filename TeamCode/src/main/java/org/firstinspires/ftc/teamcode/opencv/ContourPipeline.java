@@ -6,16 +6,13 @@ import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
-import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
 
 public class ContourPipeline extends OpenPipeline {
 
-    private ArrayList<OpenRecognition> recognitions = new ArrayList<>();
-
     Object sync = new Object();
-
+    private ArrayList<OpenRecognition> recognitions = new ArrayList<>();
     private int cameraWidth;
     private int cameraHeight;
 

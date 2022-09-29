@@ -10,8 +10,13 @@ import org.firstinspires.ftc.teamcode.drive.StandardMecanumDrive;
 
 public class LaneSystem {
 
+    private float[] laneCoordinates;
+    private Vector2d[] nodes;
+    private StandardMecanumDrive drive;
+
     public LaneSystem(StandardMecanumDrive drive, float[] laneCoordinates) {
         this.drive = drive;
+        this.laneCoordinates = laneCoordinates;
 
         int i = 0;
         for (float laneCoordinate : laneCoordinates) {
@@ -24,58 +29,63 @@ public class LaneSystem {
     }
 
     // returns end distance from target
-    public float beginNavigatingTo(Vector2d target, float relativeHeading, MarkerCallback endCallback) {
-        this.target = target;
+    public Trajectory beginNavigatingTo(Vector2d target, float relativeHeading, MarkerCallback endCallback) {
 
-        Vector2d closestNode = nodes[0];
+        Vector2d targetNode = nodes[0];
+
         for (int i = 0; i < nodes.length; i++) {
-            if (nodes[i].distTo(target) < closestNode.distTo(target)) {
-                closestNode = nodes[i];
+            if (nodes[i].distTo(target) < targetNode.distTo(target)) {
+                targetNode = nodes[i];
             }
         }
-        targetNode = closestNode;
 
         Pose2d currentPose = drive.getPoseEstimate();
 
         // might be wrong
         float absoluteHeading = (float) target.angleBetween(targetNode);
 
-        trajectoryBuilder = drive.trajectoryBuilder(currentPose);
+        TrajectoryBuilder trajectoryBuilder = drive.trajectoryBuilder(currentPose);
 
         trajectoryBuilder.lineToLinearHeading(new Pose2d(targetNode.getX(), currentPose.getY(), absoluteHeading + relativeHeading));
         trajectoryBuilder.lineToLinearHeading(new Pose2d(targetNode.getX(), targetNode.getY(), absoluteHeading + relativeHeading));
 
-        trajectoryBuilder.addDisplacementMarker(() -> {
-            trajectory = null;
-        });
+        if (endCallback != null)
+            trajectoryBuilder.addDisplacementMarker(endCallback);
+
+        return trajectoryBuilder.build();
+    }
+
+    public Trajectory getToLane(MarkerCallback endCallback) {
+
+        Vector2d currentPosition = drive.getPoseEstimate().vec();
+
+        boolean isX = true;
+        float distanceToNearestLane = Float.MAX_VALUE;
+
+        for (float laneCoordinate : laneCoordinates) {
+            if (Math.abs(laneCoordinate - currentPosition.getX()) < Math.abs(distanceToNearestLane)) {
+                distanceToNearestLane = (float) (laneCoordinate - currentPosition.getX());
+                isX = true;
+            }
+
+            if (Math.abs(laneCoordinate - currentPosition.getY()) < Math.abs(distanceToNearestLane)) {
+                distanceToNearestLane = (float) (laneCoordinate - currentPosition.getY());
+                isX = false;
+            }
+        }
+
+        Vector2d target;
+        if (isX) {
+            target = new Vector2d(currentPosition.getX() + distanceToNearestLane, currentPosition.getY());
+        } else {
+            target = new Vector2d(currentPosition.getX(), currentPosition.getY() + distanceToNearestLane);
+        }
+
+        TrajectoryBuilder builder = drive.trajectoryBuilder(drive.getPoseEstimate()).lineTo(target);
 
         if (endCallback != null)
-        trajectoryBuilder.addDisplacementMarker(endCallback);
+            builder.addDisplacementMarker(endCallback);
 
-        trajectory = trajectoryBuilder.build();
-
-        float endDistance = (float) target.distTo(targetNode);
-
-        return endDistance;
+        return builder.build();
     }
-
-    public void stopNavigation() {
-        trajectory = null;
-    }
-
-    public void tick() {
-        if (trajectory != null) {
-            drive.followTrajectoryAsync(trajectory);
-        }
-    }
-
-    private Vector2d[] nodes;
-
-    Vector2d targetNode;
-    Vector2d target;
-
-    Trajectory trajectory;
-    TrajectoryBuilder trajectoryBuilder;
-
-    private StandardMecanumDrive drive;
 }

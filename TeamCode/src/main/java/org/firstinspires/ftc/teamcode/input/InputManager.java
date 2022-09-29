@@ -10,18 +10,11 @@ import java.util.Map;
 
 public class InputManager {
 
-    public class ActionMapping {
-        ArrayList<InputCode> codes;
-    }
-
-    public class AxisActivation {
-        double intensityMultiplier;
-        InputCode code;
-    }
-
-    public class AxisMapping {
-        ArrayList<AxisActivation> activations;
-    }
+    Map<String, ActionMapping> actionMappings;
+    Map<String, AxisMapping> axisMappings;
+    Map<InputCode, UserInput> inputs;
+    InputState state;
+    ArrayList<Gamepad> managedGamepads;
 
     public void registerGamepadInput(Gamepad gamepad) {
         registerInput(InputCode.A, gamepad.a);
@@ -81,7 +74,7 @@ public class InputManager {
         for (Map.Entry<String, ActionMapping> entry : actionMappings.entrySet()) {
             ActionState actionState = ActionState.INACTIVE;
 
-            for (InputCode code: entry.getValue().codes) {
+            for (InputCode code : entry.getValue().codes) {
                 if (inputs.containsKey(code)) {
                     actionState = inputs.get(code).getState();
                 }
@@ -93,7 +86,7 @@ public class InputManager {
         for (Map.Entry<String, AxisMapping> entry : axisMappings.entrySet()) {
             double axisState = 0;
 
-            for (AxisActivation activation: entry.getValue().activations) {
+            for (AxisActivation activation : entry.getValue().activations) {
                 if (inputs.containsKey(activation.code)) {
                     double input = inputs.get(activation.code).getIntensity() * activation.intensityMultiplier;
 
@@ -114,11 +107,16 @@ public class InputManager {
         return state;
     }
 
-    Map<String, ActionMapping> actionMappings;
-    Map<String, AxisMapping> axisMappings;
+    public class ActionMapping {
+        ArrayList<InputCode> codes;
+    }
 
-    Map<InputCode, UserInput> inputs;
-    InputState state;
+    public class AxisActivation {
+        double intensityMultiplier;
+        InputCode code;
+    }
 
-    ArrayList<Gamepad> managedGamepads;
+    public class AxisMapping {
+        ArrayList<AxisActivation> activations;
+    }
 }

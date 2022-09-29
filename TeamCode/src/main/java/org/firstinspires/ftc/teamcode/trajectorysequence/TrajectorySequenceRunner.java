@@ -44,18 +44,14 @@ public class TrajectorySequenceRunner {
     private final PIDFController turnController;
 
     private final NanoClock clock;
-
+    private final FtcDashboard dashboard;
+    private final LinkedList<Pose2d> poseHistory = new LinkedList<>();
+    List<TrajectoryMarker> remainingMarkers = new ArrayList<>();
     private TrajectorySequence currentTrajectorySequence;
     private double currentSegmentStartTime;
     private int currentSegmentIndex;
     private int lastSegmentIndex;
-
     private Pose2d lastPoseError = new Pose2d();
-
-    List<TrajectoryMarker> remainingMarkers = new ArrayList<>();
-
-    private final FtcDashboard dashboard;
-    private final LinkedList<Pose2d> poseHistory = new LinkedList<>();
 
     public TrajectorySequenceRunner(TrajectoryFollower follower, PIDCoefficients headingPIDCoefficients) {
         this.follower = follower;

@@ -10,6 +10,6 @@ public class GameConstants {
 
     public static final Vector2d[] LOW_JUNCTIONS = {new Vector2d(24, 48), new Vector2d(48, 24), new Vector2d(48, -24), new Vector2d(24, -48),
             new Vector2d(-24, -48), new Vector2d(-48, -24), new Vector2d(-48, 24), new Vector2d(-24, 48)};
-    
-    public static final float[] LANE_COORDINATES = {-63, -45, -27, -9, 9, 27, 45, 63};
+
+    public static final float[] LANE_COORDINATES = {-60, -36, -12, 12, 36, 60};
 }

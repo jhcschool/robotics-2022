@@ -9,20 +9,11 @@ import org.opencv.core.Scalar;
 
 public class SleeveDetector {
 
-    enum CustomSleeve {
-        RED,
-        GREEN,
-        BLUE,
-    }
-
     private static final String[] LABELS = {"Red", "Green", "Blue"};
     private static final Scalar[] lowerBounds = {new Scalar(0, 0, 0), new Scalar(0, 0, 0), new Scalar(0, 0, 0)};
     private static final Scalar[] upperBounds = {new Scalar(0, 0, 0), new Scalar(0, 0, 0), new Scalar(0, 0, 0)};
-
     ObjectDetector objectDetector;
     CustomSleeve sleeveColor;
-
-
     public SleeveDetector(int viewId, Hardware hardware) {
         ContourPipeline pipeline = new ContourPipeline();
         pipeline.setLabels(LABELS);
@@ -48,5 +39,11 @@ public class SleeveDetector {
 
         objectDetector.stop();
         return sleeveColor;
+    }
+
+    enum CustomSleeve {
+        RED,
+        GREEN,
+        BLUE,
     }
 }

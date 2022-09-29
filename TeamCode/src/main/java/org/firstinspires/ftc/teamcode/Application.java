@@ -1,10 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.ArrayList;
@@ -14,8 +11,11 @@ public abstract class Application extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
     private Hardware hardware;
+    private double time;
+    private ArrayList<Layer> layers = new ArrayList<Layer>();
 
-    @Override public void runOpMode() {
+    @Override
+    public void runOpMode() {
         hardware = new Hardware(hardwareMap);
 
         onInit();
@@ -40,9 +40,6 @@ public abstract class Application extends LinearOpMode {
             layer.onStart();
         }
     }
-
-
-    private double time;
 
     public void tick() {
 
@@ -83,6 +80,4 @@ public abstract class Application extends LinearOpMode {
     public void removeLayer(Layer layer) {
         layers.remove(layer);
     }
-
-    private ArrayList<Layer> layers = new ArrayList<Layer>();
 }
