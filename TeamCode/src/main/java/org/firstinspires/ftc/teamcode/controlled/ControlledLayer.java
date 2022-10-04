@@ -6,8 +6,8 @@ import org.firstinspires.ftc.teamcode.FrameInfo;
 import org.firstinspires.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.teamcode.Layer;
 import org.firstinspires.ftc.teamcode.LayerInitInfo;
+import org.firstinspires.ftc.teamcode.PoseStorage;
 
-@TeleOp(name = "Controlled", group = "Iterative Opmode")
 public class ControlledLayer extends Layer {
 
     private ControlSystem controlSystem;
@@ -21,6 +21,7 @@ public class ControlledLayer extends Layer {
     public void init(LayerInitInfo info) {
         super.init(info);
         hardware = info.hardware;
+        hardware.drive.setPoseEstimate(PoseStorage.robotPose);
     }
 
     @Override

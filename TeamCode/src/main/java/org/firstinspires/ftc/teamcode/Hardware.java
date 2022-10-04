@@ -17,14 +17,14 @@ public class Hardware {
 
     public Gamepad gamepad;
 
-    public Servo clipper;
+//    public Servo clipper;
 
     public Hardware(HardwareMap map) {
         webcamName = map.get(webcamName.getClass(), "webcam");
 
         gamepad = map.get(gamepad.getClass(), "gamepad");
 
-        clipper = map.get(clipper.getClass(), "clipper");
+//        clipper = map.get(clipper.getClass(), "clipper");
 
         drive = new StandardMecanumDrive(map);
     }

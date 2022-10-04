@@ -4,7 +4,7 @@ import org.firstinspires.ftc.teamcode.game.JunctionHeight;
 
 public class ArmSystem {
 
-    JunctionHeight height = null;
+    private JunctionHeight height = null;
     private Runnable endCallback;
 
     public void tick() {
@@ -14,6 +14,9 @@ public class ArmSystem {
     public void signalBegin(JunctionHeight height, Runnable endCallback) {
         this.height = height;
         this.endCallback = endCallback;
+
+        // temporary
+        onEnd();
     }
 
     private void onEnd() {

@@ -1,0 +1,19 @@
+package org.firstinspires.ftc.teamcode.automated;
+
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
+import org.firstinspires.ftc.teamcode.Application;
+
+@Autonomous(name = "Red bottom", group = "Automated")
+public class RedBottom extends Application {
+
+    @Override
+    public void onInit() {
+        super.init();
+
+        Pose2d startingPose = new Pose2d(63, -36);
+        addLayer(new AutomatedLayer(startingPose));
+    }
+
+}

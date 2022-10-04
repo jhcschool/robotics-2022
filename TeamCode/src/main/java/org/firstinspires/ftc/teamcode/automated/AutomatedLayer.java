@@ -17,15 +17,21 @@ import org.firstinspires.ftc.teamcode.game.JunctionHeight;
 
 public class AutomatedLayer extends Layer {
 
-    protected static final Pose2d STARTING_POSE = new Pose2d(0, 0, Math.toRadians(0));
-    private static final Vector2d CONE_POSITION_BLUE = new Vector2d(-60, 0);
-    private static final Vector2d CONE_POSITION_RED = new Vector2d(60, 0);
+    protected Pose2d startingPose = new Pose2d(0, 0, Math.toRadians(0));
+    private final Vector2d CONE_POSITION_BLUE = new Vector2d(-60, 0);
+    private final Vector2d CONE_POSITION_RED = new Vector2d(60, 0);
     private SleeveSystem sleeveSystem;
     private Trajectory currentTrajectory = null;
     private Telemetry telemetry;
     private Hardware hardware;
     private LaneSystem laneSystem;
     private ArmSystem armSystem;
+
+    public AutomatedLayer(Pose2d startingPose) {
+        super();
+
+        this.startingPose = startingPose;
+    }
 
     @Override
     public void init(LayerInitInfo initInfo) {
@@ -53,7 +59,7 @@ public class AutomatedLayer extends Layer {
     public void onStart() {
         super.onStart();
 
-        hardware.drive.setPoseEstimate(STARTING_POSE);
+        hardware.drive.setPoseEstimate(startingPose);
 
     }
 
@@ -119,10 +125,10 @@ public class AutomatedLayer extends Layer {
     }
 
     private void navigateBack(float distanceRight) {
-        currentTrajectory = laneSystem.beginNavigatingTo(STARTING_POSE.vec(), 0, () -> {
+        currentTrajectory = laneSystem.beginNavigatingTo(startingPose.vec(), 0, () -> {
             float left = distanceRight > 0 ? 0 : -distanceRight;
             float right = distanceRight < 0 ? 0 : distanceRight;
-            currentTrajectory = hardware.drive.trajectoryBuilder(hardware.drive.getPoseEstimate()).lineToLinearHeading(STARTING_POSE)
+            currentTrajectory = hardware.drive.trajectoryBuilder(hardware.drive.getPoseEstimate()).lineToLinearHeading(startingPose)
                     .forward(10).strafeLeft(left).strafeRight(right).build();
         });
     }
