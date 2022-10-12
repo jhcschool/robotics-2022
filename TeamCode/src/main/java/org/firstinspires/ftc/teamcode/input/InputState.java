@@ -4,6 +4,9 @@ import java.util.Map;
 
 public class InputState {
 
+    private Map<String, ActionState> actionStates;
+    private Map<String, Double> axisStates;
+
     public ActionState getAction(String mapping) {
         return actionStates.get(mapping);
     }
@@ -24,7 +27,4 @@ public class InputState {
         actionStates.clear();
         axisStates.clear();
     }
-
-    private Map<String, ActionState> actionStates;
-    private Map<String, Double> axisStates;
 }

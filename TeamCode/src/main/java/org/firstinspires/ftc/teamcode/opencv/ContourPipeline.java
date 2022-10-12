@@ -4,18 +4,16 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
+import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
-import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
 
 public class ContourPipeline extends OpenPipeline {
 
-    private ArrayList<OpenRecognition> recognitions = new ArrayList<>();
-
     Object sync = new Object();
-
+    private ArrayList<OpenRecognition> recognitions = new ArrayList<>();
     private int cameraWidth;
     private int cameraHeight;
 
@@ -54,8 +52,6 @@ public class ContourPipeline extends OpenPipeline {
 
     @Override
     public Mat processFrame(Mat input) {
-        recognitions.clear();
-
         Mat processed = new Mat();
 
         cameraWidth = input.width();
@@ -77,16 +73,23 @@ public class ContourPipeline extends OpenPipeline {
 
             ArrayList<MatOfPoint> contours = new ArrayList<>();
 
-            Imgproc.findContours(processed, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
+            Mat contourMat = new Mat();
+            Imgproc.findContours(processed, contours, contourMat, Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
 
             synchronized (sync) {
+                recognitions.clear();
+
                 for (MatOfPoint contour : contours) {
-                    org.opencv.core.Rect rect = Imgproc.boundingRect(contour);
+                    Rect rect = Imgproc.boundingRect(contour);
 
                     recognitions.add(new OpenRecognition(label, 1, rect.x, rect.x + rect.width, rect.y, rect.y + rect.height, rect.width, rect.height, cameraWidth, cameraHeight));
                 }
             }
+
+            contourMat.release();
         }
+
+        processed.release();
 
         return input;
     }

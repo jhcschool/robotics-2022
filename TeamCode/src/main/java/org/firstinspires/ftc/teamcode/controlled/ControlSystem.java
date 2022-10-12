@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.controlled;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.Hardware;
+import org.firstinspires.ftc.teamcode.drive.StandardMecanumDrive;
 
 public class ControlSystem {
 
@@ -10,7 +11,7 @@ public class ControlSystem {
 
     }
 
-    public void tick(Gamepad gamepad, Hardware hardware) {
+    public void tick(Gamepad gamepad, StandardMecanumDrive drive) {
 
         double left = 0;
         double right = 0;
@@ -32,7 +33,7 @@ public class ControlSystem {
         frontRight = withinRange(frontRight);
         backRight = withinRange(backRight);
 
-        hardware.drive.setMotorPowers(frontLeft, backLeft, frontRight, backRight);
+        drive.setMotorPowers(frontLeft, backLeft, frontRight, backRight);
     }
 
     private double withinRange(double input) {

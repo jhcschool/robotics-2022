@@ -6,5 +6,6 @@ public interface ObjectDetector {
     public Recognition[] getRecognitions();
 
     public void start();
+
     public void stop();
 }

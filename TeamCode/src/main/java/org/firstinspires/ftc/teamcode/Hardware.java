@@ -1,13 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.StandardMecanumDrive;
 
@@ -18,16 +15,17 @@ public class Hardware {
 
     public WebcamName webcamName;
 
-    public Gamepad gamepad;
+    public Gamepad gamepad1;
+    public Gamepad gamepad2;
 
-    public Servo clipper;
+//    public Servo clipper;
 
-    public Hardware(HardwareMap map) {
-        webcamName = map.get(webcamName.getClass(), "webcam");
+    public Hardware(HardwareMap map, Gamepad gamepad1, Gamepad gamepad2) {
+        webcamName = map.get(WebcamName.class, "webcam");
+        this.gamepad1 = gamepad1;
+        this.gamepad2 = gamepad2;
 
-        gamepad = map.get(gamepad.getClass(), "gamepad");
-
-        clipper = map.get(clipper.getClass(), "clipper");
+//        clipper = map.get(Servo.class, "clipper");
 
         drive = new StandardMecanumDrive(map);
     }
