@@ -16,7 +16,11 @@ public abstract class Application extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+<<<<<<< HEAD
         hardware = new Hardware(hardwareMap, gamepad1, gamepad2);
+=======
+        hardware = new Hardware(hardwareMap);
+>>>>>>> c0cc690e56f32f219a7547facd4220a4e9202a7a
 
         onInit();
         waitForStart();

@@ -311,8 +311,11 @@ public class StandardMecanumDrive extends MecanumDrive {
         // See https://github.com/FIRST-Tech-Challenge/FtcRobotController/issues/251 for details.
         return (double) -imu.getAngularVelocity().xRotationRate;
     }
+<<<<<<< HEAD
 
     public void breakFollowing() {
         trajectorySequenceRunner.breakFollowing();
     }
+=======
+>>>>>>> c0cc690e56f32f219a7547facd4220a4e9202a7a
 }

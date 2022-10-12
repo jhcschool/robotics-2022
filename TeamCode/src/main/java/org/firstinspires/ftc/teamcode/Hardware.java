@@ -25,7 +25,13 @@ public class Hardware {
         this.gamepad1 = gamepad1;
         this.gamepad2 = gamepad2;
 
+<<<<<<< HEAD
 //        clipper = map.get(Servo.class, "clipper");
+=======
+        gamepad = map.get(gamepad.getClass(), "gamepad");
+
+//        clipper = map.get(clipper.getClass(), "clipper");
+>>>>>>> c0cc690e56f32f219a7547facd4220a4e9202a7a
 
         drive = new StandardMecanumDrive(map);
     }
