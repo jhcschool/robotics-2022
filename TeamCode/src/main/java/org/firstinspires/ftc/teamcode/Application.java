@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import java.util.ArrayList;
 
 @Disabled
-public abstract class Application extends LinearOpMode {
+public abstract class Application extends Mode {
 
     private ElapsedTime runtime = new ElapsedTime();
     private Hardware hardware;
@@ -15,26 +15,14 @@ public abstract class Application extends LinearOpMode {
     private ArrayList<Layer> layers = new ArrayList<Layer>();
 
     @Override
-    public void runOpMode() {
-<<<<<<< HEAD
-        hardware = new Hardware(hardwareMap, gamepad1, gamepad2);
-=======
-        hardware = new Hardware(hardwareMap);
->>>>>>> c0cc690e56f32f219a7547facd4220a4e9202a7a
-
-        onInit();
-        waitForStart();
-        onStart();
-        while (opModeIsActive() && !isStopRequested()) {
-            tick();
-        }
-    }
-
     public void onInit() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
+
+        hardware = new Hardware(hardwareMap, gamepad1, gamepad2);
     }
 
+    @Override
     public void onStart() {
         runtime.reset();
 
@@ -43,6 +31,7 @@ public abstract class Application extends LinearOpMode {
         }
     }
 
+    @Override
     public void tick() {
 
         hardware.update(telemetry);
@@ -62,6 +51,7 @@ public abstract class Application extends LinearOpMode {
         }
     }
 
+    @Override
     public void onEnd() {
         for (Layer layer : layers) {
             layer.onEnd();

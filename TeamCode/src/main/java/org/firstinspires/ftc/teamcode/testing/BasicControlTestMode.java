@@ -4,23 +4,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import org.firstinspires.ftc.teamcode.Mode;
+
 @TeleOp(name = "Basic Control Test", group = "Iterative Opmode")
-public class BasicControlTestMode extends LinearOpMode {
+public class BasicControlTestMode extends Mode {
 
     private DcMotorEx frontLeftMotor, rearLeftMotor, rearRightMotor, frontRightMotor;
 
     @Override
-    public void runOpMode() {
-        onInit();
-        waitForStart();
-        onStart();
-        while (opModeIsActive() && !isStopRequested()) {
-            tick();
-        }
-    }
-
-
-
     public void onInit() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -31,13 +22,11 @@ public class BasicControlTestMode extends LinearOpMode {
         frontRightMotor = hardwareMap.get(DcMotorEx.class, "frontRightMotor");
     }
 
-    public void onStart() {
-    }
-
     private double withinRange(double input) {
         return Math.max(-1, Math.min(1, input));
     }
 
+    @Override
     public void tick() {
         telemetry.update();
 
