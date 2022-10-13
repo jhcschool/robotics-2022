@@ -5,16 +5,20 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
 public class OpenRecognition implements Recognition {
 
-    private String label;
-    private float confidence;
-    private float left;
-    private float right;
-    private float top;
-    private float bottom;
-    private float width;
-    private float height;
-    private int imageWidth;
-    private int imageHeight;
+    private final String label;
+    private final float confidence;
+    private final float left;
+    private final float right;
+    private final float top;
+    private final float bottom;
+    private final float width;
+    private final float height;
+    private final int imageWidth;
+    private final int imageHeight;
+
+    public OpenRecognition() {
+        this("", 0, 0, 0, 0, 0, 0, 0, 0, 0);
+    }
 
     public OpenRecognition(String label, float confidence, float left, float right, float top, float bottom, float width, float height, int imageWidth, int imageHeight) {
         this.label = label;

@@ -8,10 +8,10 @@ import java.util.ArrayList;
 @Disabled
 public abstract class Application extends Mode {
 
-    private ElapsedTime runtime = new ElapsedTime();
+    private final ElapsedTime runtime = new ElapsedTime();
     private Hardware hardware;
     private double time;
-    private ArrayList<Layer> layers = new ArrayList<Layer>();
+    private final ArrayList<Layer> layers = new ArrayList<Layer>();
 
     @Override
     public void onInit() {

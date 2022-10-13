@@ -2,13 +2,13 @@ package org.firstinspires.ftc.teamcode.input;
 
 public interface UserInput {
 
-    public float getIntensity();
+    float getIntensity();
 
-    public ActionState getState();
+    ActionState getState();
 
-    public void registerInput(boolean value);
+    void registerInput(boolean value);
 
-    public void registerInput(float value);
+    void registerInput(float value);
 
-    public void tick();
+    void tick();
 }

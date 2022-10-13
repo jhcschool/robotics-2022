@@ -32,6 +32,7 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityCons
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
@@ -63,13 +64,16 @@ public class StandardMecanumDrive extends MecanumDrive {
     public static double VX_WEIGHT = 1;
     public static double VY_WEIGHT = 1;
     public static double OMEGA_WEIGHT = 1;
-    private TrajectorySequenceRunner trajectorySequenceRunner;
-    private TrajectoryFollower follower;
+    private final TrajectorySequenceRunner trajectorySequenceRunner;
+    private final TrajectoryFollower follower;
 
-    private DcMotorEx frontLeftMotor, rearLeftMotor, rearRightMotor, frontRightMotor;
-    private List<DcMotorEx> motors;
+    private final DcMotorEx frontLeftMotor;
+    private final DcMotorEx rearLeftMotor;
+    private final DcMotorEx rearRightMotor;
+    private final DcMotorEx frontRightMotor;
+    private final List<DcMotorEx> motors;
 
-    private VoltageSensor batteryVoltageSensor;
+    private final VoltageSensor batteryVoltageSensor;
 
     public StandardMecanumDrive(HardwareMap hardwareMap) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
@@ -109,6 +113,8 @@ public class StandardMecanumDrive extends MecanumDrive {
         }
 
         // TODO: reverse any motors using DcMotor.setDirection()
+        rearLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
         trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);

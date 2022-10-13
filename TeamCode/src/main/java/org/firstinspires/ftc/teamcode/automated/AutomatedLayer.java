@@ -19,7 +19,7 @@ public class AutomatedLayer extends Layer {
 
     private final Vector2d CONE_POSITION_BLUE = new Vector2d(-60, 0);
     private final Vector2d CONE_POSITION_RED = new Vector2d(60, 0);
-    protected Pose2d startingPose = new Pose2d(0, 0, Math.toRadians(0));
+    private Pose2d startingPose = new Pose2d(0, 0, Math.toRadians(0));
     private SleeveSystem sleeveSystem;
     private Trajectory currentTrajectory = null;
     private Telemetry telemetry;

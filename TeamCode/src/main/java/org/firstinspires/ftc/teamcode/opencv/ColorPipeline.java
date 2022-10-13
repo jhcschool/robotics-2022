@@ -14,7 +14,7 @@ public class ColorPipeline extends OpenPipeline {
     public static int REGION_WIDTH = 30;
     public static int REGION_HEIGHT = 50;
 
-    private static Point SLEEVE_TOPLEFT_ANCHOR_POINT = new Point(145, 168);
+    private static final Point SLEEVE_TOPLEFT_ANCHOR_POINT = new Point(145, 168);
 
     // Anchor point definitions
     Point SLEEVE_POINT_A = new Point(
@@ -29,7 +29,7 @@ public class ColorPipeline extends OpenPipeline {
     Scalar[] lowerBounds;
     Scalar[] upperBounds;
     String[] labels;
-    private double[] percentages;
+    private final double[] percentages;
 
     public ColorPipeline(Scalar[] lowerBounds, Scalar[] upperBounds, String[] labels) {
         this.lowerBounds = lowerBounds;

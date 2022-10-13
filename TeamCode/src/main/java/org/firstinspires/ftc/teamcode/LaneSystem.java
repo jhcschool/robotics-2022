@@ -10,9 +10,9 @@ import org.firstinspires.ftc.teamcode.drive.StandardMecanumDrive;
 
 public class LaneSystem {
 
-    private float[] laneCoordinates;
+    private final float[] laneCoordinates;
     private Vector2d[] nodes;
-    private StandardMecanumDrive drive;
+    private final StandardMecanumDrive drive;
 
     public LaneSystem(StandardMecanumDrive drive, float[] laneCoordinates) {
         this.drive = drive;

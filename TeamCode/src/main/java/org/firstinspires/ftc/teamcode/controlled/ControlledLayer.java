@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.PoseStorage;
 
 public class ControlledLayer extends Layer {
 
-    private ControlSystem controlSystem;
+    private final ControlSystem controlSystem;
     private Hardware hardware;
 
     public ControlledLayer() {
@@ -24,10 +24,6 @@ public class ControlledLayer extends Layer {
 
     @Override
     public void tick(FrameInfo frameInfo) {
-<<<<<<<HEAD
         controlSystem.tick(hardware.gamepad1, hardware.drive);
-=======
-        controlSystem.tick(hardware.gamepad, hardware);
->>>>>>>c0cc690e56f32f219a7547facd4220a4e9202a7a
     }
 }

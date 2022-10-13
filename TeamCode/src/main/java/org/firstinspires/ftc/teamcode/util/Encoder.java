@@ -10,12 +10,12 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  */
 public class Encoder {
     private final static int CPS_STEP = 0x10000;
-    private DcMotorEx motor;
-    private NanoClock clock;
+    private final DcMotorEx motor;
+    private final NanoClock clock;
     private Direction direction;
     private int lastPosition;
     private int velocityEstimateIdx;
-    private double[] velocityEstimates;
+    private final double[] velocityEstimates;
     private double lastUpdateTime;
 
     public Encoder(DcMotorEx motor, NanoClock clock) {
@@ -110,7 +110,7 @@ public class Encoder {
         FORWARD(1),
         REVERSE(-1);
 
-        private int multiplier;
+        private final int multiplier;
 
         Direction(int multiplier) {
             this.multiplier = multiplier;

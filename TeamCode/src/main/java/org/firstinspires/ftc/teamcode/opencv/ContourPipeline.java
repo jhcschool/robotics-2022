@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class ContourPipeline extends OpenPipeline {
 
     Object sync = new Object();
-    private ArrayList<OpenRecognition> recognitions = new ArrayList<>();
+    private final ArrayList<OpenRecognition> recognitions = new ArrayList<>();
     private int cameraWidth;
     private int cameraHeight;
 

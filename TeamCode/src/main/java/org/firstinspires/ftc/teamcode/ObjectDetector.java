@@ -3,9 +3,9 @@ package org.firstinspires.ftc.teamcode;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
 public interface ObjectDetector {
-    public Recognition[] getRecognitions();
+    Recognition[] getRecognitions();
 
-    public void start();
+    void start();
 
-    public void stop();
+    void stop();
 }

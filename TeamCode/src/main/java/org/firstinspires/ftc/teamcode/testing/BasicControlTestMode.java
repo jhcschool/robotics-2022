@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.Mode;
 
@@ -19,6 +20,9 @@ public class BasicControlTestMode extends Mode {
         rearLeftMotor = hardwareMap.get(DcMotorEx.class, "rearLeftMotor");
         rearRightMotor = hardwareMap.get(DcMotorEx.class, "rearRightMotor");
         frontRightMotor = hardwareMap.get(DcMotorEx.class, "frontRightMotor");
+
+        rearLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     private double withinRange(double input) {

@@ -11,8 +11,8 @@ public class SleeveSystem {
     // Returns the distance that the robot move to the right to get into the signal zone
     Function<Float, Void> onNavigateBack;
     private SleeveDetector.CustomSleeve sleeveColor;
-    private SleeveDetector sleeveDetector;
-    private ArrayList<SleeveDetector.CustomSleeve> firstDetections = new ArrayList<>();
+    private final SleeveDetector sleeveDetector;
+    private final ArrayList<SleeveDetector.CustomSleeve> firstDetections = new ArrayList<>();
 
     SleeveSystem(int viewId, Hardware hardware, Function<Float, Void> onNavigateBack) {
         sleeveDetector = new SleeveDetector(viewId, hardware);

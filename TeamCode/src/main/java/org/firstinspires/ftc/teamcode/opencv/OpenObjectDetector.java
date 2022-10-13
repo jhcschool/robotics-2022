@@ -9,12 +9,12 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 public class OpenObjectDetector implements ObjectDetector {
 
-    private OpenCvCamera camera;
+    private final OpenCvCamera camera;
 
-    private int cameraWidth;
-    private int cameraHeight;
+    private final int cameraWidth;
+    private final int cameraHeight;
 
-    private OpenPipeline pipeline;
+    private final OpenPipeline pipeline;
 
     public OpenObjectDetector(int viewId, WebcamName webcamName, OpenPipeline pipeline, int cameraWidth, int cameraHeight) {
         camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, viewId);

@@ -35,7 +35,7 @@ public class AprilTagPipeline extends OpenPipeline {
     double tagsizeX;
     double tagsizeY;
     private long nativeApriltagPtr;
-    private Mat grey = new Mat();
+    private final Mat grey = new Mat();
     private ArrayList<AprilTagDetection> detections = new ArrayList<>();
     private ArrayList<AprilTagDetection> detectionsUpdate = new ArrayList<>();
     private float decimation;
@@ -261,7 +261,7 @@ public class AprilTagPipeline extends OpenPipeline {
                 int imageWidth = cameraMatrix.width();
                 int imageHeight = cameraMatrix.height();
 
-                recognitions[i] = new OpenRecognition(Integer.toString(detection.id), (float) detection.decisionMargin, left, right, top, bottom, width, height, imageWidth, imageHeight);
+                recognitions[i] = new OpenRecognition(Integer.toString(detection.id), detection.decisionMargin, left, right, top, bottom, width, height, imageWidth, imageHeight);
             }
 
             return recognitions;
