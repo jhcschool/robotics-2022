@@ -39,6 +39,7 @@ public class OpenObjectDetector implements ObjectDetector {
             @Override
             public void onError(int errorCode) {
                 // Handle error
+                System.out.println("OpenCV Error: " + errorCode);
             }
         });
     }

@@ -9,6 +9,8 @@ import org.firstinspires.ftc.teamcode.Mode;
 public class WheelTestMode extends Mode {
 
     private DcMotorEx[] motors = new DcMotorEx[4];
+    private int motorIndex = 0;
+    private boolean reverse = false;
 
     @Override
     public void onInit() {
@@ -20,9 +22,6 @@ public class WheelTestMode extends Mode {
         motors[2] = hardwareMap.get(DcMotorEx.class, "rearRightMotor");
         motors[3] = hardwareMap.get(DcMotorEx.class, "frontRightMotor");
     }
-
-    private int motorIndex = 0;
-    private boolean reverse = false;
 
     @Override
     public void tick() {
@@ -52,7 +51,6 @@ public class WheelTestMode extends Mode {
             motors[motorIndex].setPower(1);
         }
     }
-
 
 
 }

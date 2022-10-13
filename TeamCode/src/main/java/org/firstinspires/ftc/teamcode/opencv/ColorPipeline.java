@@ -9,7 +9,7 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
-public class ColorPipeline extends OpenPipeline{
+public class ColorPipeline extends OpenPipeline {
 
     public static int REGION_WIDTH = 30;
     public static int REGION_HEIGHT = 50;
@@ -26,13 +26,10 @@ public class ColorPipeline extends OpenPipeline{
 
     Mat[] colorMatrices;
     Mat blurredMat = new Mat();
-
-    private double[] percentages;
-
     Scalar[] lowerBounds;
     Scalar[] upperBounds;
-
     String[] labels;
+    private double[] percentages;
 
     public ColorPipeline(Scalar[] lowerBounds, Scalar[] upperBounds, String[] labels) {
         this.lowerBounds = lowerBounds;
@@ -50,6 +47,9 @@ public class ColorPipeline extends OpenPipeline{
 
     @Override
     public Mat processFrame(Mat input) {
+        Imgproc.cvtColor(input, input, Imgproc.COLOR_RGBA2RGB);
+        Imgproc.cvtColor(input, input, Imgproc.COLOR_RGB2HSV);
+
         // Noise reduction
         Imgproc.blur(input, blurredMat, new Size(5, 5));
         Mat blurred = blurredMat.submat(new Rect(SLEEVE_POINT_A, SLEEVE_POINT_B));

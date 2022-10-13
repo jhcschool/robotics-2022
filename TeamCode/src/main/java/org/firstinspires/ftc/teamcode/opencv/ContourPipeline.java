@@ -52,6 +52,9 @@ public class ContourPipeline extends OpenPipeline {
 
     @Override
     public Mat processFrame(Mat input) {
+        Imgproc.cvtColor(input, input, Imgproc.COLOR_RGBA2RGB);
+        Imgproc.cvtColor(input, input, Imgproc.COLOR_RGB2HSV);
+
         Mat processed = new Mat();
 
         cameraWidth = input.width();
@@ -63,8 +66,7 @@ public class ContourPipeline extends OpenPipeline {
             Scalar upperBound = upperBounds[i];
             String label = labels[i];
 
-            Imgproc.cvtColor(input, processed, Imgproc.COLOR_RGB2HSV);
-            Core.inRange(processed, lowerBound, upperBound, processed);
+            Core.inRange(input, lowerBound, upperBound, processed);
 
             Imgproc.morphologyEx(processed, processed, Imgproc.MORPH_OPEN, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new org.opencv.core.Size(5, 5)));
             Imgproc.morphologyEx(processed, processed, Imgproc.MORPH_CLOSE, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new org.opencv.core.Size(5, 5)));

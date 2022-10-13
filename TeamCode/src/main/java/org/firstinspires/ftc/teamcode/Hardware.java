@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -25,15 +24,15 @@ public class Hardware {
         this.gamepad1 = gamepad1;
         this.gamepad2 = gamepad2;
 
-<<<<<<< HEAD
+<<<<<<<HEAD
 //        clipper = map.get(Servo.class, "clipper");
-=======
+                =======
         gamepad = map.get(gamepad.getClass(), "gamepad");
 
 //        clipper = map.get(clipper.getClass(), "clipper");
->>>>>>> c0cc690e56f32f219a7547facd4220a4e9202a7a
+>>>>>>>c0cc690e56f32f219a7547facd4220a4e9202a7a
 
-        drive = new StandardMecanumDrive(map);
+                drive = new StandardMecanumDrive(map);
     }
 
     public void update(Telemetry telemetry) {

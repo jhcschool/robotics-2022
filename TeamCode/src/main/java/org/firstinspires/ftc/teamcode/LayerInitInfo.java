@@ -8,6 +8,7 @@ public class LayerInitInfo {
     public HardwareMap hardwareMap;
     public Hardware hardware;
     public Telemetry telemetry;
+
     public LayerInitInfo() {
     }
 }

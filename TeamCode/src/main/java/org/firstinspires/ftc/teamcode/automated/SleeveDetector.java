@@ -14,6 +14,7 @@ public class SleeveDetector {
     private static final Scalar[] upperBounds = {new Scalar(0, 0, 0), new Scalar(0, 0, 0), new Scalar(0, 0, 0)};
     ObjectDetector objectDetector;
     CustomSleeve sleeveColor;
+
     public SleeveDetector(int viewId, Hardware hardware) {
         ContourPipeline pipeline = new ContourPipeline();
         pipeline.setLabels(LABELS);

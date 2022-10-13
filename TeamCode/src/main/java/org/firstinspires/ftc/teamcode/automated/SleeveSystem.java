@@ -13,6 +13,7 @@ public class SleeveSystem {
     private SleeveDetector.CustomSleeve sleeveColor;
     private SleeveDetector sleeveDetector;
     private ArrayList<SleeveDetector.CustomSleeve> firstDetections = new ArrayList<>();
+
     SleeveSystem(int viewId, Hardware hardware, Function<Float, Void> onNavigateBack) {
         sleeveDetector = new SleeveDetector(viewId, hardware);
         this.onNavigateBack = onNavigateBack;

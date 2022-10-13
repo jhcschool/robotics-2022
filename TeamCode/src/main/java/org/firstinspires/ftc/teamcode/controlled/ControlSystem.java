@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.controlled;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.teamcode.drive.StandardMecanumDrive;
 
 public class ControlSystem {
