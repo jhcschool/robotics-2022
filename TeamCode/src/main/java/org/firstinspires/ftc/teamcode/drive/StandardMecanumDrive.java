@@ -91,8 +91,8 @@ public class StandardMecanumDrive extends MecanumDrive {
 
         this.frontLeftMotor = hardwareMap.get(DcMotorEx.class, "frontLeftMotor");
         this.rearLeftMotor = hardwareMap.get(DcMotorEx.class, "rearLeftMotor");
-        this.rearRightMotor = hardwareMap.get(DcMotorEx.class, "rearRightMotor");
         this.frontRightMotor = hardwareMap.get(DcMotorEx.class, "frontRightMotor");
+        this.rearRightMotor = hardwareMap.get(DcMotorEx.class, "rearRightMotor");
 
         motors = Arrays.asList(this.frontLeftMotor, this.rearLeftMotor, this.rearRightMotor, this.frontRightMotor);
 
@@ -287,7 +287,7 @@ public class StandardMecanumDrive extends MecanumDrive {
         // expected). This bug does NOT affect orientation.
         //
         // See https://github.com/FIRST-Tech-Challenge/FtcRobotController/issues/251 for details.
-        return new Double(0);
+        return 0.0;
     }
 
     public void breakFollowing() {

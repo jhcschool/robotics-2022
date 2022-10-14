@@ -19,8 +19,8 @@ public class WheelTestMode extends Mode {
 
         motors[0] = hardwareMap.get(DcMotorEx.class, "frontLeftMotor");
         motors[1] = hardwareMap.get(DcMotorEx.class, "rearLeftMotor");
-        motors[2] = hardwareMap.get(DcMotorEx.class, "rearRightMotor");
-        motors[3] = hardwareMap.get(DcMotorEx.class, "frontRightMotor");
+        motors[2] = hardwareMap.get(DcMotorEx.class, "frontRightMotor");
+        motors[3] = hardwareMap.get(DcMotorEx.class, "rearRightMotor");
 
         motors[0].setDirection(DcMotorSimple.Direction.REVERSE);
         motors[1].setDirection(DcMotorSimple.Direction.REVERSE);

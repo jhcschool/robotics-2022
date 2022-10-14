@@ -8,12 +8,21 @@ import org.firstinspires.ftc.teamcode.PoseStorage;
 
 public class ControlledLayer extends Layer {
 
+    enum ControlMode {
+        DRIVER_CONTROL,
+        AUTONOMOUS_CONTROL
+    }
+
     private final ControlSystem controlSystem;
     private Hardware hardware;
+
+    ControlMode controlMode = ControlMode.DRIVER_CONTROL;
 
     public ControlledLayer() {
         controlSystem = new ControlSystem();
     }
+
+
 
     @Override
     public void init(LayerInitInfo info) {

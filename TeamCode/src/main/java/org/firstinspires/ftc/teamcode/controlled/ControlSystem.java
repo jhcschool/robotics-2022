@@ -18,8 +18,8 @@ public class ControlSystem {
         left += gamepad.left_stick_y;
         right += gamepad.left_stick_y;
 
-        left += gamepad.right_stick_x;
-        right -= gamepad.right_stick_x;
+        left -= gamepad.right_stick_x;
+        right += gamepad.right_stick_x;
 
         double frontLeft = left - gamepad.left_stick_x;
         double backLeft = left + gamepad.left_stick_x;

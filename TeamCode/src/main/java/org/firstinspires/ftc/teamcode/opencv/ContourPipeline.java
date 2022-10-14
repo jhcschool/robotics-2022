@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class ContourPipeline extends OpenPipeline {
 
-    Object sync = new Object();
+    private final Object sync = new Object();
     private final ArrayList<OpenRecognition> recognitions = new ArrayList<>();
     private int cameraWidth;
     private int cameraHeight;
@@ -84,7 +84,8 @@ public class ContourPipeline extends OpenPipeline {
                 for (MatOfPoint contour : contours) {
                     Rect rect = Imgproc.boundingRect(contour);
 
-                    recognitions.add(new OpenRecognition(label, 1, rect.x, rect.x + rect.width, rect.y, rect.y + rect.height, rect.width, rect.height, cameraWidth, cameraHeight));
+                    float confidence = (float) (rect.area() / (cameraWidth * cameraHeight));
+                    recognitions.add(new OpenRecognition(label, confidence, rect.x, rect.x + rect.width, rect.y, rect.y + rect.height, rect.width, rect.height, cameraWidth, cameraHeight));
                 }
             }
 

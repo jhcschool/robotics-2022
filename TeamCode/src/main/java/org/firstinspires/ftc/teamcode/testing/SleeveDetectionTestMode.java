@@ -6,8 +6,10 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.ObjectDetector;
+import org.firstinspires.ftc.teamcode.opencv.ColorPipeline;
 import org.firstinspires.ftc.teamcode.opencv.ContourPipeline;
 import org.firstinspires.ftc.teamcode.opencv.OpenObjectDetector;
+import org.firstinspires.ftc.teamcode.opencv.OpenPipeline;
 import org.opencv.core.Scalar;
 
 
@@ -39,7 +41,7 @@ public class SleeveDetectionTestMode extends LinearOpMode {
 
         int viewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 
-        ContourPipeline pipeline = new ContourPipeline(LOWER_BOUNDS, UPPER_BOUNDS, LABELS);
+        OpenPipeline pipeline = new ColorPipeline(LOWER_BOUNDS, UPPER_BOUNDS, LABELS);
 
         WebcamName webcamName = hardwareMap.get(WebcamName.class, "webcam");
 

@@ -18,8 +18,8 @@ public class BasicControlTestMode extends Mode {
 
         frontLeftMotor = hardwareMap.get(DcMotorEx.class, "frontLeftMotor");
         rearLeftMotor = hardwareMap.get(DcMotorEx.class, "rearLeftMotor");
-        rearRightMotor = hardwareMap.get(DcMotorEx.class, "rearRightMotor");
         frontRightMotor = hardwareMap.get(DcMotorEx.class, "frontRightMotor");
+        rearRightMotor = hardwareMap.get(DcMotorEx.class, "rearRightMotor");
 
         rearLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -39,8 +39,8 @@ public class BasicControlTestMode extends Mode {
         left += gamepad1.left_stick_y;
         right += gamepad1.left_stick_y;
 
-        left += gamepad1.right_stick_x;
-        right -= gamepad1.right_stick_x;
+        left -= gamepad1.right_stick_x;
+        right += gamepad1.right_stick_x;
 
         double frontLeft = left - gamepad1.left_stick_x;
         double backLeft = left + gamepad1.left_stick_x;
