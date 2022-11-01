@@ -17,16 +17,9 @@ public class OpenHouseMode extends Mode {
     private DcMotorEx frontLeftMotor, rearLeftMotor, rearRightMotor, frontRightMotor;
     private InputManager inputManager;
 
-    public OpenHouseMode() {
-        inputManager = new InputManager(gamepad1, gamepad2);
-    }
-
     @Override
     public void onInit() {
         super.onInit();
-
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
 
         frontLeftMotor = hardwareMap.get(DcMotorEx.class, "frontLeftMotor");
         rearLeftMotor = hardwareMap.get(DcMotorEx.class, "rearLeftMotor");
@@ -35,6 +28,8 @@ public class OpenHouseMode extends Mode {
 
         rearLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        inputManager = new InputManager(gamepad1, gamepad2);
     }
 
     private double withinRange(double input) {
@@ -52,7 +47,6 @@ public class OpenHouseMode extends Mode {
     public void tick() {
         super.tick();
 
-        telemetry.update();
         inputManager.update();
 
         double left = 0;

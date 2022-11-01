@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.CustomSleeve;
+import org.firstinspires.ftc.teamcode.Mode;
 import org.firstinspires.ftc.teamcode.ObjectDetector;
 import org.firstinspires.ftc.teamcode.opencv.ColorPipeline;
 import org.firstinspires.ftc.teamcode.opencv.ContourPipeline;
@@ -15,7 +16,7 @@ import org.opencv.core.Scalar;
 
 
 @TeleOp(name = "Sleeve Detection Test", group = "Tests")
-public class SleeveDetectionTestMode extends LinearOpMode {
+public class SleeveDetectionTestMode extends Mode {
 
     private static final String[] LABELS = {"Left", "Center", "Right"};
 
@@ -30,19 +31,8 @@ public class SleeveDetectionTestMode extends LinearOpMode {
     private CustomSleeve sleeveColor;
 
     @Override
-    public void runOpMode() {
-        onInit();
-        waitForStart();
-        onStart();
-        while (opModeIsActive() && !isStopRequested()) {
-            tick();
-        }
-    }
-
     public void onInit() {
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
-
+        super.onInit();
 
         int viewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 
@@ -54,12 +44,16 @@ public class SleeveDetectionTestMode extends LinearOpMode {
 
     }
 
+    @Override
     public void onStart() {
+        super.onStart();
+
         objectDetector.start();
     }
 
+    @Override
     public void tick() {
-        telemetry.update();
+        super.tick();
 
         Recognition[] recognitions = objectDetector.getRecognitions();
 

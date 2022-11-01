@@ -13,9 +13,6 @@ public class BackupOpenHouseMode extends Mode {
 
     @Override
     public void onInit() {
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
-
         frontLeftMotor = hardwareMap.get(DcMotorEx.class, "frontLeftMotor");
         rearLeftMotor = hardwareMap.get(DcMotorEx.class, "rearLeftMotor");
         frontRightMotor = hardwareMap.get(DcMotorEx.class, "frontRightMotor");
@@ -38,8 +35,6 @@ public class BackupOpenHouseMode extends Mode {
 
     @Override
     public void tick() {
-        telemetry.update();
-
         double left = 0;
         double right = 0;
 

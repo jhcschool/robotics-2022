@@ -13,8 +13,7 @@ public class BasicControlTestMode extends Mode {
 
     @Override
     public void onInit() {
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
+        super.onInit();
 
         frontLeftMotor = hardwareMap.get(DcMotorEx.class, "frontLeftMotor");
         rearLeftMotor = hardwareMap.get(DcMotorEx.class, "rearLeftMotor");
@@ -31,7 +30,7 @@ public class BasicControlTestMode extends Mode {
 
     @Override
     public void tick() {
-        telemetry.update();
+        super.tick();
 
         double left = 0;
         double right = 0;

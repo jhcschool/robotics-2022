@@ -46,9 +46,6 @@ public class GameStartTestMode extends Mode {
     public void onInit() {
         super.onInit();
 
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
-
         int viewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 
         OpenPipeline pipeline = new ContourPipeline(LOWER_BOUNDS, UPPER_BOUNDS, LABELS);
@@ -142,9 +139,6 @@ public class GameStartTestMode extends Mode {
 
     @Override
     public void tick() {
-        super.tick();
-
-        telemetry.update();
         collectFrame();
 
         if (runtime.milliseconds() < WAIT_TIME) {

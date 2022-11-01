@@ -14,8 +14,7 @@ public class WheelTestMode extends Mode {
 
     @Override
     public void onInit() {
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
+        super.onInit();
 
         motors[0] = hardwareMap.get(DcMotorEx.class, "frontLeftMotor");
         motors[1] = hardwareMap.get(DcMotorEx.class, "rearLeftMotor");
@@ -28,8 +27,7 @@ public class WheelTestMode extends Mode {
 
     @Override
     public void tick() {
-
-        telemetry.update();
+        super.tick();
 
         if (gamepad1.dpad_up) {
             motorIndex = 0;
@@ -49,6 +47,4 @@ public class WheelTestMode extends Mode {
 
         telemetry.addData("Motor index:", motorIndex);
     }
-
-
 }

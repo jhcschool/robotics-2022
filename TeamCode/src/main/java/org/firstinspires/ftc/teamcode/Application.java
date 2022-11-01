@@ -15,14 +15,15 @@ public abstract class Application extends Mode {
 
     @Override
     public void onInit() {
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
+        super.onInit();
 
         hardware = new Hardware(hardwareMap, gamepad1, gamepad2);
     }
 
     @Override
     public void onStart() {
+        super.onStart();
+
         runtime.reset();
 
         for (Layer layer : layers) {
@@ -32,8 +33,9 @@ public abstract class Application extends Mode {
 
     @Override
     public void tick() {
+        super.tick();
 
-        hardware.update(telemetry);
+        hardware.update();
 
         FrameInfo frameInfo = new FrameInfo();
         {
@@ -52,6 +54,8 @@ public abstract class Application extends Mode {
 
     @Override
     public void onEnd() {
+        super.onEnd();
+
         for (Layer layer : layers) {
             layer.onEnd();
         }

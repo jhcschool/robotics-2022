@@ -29,8 +29,7 @@ public class Hardware {
         drive = new StandardMecanumDrive(map);
     }
 
-    public void update(Telemetry telemetry) {
+    public void update() {
         drive.update();
-        telemetry.update();
     }
 }

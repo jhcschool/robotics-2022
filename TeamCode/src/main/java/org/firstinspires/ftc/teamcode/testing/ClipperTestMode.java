@@ -19,12 +19,9 @@ public class ClipperTestMode extends Mode {
     @Override
     public void tick() {
         super.tick();
-        telemetry.update();
 
         double servoPosition = gamepad1.right_trigger;
-
         telemetry.addData("Servo Position", servoPosition);
-
         clipper.setPosition(servoPosition);
     }
 }
