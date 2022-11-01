@@ -4,9 +4,9 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.drive.StandardMecanumDrive;
 
-public class ControlSystem {
+public class UserMovementSystem {
 
-    public ControlSystem() {
+    public UserMovementSystem() {
 
     }
 

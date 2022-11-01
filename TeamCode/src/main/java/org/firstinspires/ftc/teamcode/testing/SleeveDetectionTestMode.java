@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.CustomSleeve;
 import org.firstinspires.ftc.teamcode.ObjectDetector;
 import org.firstinspires.ftc.teamcode.opencv.ColorPipeline;
 import org.firstinspires.ftc.teamcode.opencv.ContourPipeline;
@@ -13,14 +14,18 @@ import org.firstinspires.ftc.teamcode.opencv.OpenPipeline;
 import org.opencv.core.Scalar;
 
 
-@TeleOp(name = "Sleeve Detection Test", group = "Iterative Opmode")
+@TeleOp(name = "Sleeve Detection Test", group = "Tests")
 public class SleeveDetectionTestMode extends LinearOpMode {
 
-    private static final String[] LABELS = {"Red", "Green", "Blue"};
+    private static final String[] LABELS = {"Left", "Center", "Right"};
 
     // OpenCV Color Detection Bounds are in HSV
-    private static final Scalar[] LOWER_BOUNDS = {new Scalar(-10, 100, 100), new Scalar(50, 100, 100), new Scalar(110, 100, 100)};
-    private static final Scalar[] UPPER_BOUNDS = {new Scalar(10, 255, 255), new Scalar(70, 255, 255), new Scalar(130, 255, 255)};
+//    private static final Scalar[] LOWER_BOUNDS = {new Scalar(-10, 100, 100), new Scalar(50, 100, 100), new Scalar(110, 100, 100)};
+//    private static final Scalar[] UPPER_BOUNDS = {new Scalar(10, 255, 255), new Scalar(70, 255, 255), new Scalar(130, 255, 255)};
+
+    private static final Scalar[] LOWER_BOUNDS = {new Scalar(60, 255, 200), new Scalar(180, 255, 200), new Scalar(300, 255, 180)};
+    private static final Scalar[] UPPER_BOUNDS = {new Scalar(60, 120, 255), new Scalar(180, 120, 255), new Scalar(300, 190, 255)};
+
     private ObjectDetector objectDetector;
     private CustomSleeve sleeveColor;
 
@@ -41,7 +46,7 @@ public class SleeveDetectionTestMode extends LinearOpMode {
 
         int viewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 
-        OpenPipeline pipeline = new ColorPipeline(LOWER_BOUNDS, UPPER_BOUNDS, LABELS);
+        OpenPipeline pipeline = new ContourPipeline(LOWER_BOUNDS, UPPER_BOUNDS, LABELS);
 
         WebcamName webcamName = hardwareMap.get(WebcamName.class, "webcam");
 
@@ -69,11 +74,5 @@ public class SleeveDetectionTestMode extends LinearOpMode {
         }
 
         telemetry.addData("Sleeve Color", sleeveColor);
-    }
-
-    enum CustomSleeve {
-        RED,
-        GREEN,
-        BLUE,
     }
 }

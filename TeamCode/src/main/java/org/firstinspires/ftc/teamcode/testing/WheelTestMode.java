@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.Mode;
 
-@TeleOp(name = "Wheel Test", group = "Iterative Opmode")
+@TeleOp(name = "Wheel Test", group = "Tests")
 public class WheelTestMode extends Mode {
 
     int motorIndex;

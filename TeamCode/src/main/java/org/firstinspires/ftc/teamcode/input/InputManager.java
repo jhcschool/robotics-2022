@@ -2,121 +2,113 @@ package org.firstinspires.ftc.teamcode.input;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import java.util.ArrayList;
-import java.util.Map;
-
-
-// this input system was ported from my game engine, you don't need to use it if you don't want to
+import java.util.HashMap;
 
 public class InputManager {
+    private Gamepad gamepad1;
+    private Gamepad gamepad2;
 
-    Map<String, ActionMapping> actionMappings;
-    Map<String, AxisMapping> axisMappings;
-    Map<InputCode, UserInput> inputs;
-    InputState state;
-    ArrayList<Gamepad> managedGamepads;
+    private HashMap<Button, ButtonAction>[] actionStates = new HashMap[2];
 
-    public void registerGamepadInput(Gamepad gamepad) {
-        registerInput(InputCode.A, gamepad.a);
-        registerInput(InputCode.B, gamepad.b);
-        registerInput(InputCode.X, gamepad.x);
-        registerInput(InputCode.Y, gamepad.y);
-        registerInput(InputCode.DPAD_UP, gamepad.dpad_up);
-        registerInput(InputCode.DPAD_DOWN, gamepad.dpad_down);
-        registerInput(InputCode.DPAD_LEFT, gamepad.dpad_left);
-        registerInput(InputCode.DPAD_RIGHT, gamepad.dpad_right);
-        registerInput(InputCode.LEFT_BUMPER, gamepad.left_bumper);
-        registerInput(InputCode.RIGHT_BUMPER, gamepad.right_bumper);
-        registerInput(InputCode.LEFT_TRIGGER, gamepad.left_trigger);
-        registerInput(InputCode.RIGHT_TRIGGER, gamepad.right_trigger);
-        registerInput(InputCode.LEFT_STICK_X, gamepad.left_stick_x);
-        registerInput(InputCode.LEFT_STICK_Y, gamepad.left_stick_y);
-        registerInput(InputCode.RIGHT_STICK_X, gamepad.right_stick_x);
-        registerInput(InputCode.RIGHT_STICK_Y, gamepad.right_stick_y);
-        registerInput(InputCode.LEFT_STICK_BUTTON, gamepad.left_stick_button);
-        registerInput(InputCode.RIGHT_STICK_BUTTON, gamepad.right_stick_button);
-        registerInput(InputCode.START, gamepad.start);
-        registerInput(InputCode.BACK, gamepad.back);
-    }
+    public InputManager(Gamepad gamepad1, Gamepad gamepad2) {
+        this.gamepad1 = gamepad1;
+        this.gamepad2 = gamepad2;
 
-    public void registerInput(InputCode code, double value) {
-        if (!inputs.containsKey(code)) {
-            inputs.put(code, new AxisInput());
+        actionStates[0] = new HashMap<>();
+        actionStates[1] = new HashMap<>();
+
+        for (Button button : Button.values()) {
+            actionStates[0].put(button, ButtonAction.NONE);
+            actionStates[1].put(button, ButtonAction.NONE);
         }
     }
 
-    public void registerInput(InputCode code, boolean value) {
-        if (!inputs.containsKey(code)) {
-            inputs.put(code, new ActionInput());
-        }
-    }
+    public boolean getButton(InputDevice device, Button button) {
+        Gamepad gamepad = getGamepad(device);
 
-    public void addManagedGamepad(Gamepad gamepad) {
-        managedGamepads.add(gamepad);
-    }
-
-    public void addAxisMapping(String name, AxisMapping mapping) {
-        axisMappings.put(name, mapping);
-    }
-
-    public void addActionMapping(String name, ActionMapping mapping) {
-        actionMappings.put(name, mapping);
-    }
-
-    public InputState tick() {
-
-        state.clear();
-
-        for (Gamepad gamepad : managedGamepads) {
-            registerGamepadInput(gamepad);
+        String name = button.toString().toLowerCase();
+        try {
+            return gamepad.getClass().getDeclaredField(name).getBoolean(gamepad);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
         }
 
-        for (Map.Entry<String, ActionMapping> entry : actionMappings.entrySet()) {
-            ActionState actionState = ActionState.INACTIVE;
+        return false;
+    }
 
-            for (InputCode code : entry.getValue().codes) {
-                if (inputs.containsKey(code)) {
-                    actionState = inputs.get(code).getState();
+    public boolean getButton(Button button) {
+        return getButton(InputDevice.GAMEPAD1, button) || getButton(InputDevice.GAMEPAD2, button);
+    }
+
+    public float getAxis(InputDevice device, Axis axis) {
+        Gamepad gamepad = getGamepad(device);
+
+        String name = axis.toString().toLowerCase();
+        try {
+            return gamepad.getClass().getDeclaredField(name).getFloat(gamepad);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    public float getAxis(Axis axis) {
+        return Math.max(getAxis(InputDevice.GAMEPAD1, axis), getAxis(InputDevice.GAMEPAD2, axis));
+    }
+
+    private Gamepad getGamepad(InputDevice device) {
+        switch (device) {
+            case GAMEPAD1:
+                return gamepad1;
+            case GAMEPAD2:
+                return gamepad2;
+        }
+
+        return null;
+    }
+
+    public void update() {
+        updateGamepad(gamepad1, 0);
+        updateGamepad(gamepad2, 1);
+    }
+
+    private void updateGamepad(Gamepad gamepad, int index) {
+        for (Button button : Button.values()) {
+            ButtonAction action = actionStates[index].get(button);
+
+            boolean pressed = getButton(InputDevice.values()[index], button);
+
+            if (pressed) {
+                if (action == ButtonAction.NONE) {
+                    actionStates[index].put(button, ButtonAction.PRESS);
+                } else {
+                    actionStates[index].put(button, ButtonAction.NONE);
+                }
+            } else {
+                if (action == ButtonAction.PRESS) {
+                    actionStates[index].put(button, ButtonAction.RELEASE);
+                } else {
+                    actionStates[index].put(button, ButtonAction.NONE);
                 }
             }
-
-            state.registerAction(entry.getKey(), actionState);
         }
-
-        for (Map.Entry<String, AxisMapping> entry : axisMappings.entrySet()) {
-            double axisState = 0;
-
-            for (AxisActivation activation : entry.getValue().activations) {
-                if (inputs.containsKey(activation.code)) {
-                    double input = inputs.get(activation.code).getIntensity() * activation.intensityMultiplier;
-
-                    if (Math.abs(input) > Math.abs(axisState)) {
-                        axisState = input;
-                    }
-                }
-            }
-
-            state.registerAxis(entry.getKey(), axisState);
-        }
-
-
-        for (Map.Entry<InputCode, UserInput> entry : inputs.entrySet()) {
-            entry.getValue().tick();
-        }
-
-        return state;
     }
 
-    public class ActionMapping {
-        ArrayList<InputCode> codes;
+    public ButtonAction getButtonAction(InputDevice device, Button button) {
+        return actionStates[device.ordinal()].get(button);
     }
 
-    public class AxisActivation {
-        double intensityMultiplier;
-        InputCode code;
-    }
+    public ButtonAction getButtonAction(Button button) {
+        ButtonAction action = getButtonAction(InputDevice.GAMEPAD1, button);
+        if (action == ButtonAction.NONE) {
+            action = getButtonAction(InputDevice.GAMEPAD2, button);
+        }
 
-    public class AxisMapping {
-        ArrayList<AxisActivation> activations;
+        return action;
     }
 }

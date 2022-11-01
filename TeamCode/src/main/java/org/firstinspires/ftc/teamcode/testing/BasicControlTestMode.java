@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.Mode;
 
-@TeleOp(name = "Basic Control Test", group = "Iterative Opmode")
+@TeleOp(name = "Basic Control Test", group = "Tests")
 public class BasicControlTestMode extends Mode {
 
     private DcMotorEx frontLeftMotor, rearLeftMotor, rearRightMotor, frontRightMotor;
