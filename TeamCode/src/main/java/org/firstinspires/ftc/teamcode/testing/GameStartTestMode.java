@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode.testing;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -31,16 +28,14 @@ public class GameStartTestMode extends Mode {
     private static final Scalar[] UPPER_BOUNDS = {new Scalar(60, 120, 255), new Scalar(180, 120, 255), new Scalar(300, 190, 255)};
 
     private static final int COLLECTED_FRAMES = 30;
-    private CustomSleeve[] detections = new CustomSleeve[COLLECTED_FRAMES];
-    private int detectionIndex = 0;
-
-    private ObjectDetector objectDetector;
-
-    private final ElapsedTime runtime = new ElapsedTime();
     private static final int WAIT_TIME = 1000;
     private static final int MOVE_TIME = 1000;
-
+    private final ElapsedTime runtime = new ElapsedTime();
+    private CustomSleeve[] detections = new CustomSleeve[COLLECTED_FRAMES];
+    private int detectionIndex = 0;
+    private ObjectDetector objectDetector;
     private DcMotorEx frontLeftMotor, rearLeftMotor, rearRightMotor, frontRightMotor;
+    private CustomSleeve averagedResult;
 
     @Override
     public void onInit() {
@@ -67,9 +62,6 @@ public class GameStartTestMode extends Mode {
         runtime.reset();
         objectDetector.start();
     }
-
-
-    private CustomSleeve averagedResult;
 
     private void collectFrame() {
         if (detectionIndex >= COLLECTED_FRAMES) return;

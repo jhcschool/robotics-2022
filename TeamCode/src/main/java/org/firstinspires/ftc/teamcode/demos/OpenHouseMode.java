@@ -16,6 +16,8 @@ public class OpenHouseMode extends Mode {
 
     private DcMotorEx frontLeftMotor, rearLeftMotor, rearRightMotor, frontRightMotor;
     private InputManager inputManager;
+    private float powerSetting = 0.5f;
+    private double powerLimit = 1.0f;
 
     @Override
     public void onInit() {
@@ -35,9 +37,6 @@ public class OpenHouseMode extends Mode {
     private double withinRange(double input) {
         return Math.max(-1, Math.min(1, input));
     }
-
-    private float powerSetting = 0.5f;
-    private double powerLimit = 1.0f;
 
     private double limitPower(double power) {
         return Math.max(-powerLimit, Math.min(powerLimit, power));

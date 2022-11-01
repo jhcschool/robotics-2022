@@ -11,8 +11,8 @@ import org.firstinspires.ftc.teamcode.drive.StandardMecanumDrive;
 public class LaneSystem {
 
     private final float[] laneCoordinates;
-    private Vector2d[] nodes;
     private final StandardMecanumDrive drive;
+    private Vector2d[] nodes;
 
     public LaneSystem(StandardMecanumDrive drive, float[] laneCoordinates) {
         this.drive = drive;

@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.testing;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -8,7 +7,6 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.CustomSleeve;
 import org.firstinspires.ftc.teamcode.Mode;
 import org.firstinspires.ftc.teamcode.ObjectDetector;
-import org.firstinspires.ftc.teamcode.opencv.ColorPipeline;
 import org.firstinspires.ftc.teamcode.opencv.ContourPipeline;
 import org.firstinspires.ftc.teamcode.opencv.OpenObjectDetector;
 import org.firstinspires.ftc.teamcode.opencv.OpenPipeline;

@@ -9,8 +9,8 @@ import org.firstinspires.ftc.teamcode.Mode;
 @TeleOp(name = "Wheel Test", group = "Tests")
 public class WheelTestMode extends Mode {
 
-    int motorIndex;
     private final DcMotorEx[] motors = new DcMotorEx[4];
+    int motorIndex;
 
     @Override
     public void onInit() {

@@ -11,11 +11,9 @@ import org.opencv.imgproc.Imgproc;
 
 public class ColorPipeline extends OpenPipeline {
 
+    private static final Point SLEEVE_TOPLEFT_ANCHOR_POINT = new Point(145, 168);
     public static int REGION_WIDTH = 30;
     public static int REGION_HEIGHT = 50;
-
-    private static final Point SLEEVE_TOPLEFT_ANCHOR_POINT = new Point(145, 168);
-
     // Anchor point definitions
     private Point SLEEVE_POINT_A = new Point(
             SLEEVE_TOPLEFT_ANCHOR_POINT.x,

@@ -9,9 +9,9 @@ import java.util.ArrayList;
 public abstract class Application extends Mode {
 
     private final ElapsedTime runtime = new ElapsedTime();
+    private final ArrayList<Layer> layers = new ArrayList<Layer>();
     private Hardware hardware;
     private double time;
-    private final ArrayList<Layer> layers = new ArrayList<Layer>();
 
     @Override
     public void onInit() {

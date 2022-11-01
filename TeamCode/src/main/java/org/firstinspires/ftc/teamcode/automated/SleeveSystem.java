@@ -9,11 +9,11 @@ import java.util.ArrayList;
 
 public class SleeveSystem {
     private final int TARGET_DETECTIONS = 15;
+    private final SleeveDetector sleeveDetector;
+    private final ArrayList<CustomSleeve> firstDetections = new ArrayList<>();
     // Returns the distance that the robot move to the right to get into the signal zone
     private Function<Float, Void> onNavigateBack;
     private CustomSleeve sleeveColor;
-    private final SleeveDetector sleeveDetector;
-    private final ArrayList<CustomSleeve> firstDetections = new ArrayList<>();
 
     SleeveSystem(int viewId, Hardware hardware, Function<Float, Void> onNavigateBack) {
         sleeveDetector = new SleeveDetector(viewId, hardware);

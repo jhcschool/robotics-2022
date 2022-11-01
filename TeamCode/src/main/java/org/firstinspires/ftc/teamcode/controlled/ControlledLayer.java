@@ -4,22 +4,16 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 
 import org.firstinspires.ftc.teamcode.FrameInfo;
 import org.firstinspires.ftc.teamcode.Hardware;
-import org.firstinspires.ftc.teamcode.LaneSystem;
 import org.firstinspires.ftc.teamcode.Layer;
 import org.firstinspires.ftc.teamcode.LayerInitInfo;
 import org.firstinspires.ftc.teamcode.PoseStorage;
 
 public class ControlledLayer extends Layer {
 
-    enum ControlMode {
-        DRIVER_CONTROL,
-        AUTONOMOUS_CONTROL
-    }
-
     private final UserMovementSystem userMovementSystem;
     private Hardware hardware;
-
     private ControlMode controlMode = ControlMode.DRIVER_CONTROL;
+    private Trajectory trajectory = null;
 
     public ControlledLayer() {
         userMovementSystem = new UserMovementSystem();
@@ -34,7 +28,7 @@ public class ControlledLayer extends Layer {
 
     @Override
     public void tick(FrameInfo frameInfo) {
-        switch(controlMode) {
+        switch (controlMode) {
             case DRIVER_CONTROL:
                 tickDriver(frameInfo);
                 break;
@@ -43,8 +37,6 @@ public class ControlledLayer extends Layer {
                 break;
         }
     }
-
-    private Trajectory trajectory = null;
 
     private void tickAutonomous(FrameInfo frameInfo) {
         if (hardware.gamepad1.b) {
@@ -60,5 +52,10 @@ public class ControlledLayer extends Layer {
 
     private void tickDriver(FrameInfo frameInfo) {
         userMovementSystem.tick(hardware.gamepad1, hardware.drive);
+    }
+
+    enum ControlMode {
+        DRIVER_CONTROL,
+        AUTONOMOUS_CONTROL
     }
 }

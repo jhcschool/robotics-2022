@@ -10,6 +10,8 @@ import org.firstinspires.ftc.teamcode.Mode;
 public class BackupOpenHouseMode extends Mode {
 
     private DcMotorEx frontLeftMotor, rearLeftMotor, rearRightMotor, frontRightMotor;
+    private float powerSetting = 0.5f;
+    private float powerLimit = 1.0f;
 
     @Override
     public void onInit() {
@@ -25,9 +27,6 @@ public class BackupOpenHouseMode extends Mode {
     private double withinRange(double input) {
         return Math.max(-1, Math.min(1, input));
     }
-
-    private float powerSetting = 0.5f;
-    private float powerLimit = 1.0f;
 
     private double limitPower(double power) {
         return Math.max(-powerLimit, Math.min(powerLimit, power));
