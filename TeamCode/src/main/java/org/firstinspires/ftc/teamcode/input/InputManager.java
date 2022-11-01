@@ -58,7 +58,14 @@ public class InputManager {
     }
 
     public float getAxis(Axis axis) {
-        return Math.max(getAxis(InputDevice.GAMEPAD1, axis), getAxis(InputDevice.GAMEPAD2, axis));
+        float axis1 = getAxis(InputDevice.GAMEPAD1, axis);
+        float axis2 = getAxis(InputDevice.GAMEPAD2, axis);
+
+        if (Math.abs(axis1) > Math.abs(axis2)) {
+            return axis1;
+        }
+
+        return axis2;
     }
 
     private Gamepad getGamepad(InputDevice device) {

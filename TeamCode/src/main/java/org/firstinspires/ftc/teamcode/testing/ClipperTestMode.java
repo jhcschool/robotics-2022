@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Mode;
 
-@TeleOp(name = "Clipper Test", group = "Tests")
+@TeleOp(name = "Clipper Test", group = "Iterative Opmode")
 public class ClipperTestMode extends Mode {
 
     private Servo clipper;

@@ -6,11 +6,11 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.Mode;
 
-@TeleOp(name = "Backup Open House Mode", group = "Tests")
+@TeleOp(name = "Backup Open House Mode", group = "Iterative Opmode")
 public class BackupOpenHouseMode extends Mode {
 
     private DcMotorEx frontLeftMotor, rearLeftMotor, rearRightMotor, frontRightMotor;
-    private float powerSetting = 0.5f;
+    private float powerSetting = 1.0f;
     private float powerLimit = 1.0f;
 
     @Override

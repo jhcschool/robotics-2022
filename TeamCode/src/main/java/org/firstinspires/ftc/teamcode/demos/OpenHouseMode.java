@@ -8,15 +8,14 @@ import org.firstinspires.ftc.teamcode.Mode;
 import org.firstinspires.ftc.teamcode.input.Axis;
 import org.firstinspires.ftc.teamcode.input.Button;
 import org.firstinspires.ftc.teamcode.input.ButtonAction;
-import org.firstinspires.ftc.teamcode.input.InputDevice;
 import org.firstinspires.ftc.teamcode.input.InputManager;
 
-@TeleOp(name = "Open House Mode", group = "Demos")
+@TeleOp(name = "Open House Mode", group = "Iterative Opmode")
 public class OpenHouseMode extends Mode {
 
     private DcMotorEx frontLeftMotor, rearLeftMotor, rearRightMotor, frontRightMotor;
     private InputManager inputManager;
-    private float powerSetting = 0.5f;
+    private float powerSetting = 1.0f;
     private double powerLimit = 1.0f;
 
     @Override
@@ -75,9 +74,9 @@ public class OpenHouseMode extends Mode {
 
         setMotorPowers(frontLeft, backLeft, frontRight, backRight);
 
-        if (inputManager.getButtonAction(InputDevice.GAMEPAD1, Button.DPAD_UP) == ButtonAction.PRESS) {
+        if (inputManager.getButtonAction(Button.DPAD_UP) == ButtonAction.PRESS) {
             powerSetting += 0.1f;
-        } else if (inputManager.getButtonAction(InputDevice.GAMEPAD1, Button.DPAD_DOWN) == ButtonAction.PRESS) {
+        } else if (inputManager.getButtonAction(Button.DPAD_DOWN) == ButtonAction.PRESS) {
             powerSetting -= 0.1f;
         }
 
@@ -87,9 +86,9 @@ public class OpenHouseMode extends Mode {
             powerSetting = 1;
         }
 
-        if (inputManager.getButtonAction(InputDevice.GAMEPAD1, Button.DPAD_LEFT) == ButtonAction.PRESS) {
+        if (inputManager.getButtonAction(Button.DPAD_LEFT) == ButtonAction.PRESS) {
             powerLimit -= 0.1f;
-        } else if (inputManager.getButtonAction(InputDevice.GAMEPAD1, Button.DPAD_RIGHT) == ButtonAction.PRESS) {
+        } else if (inputManager.getButtonAction(Button.DPAD_RIGHT) == ButtonAction.PRESS) {
             powerLimit += 0.1f;
         }
 

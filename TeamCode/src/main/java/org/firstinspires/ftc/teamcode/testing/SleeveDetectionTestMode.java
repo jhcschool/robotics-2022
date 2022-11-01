@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.testing;
 
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.opencv.OpenPipeline;
 import org.opencv.core.Scalar;
 
 
-@TeleOp(name = "Sleeve Detection Test", group = "Tests")
+@Autonomous(name = "Sleeve Detection Test", group = "Iterative Opmode")
 public class SleeveDetectionTestMode extends Mode {
 
     private static final String[] LABELS = {"Left", "Center", "Right"};

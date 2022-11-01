@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.input.InputManager;
+
 import java.util.ArrayList;
 
 @Disabled
@@ -13,11 +15,14 @@ public abstract class Application extends Mode {
     private Hardware hardware;
     private double time;
 
+    private InputManager inputManager;
+
     @Override
     public void onInit() {
         super.onInit();
 
         hardware = new Hardware(hardwareMap, gamepad1, gamepad2);
+        inputManager = new InputManager(gamepad1, gamepad2);
     }
 
     @Override
@@ -36,6 +41,7 @@ public abstract class Application extends Mode {
         super.tick();
 
         hardware.update();
+        inputManager.update();
 
         FrameInfo frameInfo = new FrameInfo();
         {
@@ -47,8 +53,6 @@ public abstract class Application extends Mode {
             for (Layer layer : layers) {
                 layer.tick(frameInfo);
             }
-
-
         }
     }
 
@@ -68,6 +72,7 @@ public abstract class Application extends Mode {
         info.hardwareMap = hardwareMap;
         info.hardware = hardware;
         info.telemetry = telemetry;
+        info.inputManager = inputManager;
 
         layer.init(info);
     }

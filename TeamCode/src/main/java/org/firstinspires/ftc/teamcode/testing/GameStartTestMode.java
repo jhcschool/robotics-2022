@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.testing;
 
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -15,14 +15,15 @@ import org.firstinspires.ftc.teamcode.opencv.OpenPipeline;
 import org.opencv.core.Scalar;
 
 
-@TeleOp(name = "Game Start Test", group = "Tests")
+@Autonomous(name = "Game Start Test", group = "Iterative Opmode")
 public class GameStartTestMode extends Mode {
 
     private static final String[] LABELS = {"Left", "Center", "Right"};
 
-    // OpenCV Color Detection Bounds are in HSV
-//    private static final Scalar[] LOWER_BOUNDS = {new Scalar(-10, 100, 100), new Scalar(50, 100, 100), new Scalar(110, 100, 100)};
-//    private static final Scalar[] UPPER_BOUNDS = {new Scalar(10, 255, 255), new Scalar(70, 255, 255), new Scalar(130, 255, 255)};
+//     OpenCV Color Detection Bounds are in HSV
+
+//     private static final Scalar[] LOWER_BOUNDS = {new Scalar(-10, 100, 100), new Scalar(50, 100, 100), new Scalar(110, 100, 100)};
+//     private static final Scalar[] UPPER_BOUNDS = {new Scalar(10, 255, 255), new Scalar(70, 255, 255), new Scalar(130, 255, 255)};
 
     private static final Scalar[] LOWER_BOUNDS = {new Scalar(60, 255, 200), new Scalar(180, 255, 200), new Scalar(300, 255, 180)};
     private static final Scalar[] UPPER_BOUNDS = {new Scalar(60, 120, 255), new Scalar(180, 120, 255), new Scalar(300, 190, 255)};

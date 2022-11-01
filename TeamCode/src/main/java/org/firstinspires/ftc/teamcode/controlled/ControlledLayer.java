@@ -7,14 +7,17 @@ import org.firstinspires.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.teamcode.Layer;
 import org.firstinspires.ftc.teamcode.LayerInitInfo;
 import org.firstinspires.ftc.teamcode.PoseStorage;
+import org.firstinspires.ftc.teamcode.input.Button;
+import org.firstinspires.ftc.teamcode.input.ButtonAction;
+import org.firstinspires.ftc.teamcode.input.InputManager;
 
 public class ControlledLayer extends Layer {
 
     private final UserMovementSystem userMovementSystem;
     private Hardware hardware;
+    private InputManager inputManager;
     private ControlMode controlMode = ControlMode.DRIVER_CONTROL;
     private Trajectory trajectory = null;
-
     public ControlledLayer() {
         userMovementSystem = new UserMovementSystem();
     }
@@ -23,6 +26,8 @@ public class ControlledLayer extends Layer {
     public void init(LayerInitInfo info) {
         super.init(info);
         hardware = info.hardware;
+        inputManager = info.inputManager;
+
         hardware.drive.setPoseEstimate(PoseStorage.robotPose);
     }
 
@@ -39,7 +44,7 @@ public class ControlledLayer extends Layer {
     }
 
     private void tickAutonomous(FrameInfo frameInfo) {
-        if (hardware.gamepad1.b) {
+        if (inputManager.getButtonAction(Button.B) == ButtonAction.PRESS) {
             controlMode = ControlMode.DRIVER_CONTROL;
             trajectory = null;
             return;
@@ -54,7 +59,7 @@ public class ControlledLayer extends Layer {
         userMovementSystem.tick(hardware.gamepad1, hardware.drive);
     }
 
-    enum ControlMode {
+    private enum ControlMode {
         DRIVER_CONTROL,
         AUTONOMOUS_CONTROL
     }

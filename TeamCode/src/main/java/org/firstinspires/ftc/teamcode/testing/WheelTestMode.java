@@ -6,11 +6,11 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.Mode;
 
-@TeleOp(name = "Wheel Test", group = "Tests")
+@TeleOp(name = "Wheel Test", group = "Iterative Opmode")
 public class WheelTestMode extends Mode {
 
     private final DcMotorEx[] motors = new DcMotorEx[4];
-    int motorIndex;
+    private int motorIndex;
 
     @Override
     public void onInit() {
