@@ -5,26 +5,14 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.Mode;
-import org.firstinspires.ftc.teamcode.input.Axis;
-import org.firstinspires.ftc.teamcode.input.Button;
-import org.firstinspires.ftc.teamcode.input.ButtonAction;
-import org.firstinspires.ftc.teamcode.input.InputDevice;
-import org.firstinspires.ftc.teamcode.input.InputManager;
 
-@TeleOp(name = "Open House Mode", group = "Demos")
-public class OpenHouseMode extends Mode {
+@TeleOp(name = "Backup Open House Mode", group = "Tests")
+public class BackupOpenHouseMode extends Mode {
 
     private DcMotorEx frontLeftMotor, rearLeftMotor, rearRightMotor, frontRightMotor;
-    private InputManager inputManager;
-
-    public OpenHouseMode() {
-        inputManager = new InputManager(gamepad1, gamepad2);
-    }
 
     @Override
     public void onInit() {
-        super.onInit();
-
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
@@ -42,7 +30,7 @@ public class OpenHouseMode extends Mode {
     }
 
     private float powerSetting = 0.5f;
-    private double powerLimit = 1.0f;
+    private float powerLimit = 1.0f;
 
     private double limitPower(double power) {
         return Math.max(-powerLimit, Math.min(powerLimit, power));
@@ -50,25 +38,22 @@ public class OpenHouseMode extends Mode {
 
     @Override
     public void tick() {
-        super.tick();
-
         telemetry.update();
-        inputManager.update();
 
         double left = 0;
         double right = 0;
 
-        left += inputManager.getAxis(Axis.LEFT_STICK_Y);
-        right += inputManager.getAxis(Axis.LEFT_STICK_Y);
+        left += gamepad1.left_stick_y;
+        right += gamepad1.left_stick_y;
 
-        left -= inputManager.getAxis(Axis.RIGHT_STICK_X);
-        right += inputManager.getAxis(Axis.RIGHT_STICK_X);
+        left -= gamepad1.right_stick_x;
+        right += gamepad1.right_stick_x;
 
-        double frontLeft = left - inputManager.getAxis(Axis.LEFT_STICK_X);
-        double backLeft = left + inputManager.getAxis(Axis.LEFT_STICK_X);
+        double frontLeft = left - gamepad1.left_stick_x;
+        double backLeft = left + gamepad1.left_stick_x;
 
-        double frontRight = right + inputManager.getAxis(Axis.LEFT_STICK_X);
-        double backRight = right - inputManager.getAxis(Axis.LEFT_STICK_X);
+        double frontRight = right + gamepad1.left_stick_x;
+        double backRight = right - gamepad1.left_stick_x;
 
         frontLeft = withinRange(frontLeft) * powerSetting;
         backLeft = withinRange(backLeft) * powerSetting;
@@ -82,28 +67,30 @@ public class OpenHouseMode extends Mode {
 
         setMotorPowers(frontLeft, backLeft, frontRight, backRight);
 
-        if (inputManager.getButtonAction(InputDevice.GAMEPAD1, Button.DPAD_UP) == ButtonAction.PRESS) {
-            powerSetting += 0.1f;
-        } else if (inputManager.getButtonAction(InputDevice.GAMEPAD1, Button.DPAD_DOWN) == ButtonAction.PRESS) {
-            powerSetting -= 0.1f;
+        if (gamepad1.dpad_left) {
+            powerSetting = 0.25f;
+        }
+        if (gamepad1.dpad_right) {
+            powerSetting = 0.5f;
+        }
+        if (gamepad1.dpad_up) {
+            powerSetting = 0.75f;
+        }
+        if (gamepad1.dpad_down) {
+            powerSetting = 1f;
         }
 
-        if (powerSetting > 1) {
-            powerSetting = 0;
-        } else if (powerSetting < 0) {
-            powerSetting = 1;
+        if (gamepad1.x) {
+            powerLimit = 0.25f;
         }
-
-        if (inputManager.getButtonAction(InputDevice.GAMEPAD1, Button.DPAD_LEFT) == ButtonAction.PRESS) {
-            powerLimit -= 0.1f;
-        } else if (inputManager.getButtonAction(InputDevice.GAMEPAD1, Button.DPAD_RIGHT) == ButtonAction.PRESS) {
-            powerLimit += 0.1f;
+        if (gamepad1.b) {
+            powerLimit = 0.5f;
         }
-
-        if (powerLimit > 1) {
-            powerLimit = 0;
-        } else if (powerLimit < 0) {
-            powerLimit = 1;
+        if (gamepad1.y) {
+            powerLimit = 0.75f;
+        }
+        if (gamepad1.a) {
+            powerLimit = 1f;
         }
 
         telemetry.addData("Power Setting", powerSetting);
