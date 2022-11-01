@@ -47,6 +47,9 @@ public class OpenHouseMode extends Mode {
 
         inputManager.update();
 
+        telemetry.addData("Power Setting", powerSetting);
+        telemetry.addData("Power Limit", powerLimit);
+
         double left = 0;
         double right = 0;
 
@@ -74,6 +77,10 @@ public class OpenHouseMode extends Mode {
 
         setMotorPowers(frontLeft, backLeft, frontRight, backRight);
 
+        if (inputManager.getAxis(Axis.LEFT_TRIGGER) < 0.5 || inputManager.getAxis(Axis.RIGHT_TRIGGER) < 0.5) {
+            return;
+        }
+
         if (inputManager.getButtonAction(Button.DPAD_UP) == ButtonAction.PRESS) {
             powerSetting += 0.1f;
         } else if (inputManager.getButtonAction(Button.DPAD_DOWN) == ButtonAction.PRESS) {
@@ -97,9 +104,6 @@ public class OpenHouseMode extends Mode {
         } else if (powerLimit < 0) {
             powerLimit = 1;
         }
-
-        telemetry.addData("Power Setting", powerSetting);
-        telemetry.addData("Power Limit", powerLimit);
     }
 
     private void setMotorPowers(double frontLeft, double rearLeft, double frontRight, double rearRight) {

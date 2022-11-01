@@ -16,12 +16,26 @@ public class ClipperTestMode extends Mode {
         clipper = hardwareMap.get(Servo.class, "clipper");
     }
 
+    boolean clipped = false;
+
     @Override
     public void tick() {
         super.tick();
 
-        double servoPosition = gamepad1.right_trigger;
-        telemetry.addData("Servo Position", servoPosition);
-        clipper.setPosition(servoPosition);
+        telemetry.addData("Clipped", clipped);
+
+        if (clipped) {
+            clipper.setPosition(0);
+        } else {
+            clipper.setPosition(0.5);
+        }
+
+        if (gamepad1.a) {
+            clipped = true;
+        }
+
+        if (gamepad1.b) {
+            clipped = false;
+        }
     }
 }

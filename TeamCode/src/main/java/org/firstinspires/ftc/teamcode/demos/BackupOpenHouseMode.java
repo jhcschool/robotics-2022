@@ -34,6 +34,11 @@ public class BackupOpenHouseMode extends Mode {
 
     @Override
     public void tick() {
+        super.tick();
+
+        telemetry.addData("Power Setting", powerSetting);
+        telemetry.addData("Power Limit", powerLimit);
+
         double left = 0;
         double right = 0;
 
@@ -61,6 +66,8 @@ public class BackupOpenHouseMode extends Mode {
 
         setMotorPowers(frontLeft, backLeft, frontRight, backRight);
 
+        if (gamepad1.left_trigger < 0.5 || gamepad1.right_trigger < 0.5) return;
+
         if (gamepad1.dpad_left) {
             powerSetting = 0.25f;
         }
@@ -86,9 +93,6 @@ public class BackupOpenHouseMode extends Mode {
         if (gamepad1.a) {
             powerLimit = 1f;
         }
-
-        telemetry.addData("Power Setting", powerSetting);
-        telemetry.addData("Power Limit", powerLimit);
     }
 
     private void setMotorPowers(double frontLeft, double rearLeft, double frontRight, double rearRight) {

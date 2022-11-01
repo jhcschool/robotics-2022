@@ -22,8 +22,8 @@ public class SleeveDetectionTestMode extends Mode {
 //    private static final Scalar[] LOWER_BOUNDS = {new Scalar(-10, 100, 100), new Scalar(50, 100, 100), new Scalar(110, 100, 100)};
 //    private static final Scalar[] UPPER_BOUNDS = {new Scalar(10, 255, 255), new Scalar(70, 255, 255), new Scalar(130, 255, 255)};
 
-    private static final Scalar[] LOWER_BOUNDS = {new Scalar(60, 255, 200), new Scalar(180, 255, 200), new Scalar(300, 255, 180)};
-    private static final Scalar[] UPPER_BOUNDS = {new Scalar(60, 120, 255), new Scalar(180, 120, 255), new Scalar(300, 190, 255)};
+    private static final Scalar[] LOWER_BOUNDS = {new Scalar(60, 255, 200), new Scalar(180, 255, 200), new Scalar(300, 255, 170)};
+    private static final Scalar[] UPPER_BOUNDS = {new Scalar(60, 125, 255), new Scalar(180, 100, 255), new Scalar(300, 195, 255)};
 
     private ObjectDetector objectDetector;
     private CustomSleeve sleeveColor;
