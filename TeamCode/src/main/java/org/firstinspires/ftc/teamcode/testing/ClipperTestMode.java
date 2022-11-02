@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.Mode;
 @TeleOp(name = "Clipper Test", group = "Iterative Opmode")
 public class ClipperTestMode extends Mode {
 
+    boolean clipped = false;
     private Servo clipper;
 
     @Override
@@ -15,8 +16,6 @@ public class ClipperTestMode extends Mode {
         super.onInit();
         clipper = hardwareMap.get(Servo.class, "clipper");
     }
-
-    boolean clipped = false;
 
     @Override
     public void tick() {

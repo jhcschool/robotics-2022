@@ -68,7 +68,18 @@ public class GrizzlyGamepad {
                 continue;
             }
 
-            boolean pressed = getButton(button);
+            boolean pressed = false;
+
+            try {
+                pressed = gamepad.getClass().getDeclaredField(button.toString().toLowerCase()).getBoolean(gamepad);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+                continue;
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+                continue;
+            }
+
             ButtonAction action = buttonActions.get(button);
 
             if (pressed) {

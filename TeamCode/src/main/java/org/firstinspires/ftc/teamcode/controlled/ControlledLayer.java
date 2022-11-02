@@ -18,6 +18,7 @@ public class ControlledLayer extends Layer {
     private InputManager inputManager;
     private ControlMode controlMode = ControlMode.DRIVER_CONTROL;
     private Trajectory trajectory = null;
+
     public ControlledLayer() {
         userMovementSystem = new UserMovementSystem();
     }

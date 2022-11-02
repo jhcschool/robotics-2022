@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode.input;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import java.util.HashMap;
-
 public class InputManager {
 
     private GrizzlyGamepad gamepad1;
