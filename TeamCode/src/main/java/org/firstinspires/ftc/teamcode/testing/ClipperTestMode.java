@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.Mode;
 @TeleOp(name = "Clipper Test", group = "Iterative Opmode")
 public class ClipperTestMode extends Mode {
 
-    boolean clipped = false;
+    private boolean clipped = false;
     private Servo clipper;
 
     @Override
@@ -24,9 +24,9 @@ public class ClipperTestMode extends Mode {
         telemetry.addData("Clipped", clipped);
 
         if (clipped) {
-            clipper.setPosition(0);
-        } else {
             clipper.setPosition(0.5);
+        } else {
+            clipper.setPosition(0);
         }
 
         if (gamepad1.a) {

@@ -10,31 +10,18 @@ public class GrizzlyGamepad {
     private Gamepad gamepad;
     private ElapsedTime timer;
 
-    private float debounceTime = 30;
-
     private HashMap<Button, ButtonAction> buttonActions;
-    private HashMap<Button, Boolean> buttonStates;
-    private HashMap<Button, Float> buttonTimes;
 
     public GrizzlyGamepad(Gamepad gamepad) {
         this.gamepad = gamepad;
 
         timer = new ElapsedTime();
         buttonActions = new HashMap<>();
-        buttonStates = new HashMap<>();
-        buttonTimes = new HashMap<>();
-
         timer.reset();
 
         for (Button button : Button.values()) {
             buttonActions.put(button, ButtonAction.NONE);
-            buttonStates.put(button, false);
-            buttonTimes.put(button, 0.0f);
         }
-    }
-
-    public void setDebounceTime(float debounceTime) {
-        this.debounceTime = debounceTime;
     }
 
     public float getAxis(Axis axis) {
@@ -51,54 +38,40 @@ public class GrizzlyGamepad {
     }
 
     public boolean getButton(Button button) {
-        return buttonStates.get(button);
+        String name = button.toString().toLowerCase();
+        try {
+            return gamepad.getClass().getDeclaredField(name).getBoolean(gamepad);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
     public ButtonAction getButtonAction(Button button) {
         return buttonActions.get(button);
     }
 
-    private boolean shouldDebounce(Button button) {
-        return timer.milliseconds() - buttonTimes.get(button) < debounceTime;
-    }
-
     public void update() {
         for (Button button : Button.values()) {
-            if (shouldDebounce(button)) {
-                continue;
-            }
-
-            boolean pressed = false;
-
-            try {
-                pressed = gamepad.getClass().getDeclaredField(button.toString().toLowerCase()).getBoolean(gamepad);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-                continue;
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-                continue;
-            }
-
+            boolean pressed = getButton(button);
             ButtonAction action = buttonActions.get(button);
 
             if (pressed) {
                 if (action == ButtonAction.NONE) {
                     buttonActions.put(button, ButtonAction.PRESS);
-                    buttonTimes.put(button, (float) timer.milliseconds());
                 } else {
-                    buttonActions.put(button, ButtonAction.NONE);
+                    buttonActions.put(button, ButtonAction.HELD);
                 }
             } else {
-                if (action == ButtonAction.PRESS) {
+                if (action == ButtonAction.PRESS || action == ButtonAction.HELD) {
                     buttonActions.put(button, ButtonAction.RELEASE);
-                    buttonTimes.put(button, (float) timer.milliseconds());
                 } else {
                     buttonActions.put(button, ButtonAction.NONE);
                 }
             }
-
-            buttonStates.put(button, pressed);
         }
     }
 }

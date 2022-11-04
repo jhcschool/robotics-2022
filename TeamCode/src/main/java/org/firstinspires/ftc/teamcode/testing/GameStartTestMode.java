@@ -25,8 +25,8 @@ public class GameStartTestMode extends Mode {
 //     private static final Scalar[] LOWER_BOUNDS = {new Scalar(-10, 100, 100), new Scalar(50, 100, 100), new Scalar(110, 100, 100)};
 //     private static final Scalar[] UPPER_BOUNDS = {new Scalar(10, 255, 255), new Scalar(70, 255, 255), new Scalar(130, 255, 255)};
 
-    private static final Scalar[] LOWER_BOUNDS = {new Scalar(60, 255, 200), new Scalar(180, 255, 200), new Scalar(300, 255, 180)};
-    private static final Scalar[] UPPER_BOUNDS = {new Scalar(60, 120, 255), new Scalar(180, 120, 255), new Scalar(300, 190, 255)};
+    private static final Scalar[] LOWER_BOUNDS = {new Scalar(20, 255, 100), new Scalar(80, 255, 100), new Scalar(140, 255, 100)};
+    private static final Scalar[] UPPER_BOUNDS = {new Scalar(40, 120, 255), new Scalar(100, 120, 255), new Scalar(160, 190, 255)};
 
     private static final int COLLECTED_FRAMES = 30;
     private static final int WAIT_TIME = 1000;
@@ -132,6 +132,8 @@ public class GameStartTestMode extends Mode {
 
     @Override
     public void tick() {
+        super.tick();
+
         collectFrame();
 
         if (runtime.milliseconds() < WAIT_TIME) {
