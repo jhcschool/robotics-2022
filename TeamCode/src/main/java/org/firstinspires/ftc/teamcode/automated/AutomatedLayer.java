@@ -56,11 +56,18 @@ public class AutomatedLayer extends Layer {
     }
 
     @Override
+    public void beforeStartLoop(FrameInfo frameInfo) {
+        super.beforeStartLoop(frameInfo);
+
+        sleeveSystem.update();
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
 
         hardware.drive.setPoseEstimate(startingPose);
-
+        sleeveSystem.onGameStart();
     }
 
     @Override

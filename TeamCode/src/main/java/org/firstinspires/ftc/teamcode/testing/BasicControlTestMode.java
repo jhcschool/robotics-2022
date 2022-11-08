@@ -4,11 +4,13 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Mode;
 
 @TeleOp(name = "Basic Control Test", group = "Iterative Opmode")
 public class BasicControlTestMode extends Mode {
 
+    Telemetry.Line line;
     private DcMotorEx frontLeftMotor, rearLeftMotor, rearRightMotor, frontRightMotor;
 
     @Override
@@ -24,8 +26,22 @@ public class BasicControlTestMode extends Mode {
         frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
+    @Override
+    public void beforeStartLoop() {
+        super.beforeStartLoop();
+
+        line = telemetry.addLine("Looping before start");
+    }
+
     private double withinRange(double input) {
         return Math.max(-1, Math.min(1, input));
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        telemetry.removeLine(line);
     }
 
     @Override

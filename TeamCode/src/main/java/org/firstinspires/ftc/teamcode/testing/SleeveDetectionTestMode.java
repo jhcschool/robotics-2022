@@ -3,13 +3,9 @@ package org.firstinspires.ftc.teamcode.testing;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.CustomSleeve;
 import org.firstinspires.ftc.teamcode.Mode;
-import org.firstinspires.ftc.teamcode.ObjectDetector;
-import org.firstinspires.ftc.teamcode.opencv.AprilTagPipeline;
-import org.firstinspires.ftc.teamcode.opencv.OpenObjectDetector;
-import org.firstinspires.ftc.teamcode.opencv.OpenPipeline;
+import org.firstinspires.ftc.teamcode.automated.SleeveDetector;
 
 import java.util.HashMap;
 
@@ -25,14 +21,14 @@ public class SleeveDetectionTestMode extends Mode {
 //    private static final Scalar[] LOWER_BOUNDS = {new Scalar(30, 255, 200), new Scalar(90, 255, 200), new Scalar(150, 255, 160)};
 //    private static final Scalar[] UPPER_BOUNDS = {new Scalar(30, 125, 255), new Scalar(90, 105, 255), new Scalar(150, 155, 255)};
 
-    private HashMap<Integer, String> idToLabel = new HashMap<Integer, String>() {{
-        put(0, "Left");
-        put(1, "Center");
-        put(2, "Right");
+    private static final HashMap<Integer, String> ID_TO_LABEL = new HashMap<Integer, String>() {{
+        put(1, "Left");
+        put(2, "Center");
+        put(3, "Right");
     }};
 
-    private ObjectDetector objectDetector;
     private CustomSleeve sleeveColor;
+    private SleeveDetector sleeveDetector;
 
     @Override
     public void onInit() {
@@ -41,37 +37,29 @@ public class SleeveDetectionTestMode extends Mode {
         int viewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 
 //        OpenPipeline pipeline = new ContourPipeline(LOWER_BOUNDS, UPPER_BOUNDS, LABELS);
-        OpenPipeline pipeline = new AprilTagPipeline(idToLabel);
-
         WebcamName webcamName = hardwareMap.get(WebcamName.class, "webcam");
 
-        objectDetector = new OpenObjectDetector(viewId, webcamName, pipeline, 320, 240);
+        sleeveDetector = new SleeveDetector(viewId, webcamName);
+        sleeveDetector.start();
+    }
 
+    @Override
+    public void beforeStartLoop() {
+        super.beforeStartLoop();
+
+        sleeveDetector.update();
     }
 
     @Override
     public void onStart() {
         super.onStart();
 
-        objectDetector.start();
+        sleeveDetector.onGameStart();
     }
 
     @Override
     public void tick() {
         super.tick();
-
-        Recognition[] recognitions = objectDetector.getRecognitions();
-
-        float maxConfidence = 0;
-        for (Recognition recognition : recognitions) {
-            if (recognition == null) continue;
-
-            if (recognition.getConfidence() > maxConfidence) {
-                maxConfidence = recognition.getConfidence();
-                sleeveColor = CustomSleeve.valueOf(recognition.getLabel().toUpperCase());
-            }
-        }
-
-        telemetry.addData("Sleeve Color", sleeveColor);
+        telemetry.addData("Sleeve Color with limited time", sleeveDetector.getResult());
     }
 }

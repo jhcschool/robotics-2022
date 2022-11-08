@@ -23,6 +23,25 @@ public abstract class Application extends Mode {
 
         hardware = new Hardware(hardwareMap, gamepad1, gamepad2);
         inputManager = new InputManager(gamepad1, gamepad2);
+
+        runtime.reset();
+    }
+
+    @Override
+    public void beforeStartLoop() {
+        super.beforeStartLoop();
+
+        FrameInfo frameInfo = new FrameInfo();
+        {
+            frameInfo.time = runtime.milliseconds();
+            frameInfo.deltaTime = frameInfo.time - time;
+
+            time = frameInfo.time;
+
+            for (Layer layer : layers) {
+                layer.beforeStartLoop(frameInfo);
+            }
+        }
     }
 
     @Override

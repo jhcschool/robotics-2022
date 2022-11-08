@@ -1,37 +1,70 @@
 package org.firstinspires.ftc.teamcode.automated;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.CustomSleeve;
-import org.firstinspires.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.teamcode.ObjectDetector;
-import org.firstinspires.ftc.teamcode.opencv.ContourPipeline;
+import org.firstinspires.ftc.teamcode.opencv.AprilTagPipeline;
 import org.firstinspires.ftc.teamcode.opencv.OpenObjectDetector;
-import org.opencv.core.Scalar;
+import org.firstinspires.ftc.teamcode.opencv.OpenPipeline;
+
+import java.util.HashMap;
 
 public class SleeveDetector {
 
-    private static final String[] LABELS = {"Red", "Green", "Blue"};
-    // OpenCV Color Detection Bounds are in HSV
-    private static final Scalar[] LOWER_BOUNDS = {new Scalar(-10, 100, 100), new Scalar(50, 100, 100), new Scalar(110, 100, 100)};
-    private static final Scalar[] UPPER_BOUNDS = {new Scalar(10, 255, 255), new Scalar(70, 255, 255), new Scalar(130, 255, 255)};
+    private static final HashMap<Integer, String> ID_TO_LABEL = new HashMap<Integer, String>() {{
+        put(1, "Left");
+        put(2, "Center");
+        put(3, "Right");
+    }};
 
-    private ObjectDetector objectDetector;
-    private CustomSleeve sleeveColor;
+    private final ObjectDetector objectDetector;
 
-    public SleeveDetector(int viewId, Hardware hardware) {
-        ContourPipeline pipeline = new ContourPipeline();
-        pipeline.setLabels(LABELS);
-        pipeline.setLowerBounds(LOWER_BOUNDS);
-        pipeline.setUpperBounds(UPPER_BOUNDS);
+    private CustomSleeve detectedSleeve = null;
+    private int[] detectionSizes = new int[CustomSleeve.values().length];
 
-        objectDetector = new OpenObjectDetector(viewId, hardware.webcamName, pipeline, 1280, 720);
-        // objectDetector = new TensorflowObjectDetector(viewId, hardware.webcamName, "CustomSleeve.tflite", LABELS);
+    public SleeveDetector(int viewId, WebcamName webcamName) {
+        OpenPipeline pipeline = new AprilTagPipeline(ID_TO_LABEL);
+        objectDetector = new OpenObjectDetector(viewId, webcamName, pipeline, 640, 480);
+
+        for (int i = 0; i < detectionSizes.length; i++) {
+            detectionSizes[i] = 0;
+        }
     }
 
-    CustomSleeve getSingleDetection() {
-        objectDetector.start();
+    public CustomSleeve getResult() {
+        if (detectedSleeve != null) return detectedSleeve;
+        return CustomSleeve.CENTER;
+    }
 
+    public void start() {
+        objectDetector.start();
+    }
+
+    public void update() {
+        CustomSleeve newDetection = getSingleDetection();
+        if (newDetection == null) return;
+
+        detectionSizes[newDetection.ordinal()]++;
+    }
+
+    public void onGameStart() {
+        objectDetector.stop();
+
+        int detectionIndex = 0;
+        int maxDetection = 0;
+        for (int i = 0; i < detectionSizes.length; i++) {
+            if (detectionSizes[i] > maxDetection) {
+                detectionIndex = i;
+            }
+        }
+
+        detectedSleeve = CustomSleeve.values()[detectionIndex];
+    }
+
+    private CustomSleeve getSingleDetection() {
         Recognition[] recognitions = objectDetector.getRecognitions();
+        CustomSleeve sleeveColor = null;
 
         float maxConfidence = 0;
         for (Recognition recognition : recognitions) {
@@ -41,7 +74,6 @@ public class SleeveDetector {
             }
         }
 
-        objectDetector.stop();
         return sleeveColor;
     }
 }

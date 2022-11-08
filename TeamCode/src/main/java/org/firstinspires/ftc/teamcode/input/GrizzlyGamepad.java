@@ -7,10 +7,10 @@ import java.util.HashMap;
 
 public class GrizzlyGamepad {
 
-    private Gamepad gamepad;
-    private ElapsedTime timer;
+    private final Gamepad gamepad;
+    private final ElapsedTime timer;
 
-    private HashMap<Button, ButtonAction> buttonActions;
+    private final HashMap<Button, ButtonAction> buttonActions;
 
     public GrizzlyGamepad(Gamepad gamepad) {
         this.gamepad = gamepad;

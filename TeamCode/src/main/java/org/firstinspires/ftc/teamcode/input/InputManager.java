@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 public class InputManager {
 
-    private GrizzlyGamepad gamepad1;
-    private GrizzlyGamepad gamepad2;
+    private final GrizzlyGamepad gamepad1;
+    private final GrizzlyGamepad gamepad2;
 
     public InputManager(Gamepad gamepad1, Gamepad gamepad2) {
         this.gamepad1 = new GrizzlyGamepad(gamepad1);

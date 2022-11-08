@@ -6,10 +6,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 @Disabled
 public class Mode extends LinearOpMode {
 
+    private Object beforeStartLoopSync = new Object();
+    private Thread beforeStartLoopThread;
+    private boolean isBeforeStart = true;
+
     @Override
     public void runOpMode() {
         onInit();
-        waitForStart();
+        beforeStart();
         onStart();
         while (opModeIsActive() && !isStopRequested()) {
             tick();
@@ -21,6 +25,34 @@ public class Mode extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
     }
+
+    public void beforeStart() {
+        beforeStartLoopThread = new Thread(() -> {
+            while (true) {
+                synchronized (beforeStartLoopSync) {
+                    if (!isBeforeStart) {
+                        break;
+                    }
+                }
+                beforeStartLoop();
+            }
+        });
+        beforeStartLoopThread.start();
+        waitForStart();
+        synchronized (beforeStartLoopSync) {
+            isBeforeStart = false;
+        }
+        try {
+            beforeStartLoopThread.join(50);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void beforeStartLoop() {
+        telemetry.update();
+    }
+
 
     public void onStart() {
         telemetry.addData("Status", "Started");

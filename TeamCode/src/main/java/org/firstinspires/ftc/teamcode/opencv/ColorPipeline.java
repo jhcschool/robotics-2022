@@ -15,19 +15,19 @@ public class ColorPipeline extends OpenPipeline {
     public static int REGION_WIDTH = 30;
     public static int REGION_HEIGHT = 50;
     // Anchor point definitions
-    private Point SLEEVE_POINT_A = new Point(
+    private final Point SLEEVE_POINT_A = new Point(
             SLEEVE_TOPLEFT_ANCHOR_POINT.x,
             SLEEVE_TOPLEFT_ANCHOR_POINT.y);
-    private Point SLEEVE_POINT_B = new Point(
+    private final Point SLEEVE_POINT_B = new Point(
             SLEEVE_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
             SLEEVE_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
 
-    private Mat[] colorMatrices;
-    private Mat blurredMat = new Mat();
-    private Scalar[] lowerBounds;
-    private Scalar[] upperBounds;
-    private String[] labels;
-    private double[] percentages;
+    private final Mat[] colorMatrices;
+    private final Mat blurredMat = new Mat();
+    private final Scalar[] lowerBounds;
+    private final Scalar[] upperBounds;
+    private final String[] labels;
+    private final double[] percentages;
 
     public ColorPipeline(Scalar[] lowerBounds, Scalar[] upperBounds, String[] labels) {
         this.lowerBounds = lowerBounds;

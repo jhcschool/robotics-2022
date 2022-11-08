@@ -21,17 +21,16 @@ public class AprilTagPipeline extends OpenPipeline {
     private static final double cy = 221.506;
     private static final double tagSize = 0.166;
 
-    private final Object detectionsUpdateSync = new Object();
+    private final Object newDetectionsSync = new Object();
     private final Object decimationSync = new Object();
     private final Mat gray = new Mat();
-    private Mat cameraMatrix;
+    private final Mat cameraMatrix;
+    private final HashMap<Integer, String> idToLabel;
     private long nativeAprilTagPointer;
     private ArrayList<AprilTagDetection> detections = new ArrayList<>();
-
-    private float decimation;
-    private boolean needToSetDecimation;
-
-    private HashMap<Integer, String> idToLabel;
+    private ArrayList<AprilTagDetection> newDetections = new ArrayList<>();
+    private float decimation = 3;
+    private boolean needToSetDecimation = true;
 
     public AprilTagPipeline(HashMap<Integer, String> idToLabel) {
         this.idToLabel = idToLabel;
@@ -74,6 +73,11 @@ public class AprilTagPipeline extends OpenPipeline {
 
         // Run AprilTag
         detections = AprilTagDetectorJNI.runAprilTagDetectorSimple(nativeAprilTagPointer, gray, tagSize, fx, fy, cx, cy);
+
+        synchronized (newDetectionsSync) {
+            newDetections = detections;
+        }
+
         return input;
     }
 
@@ -86,11 +90,10 @@ public class AprilTagPipeline extends OpenPipeline {
 
     @Override
     public Recognition[] getRecognitions() {
-
-        synchronized (detectionsUpdateSync) {
-            Recognition[] recognitions = new OpenRecognition[detections.size()];
+        synchronized (newDetectionsSync) {
+            Recognition[] recognitions = new OpenRecognition[newDetections.size()];
             for (int i = 0; i < recognitions.length; i++) {
-                AprilTagDetection detection = detections.get(i);
+                AprilTagDetection detection = newDetections.get(i);
 
                 if (!idToLabel.containsKey(detection.id)) {
                     continue;

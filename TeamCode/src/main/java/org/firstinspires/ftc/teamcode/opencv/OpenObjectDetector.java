@@ -34,7 +34,6 @@ public class OpenObjectDetector implements ObjectDetector {
             @Override
             public void onOpened() {
                 camera.startStreaming(cameraWidth, cameraHeight, OpenCvCameraRotation.UPRIGHT);
-                camera.resumeViewport();
             }
 
             @Override
@@ -47,13 +46,11 @@ public class OpenObjectDetector implements ObjectDetector {
 
     @Override
     public void stop() {
-        camera.pauseViewport();
         camera.stopStreaming();
     }
 
+    @Override
     public Recognition[] getRecognitions() {
         return pipeline.getRecognitions();
     }
-
-
 }

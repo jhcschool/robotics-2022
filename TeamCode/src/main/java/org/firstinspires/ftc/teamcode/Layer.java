@@ -5,6 +5,10 @@ public class Layer {
     public void init(LayerInitInfo info) {
     }
 
+    public void beforeStartLoop(FrameInfo frameInfo) {
+
+    }
+
     public void onStart() {
 
     }
