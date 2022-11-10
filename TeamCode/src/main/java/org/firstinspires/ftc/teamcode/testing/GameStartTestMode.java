@@ -24,13 +24,13 @@ public class GameStartTestMode extends Mode {
 
         int viewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         WebcamName webcamName = hardwareMap.get(WebcamName.class, "webcam");
-        sleeveDetector = new SleeveDetector(viewId, webcamName);
 
         frontLeftMotor = hardwareMap.get(DcMotorEx.class, "frontLeftMotor");
         rearLeftMotor = hardwareMap.get(DcMotorEx.class, "rearLeftMotor");
         frontRightMotor = hardwareMap.get(DcMotorEx.class, "frontRightMotor");
         rearRightMotor = hardwareMap.get(DcMotorEx.class, "rearRightMotor");
 
+        sleeveDetector = new SleeveDetector(viewId, webcamName);
         sleeveDetector.start();
     }
 
@@ -45,8 +45,8 @@ public class GameStartTestMode extends Mode {
     public void onStart() {
         super.onStart();
 
-        runtime.reset();
         sleeveDetector.onGameStart();
+        runtime.reset();
     }
 
     private void strafeLeft() {
