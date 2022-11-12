@@ -20,7 +20,7 @@ public class ControlledLayer extends Layer {
     private Trajectory trajectory = null;
 
     public ControlledLayer() {
-        userMovementSystem = new UserMovementSystem();
+        userMovementSystem = new UserMovementSystem(hardware.gamepad1, hardware.drive);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class ControlledLayer extends Layer {
     }
 
     private void tickDriver(FrameInfo frameInfo) {
-        userMovementSystem.tick(hardware.gamepad1, hardware.drive);
+        userMovementSystem.tick();
     }
 
     private enum ControlMode {

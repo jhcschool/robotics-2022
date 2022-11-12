@@ -1,16 +1,30 @@
 package org.firstinspires.ftc.teamcode.controlled;
 
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.drive.StandardMecanumDrive;
 
 public class UserMovementSystem {
 
-    public UserMovementSystem() {
+    private Gamepad gamepad;
+    private StandardMecanumDrive drive = null;
+    private DcMotorEx frontLeftMotor, rearLeftMotor, rearRightMotor, frontRightMotor;
 
+    public UserMovementSystem(Gamepad gamepad, StandardMecanumDrive drive) {
+        this.gamepad = gamepad;
+        this.drive = drive;
     }
 
-    public void tick(Gamepad gamepad, StandardMecanumDrive drive) {
+    public UserMovementSystem(Gamepad gamepad, DcMotorEx frontLeft, DcMotorEx rearLeft, DcMotorEx rearRight, DcMotorEx frontRight) {
+        this.gamepad = gamepad;
+        this.frontLeftMotor = frontLeft;
+        this.rearLeftMotor = rearLeft;
+        this.rearRightMotor = rearRight;
+        this.frontRightMotor = frontRight;
+    }
+
+    public void tick() {
 
         double left = 0;
         double right = 0;
@@ -32,7 +46,16 @@ public class UserMovementSystem {
         frontRight = withinRange(frontRight);
         backRight = withinRange(backRight);
 
+        if (drive != null)
         drive.setMotorPowers(frontLeft, backLeft, frontRight, backRight);
+        else setPowers(frontLeft, backLeft, frontRight, backRight);
+    }
+
+    private void setPowers(double fl, double bl, double fr, double br) {
+        frontLeftMotor.setPower(fl);
+        rearLeftMotor.setPower(bl);
+        frontRightMotor.setPower(fr);
+        rearRightMotor.setPower(br);
     }
 
     private double withinRange(double input) {

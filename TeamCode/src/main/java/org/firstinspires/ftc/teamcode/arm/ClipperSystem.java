@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.arm;
 
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -36,13 +36,16 @@ public class ClipperSystem {
         this.onRelease = onRelease;
     }
 
+    private boolean shouldRun = true;
     public void update() {
         double position = clipper.getPosition();
 
-        if (clipped && isClippedWithinTolerance() && onClip != null) {
+        if (clipped && isClippedWithinTolerance() && onClip != null && shouldRun) {
             onClip.run();
-        } else if (!clipped && isReleasedWithinTolerance() && onRelease != null) {
+            shouldRun = false;
+        } else if (!clipped && isReleasedWithinTolerance() && onRelease != null && shouldRun) {
             onRelease.run();
+            shouldRun = false;
         }
     }
 
@@ -64,6 +67,7 @@ public class ClipperSystem {
         if (!clipped) {
             clipper.setPosition(CLIP_POSITION);
             clipped = true;
+            shouldRun = true;
         }
     }
 
@@ -71,6 +75,7 @@ public class ClipperSystem {
         if (clipped) {
             clipper.setPosition(RELEASE_POSITION);
             clipped = false;
+            shouldRun = true;
         }
     }
 

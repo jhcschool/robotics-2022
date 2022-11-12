@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.arm;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
@@ -25,6 +25,7 @@ public class SlideArmSystem {
     private JunctionHeight currentHeight = JunctionHeight.NONE;
     private boolean setHeight = false;
     private boolean currentlyRunning = false;
+
     public SlideArmSystem(DcMotorEx slideMotor) {
         this.slideMotor = slideMotor;
 
