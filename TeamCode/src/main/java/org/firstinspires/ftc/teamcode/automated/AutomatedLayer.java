@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.LaneSystem;
 import org.firstinspires.ftc.teamcode.Layer;
 import org.firstinspires.ftc.teamcode.LayerInitInfo;
 import org.firstinspires.ftc.teamcode.PoseStorage;
+import org.firstinspires.ftc.teamcode.arm.ClipperSystem;
 import org.firstinspires.ftc.teamcode.game.GameConstants;
 import org.firstinspires.ftc.teamcode.game.JunctionHeight;
 
@@ -26,6 +27,7 @@ public class AutomatedLayer extends Layer {
     private Hardware hardware;
     private LaneSystem laneSystem;
     private ArmSystem armSystem;
+    private ClipperSystem clipperSystem;
 
     public AutomatedLayer(Pose2d startingPose) {
         super();
@@ -45,7 +47,7 @@ public class AutomatedLayer extends Layer {
         laneSystem = new LaneSystem(hardware.drive, GameConstants.LANE_COORDINATES);
         armSystem = new ArmSystem();
 
-        sleeveSystem = new SleeveSystem(viewId, hardware, (Float f) -> {
+        sleeveSystem = new SleeveSystem(viewId, hardware.webcamName, (Float f) -> {
             navigateBack(f);
             return null;
         });
@@ -53,6 +55,8 @@ public class AutomatedLayer extends Layer {
         currentTrajectory = laneSystem.getToLane(() -> {
             navigateToNearestJunction();
         });
+
+        clipperSystem = new ClipperSystem(hardware.clipper);
     }
 
     @Override
@@ -143,6 +147,6 @@ public class AutomatedLayer extends Layer {
     }
 
     private void pickUpCone() {
-
+        clipperSystem.beginClip();
     }
 }

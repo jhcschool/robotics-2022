@@ -1,10 +1,11 @@
-package org.firstinspires.ftc.teamcode.testing;
+package org.firstinspires.ftc.teamcode.testing.controlled;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.Mode;
+import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 
 @TeleOp(name = "Wheel Test", group = "Iterative Opmode")
 public class WheelTestMode extends Mode {
@@ -20,9 +21,6 @@ public class WheelTestMode extends Mode {
         motors[1] = hardwareMap.get(DcMotorEx.class, "rearLeftMotor");
         motors[2] = hardwareMap.get(DcMotorEx.class, "frontRightMotor");
         motors[3] = hardwareMap.get(DcMotorEx.class, "rearRightMotor");
-
-        motors[0].setDirection(DcMotorSimple.Direction.REVERSE);
-        motors[1].setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     @Override
@@ -47,4 +45,5 @@ public class WheelTestMode extends Mode {
 
         telemetry.addData("Motor index:", motorIndex);
     }
+
 }

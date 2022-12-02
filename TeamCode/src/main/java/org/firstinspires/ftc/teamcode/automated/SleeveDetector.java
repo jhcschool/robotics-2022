@@ -17,19 +17,17 @@ public class SleeveDetector {
         put(2, "Center");
         put(3, "Right");
     }};
+    private static final int NUM_DETECTIONS = 20;
 
     private final ObjectDetector objectDetector;
 
     private CustomSleeve detectedSleeve = null;
-    private int[] detectionSizes = new int[CustomSleeve.values().length];
+    private CustomSleeve[] lastDetections = new CustomSleeve[NUM_DETECTIONS];
+    private int detectionIndex = 0;
 
     public SleeveDetector(int viewId, WebcamName webcamName) {
         OpenPipeline pipeline = new AprilTagPipeline(ID_TO_LABEL);
         objectDetector = new OpenObjectDetector(viewId, webcamName, pipeline, 640, 480);
-
-        for (int i = 0; i < detectionSizes.length; i++) {
-            detectionSizes[i] = 0;
-        }
     }
 
     public CustomSleeve getResult() {
@@ -45,16 +43,31 @@ public class SleeveDetector {
         CustomSleeve newDetection = getSingleDetection();
         if (newDetection == null) return;
 
-        detectionSizes[newDetection.ordinal()]++;
+        lastDetections[detectionIndex] = newDetection;
+
+        detectionIndex++;
+        if (detectionIndex >= NUM_DETECTIONS) detectionIndex = 0;
     }
 
     public void onGameStart() {
         objectDetector.stop();
 
-        int detectionIndex = 0;
+        int detectionIndex = 1;
         int maxDetection = 0;
-        for (int i = 0; i < detectionSizes.length; i++) {
-            if (detectionSizes[i] > maxDetection) {
+
+        int[] numDetections = new int[CustomSleeve.values().length];
+
+        for (int i = 0; i < numDetections.length; i++) {
+            numDetections[i] = 0;
+        }
+
+        for (CustomSleeve sleeve: lastDetections) {
+            if (sleeve == null) continue;
+            numDetections[sleeve.ordinal()]++;
+        }
+
+        for (int i = 0; i < numDetections.length; i++) {
+            if (numDetections[i] > maxDetection) {
                 detectionIndex = i;
             }
         }

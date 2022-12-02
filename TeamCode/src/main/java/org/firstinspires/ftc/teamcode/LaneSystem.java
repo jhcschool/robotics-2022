@@ -6,15 +6,16 @@ import com.acmerobotics.roadrunner.trajectory.MarkerCallback;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 
-import org.firstinspires.ftc.teamcode.drive.StandardMecanumDrive;
+import org.firstinspires.ftc.teamcode.drive.Drive;
+import org.firstinspires.ftc.teamcode.drive.GrizzlyDrive;
 
 public class LaneSystem {
 
     private final float[] laneCoordinates;
-    private final StandardMecanumDrive drive;
+    private final Drive drive;
     private Vector2d[] nodes;
 
-    public LaneSystem(StandardMecanumDrive drive, float[] laneCoordinates) {
+    public LaneSystem(Drive drive, float[] laneCoordinates) {
         this.drive = drive;
         this.laneCoordinates = laneCoordinates;
 

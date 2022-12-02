@@ -15,16 +15,12 @@ public class SlideArmSystem {
         put(JunctionHeight.HIGH, 34);
     }};
 
-    private static final float WHEEL_DIAMETER = 1.5f;
-    private static final float GEAR_RATIO = 1.0f;
-    private static final float TICKS_PER_REVOLUTION = 28.0f;
-
     private DcMotorEx slideMotor;
-    private float height = 0;
+
     private JunctionHeight targetHeight = JunctionHeight.NONE;
     private JunctionHeight currentHeight = JunctionHeight.NONE;
     private boolean setHeight = false;
-    private boolean currentlyRunning = false;
+    private boolean currentlyMoving = false;
 
     public SlideArmSystem(DcMotorEx slideMotor) {
         this.slideMotor = slideMotor;
@@ -43,25 +39,24 @@ public class SlideArmSystem {
             moveToHeight();
         }
 
-        if (currentlyRunning && !slideMotor.isBusy()) {
-            currentlyRunning = false;
+        if (currentlyMoving && !slideMotor.isBusy()) {
             currentHeight = targetHeight;
-
             slideMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+
+            currentlyMoving = false;
         }
+    }
+
+    private double getTargetWheelPosition() {
+        return SlideConstants.inchesToEncoderTicks(ARM_POSITIONS.get(targetHeight));
     }
 
     private void moveToHeight() {
         if (targetHeight == currentHeight) return;
 
-        int currentMotorPosition = slideMotor.getCurrentPosition();
-        int targetPositionInInches = ARM_POSITIONS.get(targetHeight);
-
-        int targetPositionInTicks = (int) (targetPositionInInches * TICKS_PER_REVOLUTION * GEAR_RATIO / (WHEEL_DIAMETER * Math.PI)) + currentMotorPosition;
-
-        slideMotor.setTargetPosition(targetPositionInTicks);
         slideMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        slideMotor.setTargetPosition((int) getTargetWheelPosition());
 
-        currentlyRunning = true;
+        currentlyMoving = true;
     }
 }

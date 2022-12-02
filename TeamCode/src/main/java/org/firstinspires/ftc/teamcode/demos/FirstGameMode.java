@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.demos;
 
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.teamcode.input.Button;
 import org.firstinspires.ftc.teamcode.input.ButtonAction;
 import org.firstinspires.ftc.teamcode.input.InputManager;
 
+@TeleOp(name = "First Simple Game Mode", group = "Iterative Opmode")
 public class FirstGameMode extends Mode {
 
     private DcMotorEx frontLeftMotor, rearLeftMotor, rearRightMotor, frontRightMotor;
@@ -33,8 +35,8 @@ public class FirstGameMode extends Mode {
 
         slideArmMotor = hardwareMap.get(DcMotorEx.class, "slideArmMotor");
 
-        rearLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        rearRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         userMovementSystem = new UserMovementSystem(gamepad1, frontLeftMotor, rearLeftMotor, rearRightMotor, frontRightMotor);
         clipperSystem = new ClipperSystem(hardwareMap.get(Servo.class, "clipper"));
@@ -45,6 +47,8 @@ public class FirstGameMode extends Mode {
     @Override
     public void tick() {
         super.tick();
+        inputManager.update();
+
         userMovementSystem.tick();
 
         if (inputManager.getButtonAction(Button.RIGHT_BUMPER) == ButtonAction.PRESS) {

@@ -1,19 +1,24 @@
-package org.firstinspires.ftc.teamcode.testing;
+package org.firstinspires.ftc.teamcode.testing.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.CustomSleeve;
 import org.firstinspires.ftc.teamcode.Mode;
 import org.firstinspires.ftc.teamcode.automated.SleeveDetector;
 
 
 @Autonomous(name = "Game Start Test", group = "Iterative Opmode")
-public class GameStartTestMode extends Mode {
+public class TimedGameStartTestMode extends Mode {
 
     private static final int WAIT_TIME = 1000;
     private static final int MOVE_TIME = 1000;
+    private static final int STRAFE_TIME = 1200;
+    private static final int TIME_BETWEEN_MOVES = 300;
+    private static final double POWER = 0.5;
     private final ElapsedTime runtime = new ElapsedTime();
     private SleeveDetector sleeveDetector;
     private DcMotorEx frontLeftMotor, rearLeftMotor, rearRightMotor, frontRightMotor;
@@ -29,6 +34,9 @@ public class GameStartTestMode extends Mode {
         rearLeftMotor = hardwareMap.get(DcMotorEx.class, "rearLeftMotor");
         frontRightMotor = hardwareMap.get(DcMotorEx.class, "frontRightMotor");
         rearRightMotor = hardwareMap.get(DcMotorEx.class, "rearRightMotor");
+
+        rearRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         sleeveDetector = new SleeveDetector(viewId, webcamName);
         sleeveDetector.start();
@@ -50,17 +58,17 @@ public class GameStartTestMode extends Mode {
     }
 
     private void strafeLeft() {
-        frontLeftMotor.setPower(-1);
-        rearLeftMotor.setPower(1);
-        frontRightMotor.setPower(1);
-        rearRightMotor.setPower(-1);
+        frontLeftMotor.setPower(-POWER);
+        rearLeftMotor.setPower(POWER);
+        frontRightMotor.setPower(POWER);
+        rearRightMotor.setPower(-POWER);
     }
 
     private void strafeRight() {
-        frontLeftMotor.setPower(1);
-        rearLeftMotor.setPower(-1);
-        frontRightMotor.setPower(-1);
-        rearRightMotor.setPower(1);
+        frontLeftMotor.setPower(POWER);
+        rearLeftMotor.setPower(-POWER);
+        frontRightMotor.setPower(-POWER);
+        rearRightMotor.setPower(POWER);
     }
 
     private void stopMotors() {
@@ -71,10 +79,10 @@ public class GameStartTestMode extends Mode {
     }
 
     private void moveForward() {
-        frontLeftMotor.setPower(1);
-        rearLeftMotor.setPower(1);
-        frontRightMotor.setPower(1);
-        rearRightMotor.setPower(1);
+        frontLeftMotor.setPower(POWER);
+        rearLeftMotor.setPower(POWER);
+        frontRightMotor.setPower(POWER);
+        rearRightMotor.setPower(POWER);
     }
 
     @Override
@@ -88,15 +96,29 @@ public class GameStartTestMode extends Mode {
         if (runtime.milliseconds() > WAIT_TIME + MOVE_TIME) {
             stopMotors();
         } else {
-            switch (sleeveDetector.getResult()) {
+            CustomSleeve sleeve = sleeveDetector.getResult();
+            telemetry.addData("Direction", sleeve.toString());
+
+            switch (sleeve) {
                 case LEFT:
                     strafeLeft();
+                    sleep(STRAFE_TIME);
+                    stopMotors();
+                    sleep(TIME_BETWEEN_MOVES);
+                    moveForward();
+                    sleep(MOVE_TIME);
                     break;
                 case CENTER:
                     moveForward();
+                    sleep(MOVE_TIME);
                     break;
                 case RIGHT:
                     strafeRight();
+                    sleep(STRAFE_TIME);
+                    stopMotors();
+                    sleep(TIME_BETWEEN_MOVES);
+                    moveForward();
+                    sleep(MOVE_TIME);
                     break;
             }
         }

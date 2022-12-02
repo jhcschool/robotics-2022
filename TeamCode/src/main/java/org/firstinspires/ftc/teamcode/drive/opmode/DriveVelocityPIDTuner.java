@@ -19,7 +19,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.firstinspires.ftc.teamcode.drive.StandardMecanumDrive;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.drive.GrizzlyDrive;
 
 import java.util.List;
 
@@ -52,6 +53,11 @@ import java.util.List;
 public class DriveVelocityPIDTuner extends LinearOpMode {
     public static double DISTANCE = 72; // in
 
+    enum Mode {
+        DRIVER_MODE,
+        TUNING_MODE
+    }
+
     private static MotionProfile generateProfile(boolean movingForward) {
         MotionState start = new MotionState(movingForward ? 0 : DISTANCE, 0, 0, 0);
         MotionState goal = new MotionState(movingForward ? DISTANCE : 0, 0, 0, 0);
@@ -65,9 +71,9 @@ public class DriveVelocityPIDTuner extends LinearOpMode {
                     "PID is not in use", getClass().getSimpleName());
         }
 
-        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+        Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        StandardMecanumDrive drive = new StandardMecanumDrive(hardwareMap);
+        GrizzlyDrive drive = new GrizzlyDrive(hardwareMap);
 
         Mode mode = Mode.TUNING_MODE;
 
@@ -161,10 +167,5 @@ public class DriveVelocityPIDTuner extends LinearOpMode {
 
             telemetry.update();
         }
-    }
-
-    enum Mode {
-        DRIVER_MODE,
-        TUNING_MODE
     }
 }

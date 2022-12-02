@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.automated;
 
 import org.firstinspires.ftc.robotcore.external.Function;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.CustomSleeve;
 import org.firstinspires.ftc.teamcode.FrameInfo;
 import org.firstinspires.ftc.teamcode.Hardware;
@@ -11,8 +12,8 @@ public class SleeveSystem {
     // Returns the distance that the robot move to the right to get into the signal zone
     private Function<Float, Void> onNavigateBack;
 
-    public SleeveSystem(int viewId, Hardware hardware, Function<Float, Void> onNavigateBack) {
-        sleeveDetector = new SleeveDetector(viewId, hardware.webcamName);
+    public SleeveSystem(int viewId, WebcamName webcamName, Function<Float, Void> onNavigateBack) {
+        sleeveDetector = new SleeveDetector(viewId, webcamName);
         this.onNavigateBack = onNavigateBack;
     }
 

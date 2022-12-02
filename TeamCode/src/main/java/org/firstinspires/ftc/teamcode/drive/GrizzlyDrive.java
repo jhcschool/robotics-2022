@@ -51,11 +51,8 @@ import java.util.List;
  * Simple mecanum drive hardware implementation for REV hardware.
  */
 
-
-// uses three wheel odometry
-
 @Config
-public class StandardMecanumDrive extends MecanumDrive {
+public class GrizzlyDrive extends Drive {
     private static final TrajectoryVelocityConstraint VEL_CONSTRAINT = getVelocityConstraint(MAX_VEL, MAX_ANG_VEL, TRACK_WIDTH);
     private static final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = getAccelerationConstraint(MAX_ACCEL);
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
@@ -75,7 +72,7 @@ public class StandardMecanumDrive extends MecanumDrive {
 
     private final VoltageSensor batteryVoltageSensor;
 
-    public StandardMecanumDrive(HardwareMap hardwareMap) {
+    public GrizzlyDrive(HardwareMap hardwareMap) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
@@ -113,10 +110,10 @@ public class StandardMecanumDrive extends MecanumDrive {
         }
 
         // TODO: reverse any motors using DcMotor.setDirection()
-        rearLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        rearRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
+        setLocalizer(new DeadWheelLocalizer(hardwareMap));
         trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
     }
 
@@ -131,18 +128,32 @@ public class StandardMecanumDrive extends MecanumDrive {
         return new ProfileAccelerationConstraint(maxAccel);
     }
 
+    @Override
+    public TrajectoryBuilder trajectoryBuilder() {
+        return trajectoryBuilder(getPoseEstimate());
+    }
+
+    @Override
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
         return new TrajectoryBuilder(startPose, VEL_CONSTRAINT, ACCEL_CONSTRAINT);
     }
 
+    @Override
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose, boolean reversed) {
         return new TrajectoryBuilder(startPose, reversed, VEL_CONSTRAINT, ACCEL_CONSTRAINT);
     }
 
+    @Override
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose, double startHeading) {
         return new TrajectoryBuilder(startPose, startHeading, VEL_CONSTRAINT, ACCEL_CONSTRAINT);
     }
 
+    @Override
+    public TrajectorySequenceBuilder trajectorySequenceBuilder() {
+        return trajectorySequenceBuilder(getPoseEstimate());
+    }
+
+    @Override
     public TrajectorySequenceBuilder trajectorySequenceBuilder(Pose2d startPose) {
         return new TrajectorySequenceBuilder(
                 startPose,
@@ -151,6 +162,7 @@ public class StandardMecanumDrive extends MecanumDrive {
         );
     }
 
+    @Override
     public void turnAsync(double angle) {
         trajectorySequenceRunner.followTrajectorySequenceAsync(
                 trajectorySequenceBuilder(getPoseEstimate())
@@ -159,11 +171,13 @@ public class StandardMecanumDrive extends MecanumDrive {
         );
     }
 
+    @Override
     public void turn(double angle) {
         turnAsync(angle);
         waitForIdle();
     }
 
+    @Override
     public void followTrajectoryAsync(Trajectory trajectory) {
         trajectorySequenceRunner.followTrajectorySequenceAsync(
                 trajectorySequenceBuilder(trajectory.start())
@@ -172,9 +186,20 @@ public class StandardMecanumDrive extends MecanumDrive {
         );
     }
 
+    @Override
     public void followTrajectory(Trajectory trajectory) {
         followTrajectoryAsync(trajectory);
         waitForIdle();
+    }
+
+    @Override
+    public void followTrajectorySequenceAsync(TrajectorySequenceBuilder trajectorySequence) {
+
+    }
+
+    @Override
+    public void followTrajectorySequence(TrajectorySequenceBuilder trajectorySequence) {
+
     }
 
     public void followTrajectorySequenceAsync(TrajectorySequence trajectorySequence) {
@@ -186,37 +211,44 @@ public class StandardMecanumDrive extends MecanumDrive {
         waitForIdle();
     }
 
+    @Override
     public Pose2d getLastError() {
         return trajectorySequenceRunner.getLastPoseError();
     }
 
+    @Override
     public void update() {
         updatePoseEstimate();
         DriveSignal signal = trajectorySequenceRunner.update(getPoseEstimate(), getPoseVelocity());
         if (signal != null) setDriveSignal(signal);
     }
 
+    @Override
     public void waitForIdle() {
         while (!Thread.currentThread().isInterrupted() && isBusy())
             update();
     }
 
+    @Override
     public boolean isBusy() {
         return trajectorySequenceRunner.isBusy();
     }
 
+    @Override
     public void setMode(DcMotor.RunMode runMode) {
         for (DcMotorEx motor : motors) {
             motor.setMode(runMode);
         }
     }
 
+    @Override
     public void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior zeroPowerBehavior) {
         for (DcMotorEx motor : motors) {
             motor.setZeroPowerBehavior(zeroPowerBehavior);
         }
     }
 
+    @Override
     public void setPIDFCoefficients(DcMotor.RunMode runMode, PIDFCoefficients coefficients) {
         PIDFCoefficients compensatedCoefficients = new PIDFCoefficients(
                 coefficients.p, coefficients.i, coefficients.d,
@@ -228,6 +260,7 @@ public class StandardMecanumDrive extends MecanumDrive {
         }
     }
 
+    @Override
     public void setWeightedDrivePower(Pose2d drivePower) {
         Pose2d vel = drivePower;
 
@@ -282,14 +315,10 @@ public class StandardMecanumDrive extends MecanumDrive {
 
     @Override
     public Double getExternalHeadingVelocity() {
-        // To work around an SDK bug, use -zRotationRate in place of xRotationRate
-        // and -xRotationRate in place of zRotationRate (yRotationRate behaves as
-        // expected). This bug does NOT affect orientation.
-        //
-        // See https://github.com/FIRST-Tech-Challenge/FtcRobotController/issues/251 for details.
         return 0.0;
     }
 
+    @Override
     public void breakFollowing() {
         trajectorySequenceRunner.breakFollowing();
     }

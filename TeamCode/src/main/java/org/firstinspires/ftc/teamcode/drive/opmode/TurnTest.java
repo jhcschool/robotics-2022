@@ -4,7 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.drive.StandardMecanumDrive;
+import org.firstinspires.ftc.teamcode.drive.GrizzlyDrive;
 
 /*
  * This is a simple routine to test turning capabilities.
@@ -16,7 +16,7 @@ public class TurnTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        StandardMecanumDrive drive = new StandardMecanumDrive(hardwareMap);
+        GrizzlyDrive drive = new GrizzlyDrive(hardwareMap);
 
         waitForStart();
 

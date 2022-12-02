@@ -20,7 +20,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.firstinspires.ftc.teamcode.drive.StandardMecanumDrive;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.drive.GrizzlyDrive;
 
 import java.util.Objects;
 
@@ -44,9 +45,15 @@ import java.util.Objects;
 public class ManualFeedforwardTuner extends LinearOpMode {
     public static double DISTANCE = 72; // in
 
-    private final FtcDashboard dashboard = FtcDashboard.getInstance();
+    private FtcDashboard dashboard = FtcDashboard.getInstance();
 
-    private StandardMecanumDrive drive;
+    private GrizzlyDrive drive;
+
+    enum Mode {
+        DRIVER_MODE,
+        TUNING_MODE
+    }
+
     private Mode mode;
 
     private static MotionProfile generateProfile(boolean movingForward) {
@@ -62,9 +69,9 @@ public class ManualFeedforwardTuner extends LinearOpMode {
                     "when using the built-in drive motor velocity PID.");
         }
 
-        telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
+        Telemetry telemetry = new MultipleTelemetry(this.telemetry, dashboard.getTelemetry());
 
-        drive = new StandardMecanumDrive(hardwareMap);
+        drive = new GrizzlyDrive(hardwareMap);
 
         mode = Mode.TUNING_MODE;
 
@@ -136,10 +143,5 @@ public class ManualFeedforwardTuner extends LinearOpMode {
 
             telemetry.update();
         }
-    }
-
-    enum Mode {
-        DRIVER_MODE,
-        TUNING_MODE
     }
 }

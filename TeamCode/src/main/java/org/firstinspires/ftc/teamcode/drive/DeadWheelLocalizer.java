@@ -27,7 +27,7 @@ import java.util.List;
  *
  */
 @Config
-public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer {
+public class DeadWheelLocalizer extends ThreeTrackingWheelLocalizer {
     private static final double X_MULTIPLIER = 1.0; // Multiplier in the X direction
     private static final double Y_MULTIPLIER = 1.0; // Multiplier in the Y direction
     public static double TICKS_PER_REV = 0;
@@ -39,7 +39,7 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
     private final Encoder rightEncoder;
     private final Encoder frontEncoder;
 
-    public StandardTrackingWheelLocalizer(HardwareMap hardwareMap) {
+    public DeadWheelLocalizer(HardwareMap hardwareMap) {
         super(Arrays.asList(
                 new Pose2d(0, LATERAL_DISTANCE / 2, 0), // left
                 new Pose2d(0, -LATERAL_DISTANCE / 2, 0), // right

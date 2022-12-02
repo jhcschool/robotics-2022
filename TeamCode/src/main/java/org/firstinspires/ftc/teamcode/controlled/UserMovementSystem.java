@@ -3,15 +3,16 @@ package org.firstinspires.ftc.teamcode.controlled;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.drive.StandardMecanumDrive;
+import org.firstinspires.ftc.teamcode.drive.Drive;
+import org.firstinspires.ftc.teamcode.drive.GrizzlyDrive;
 
 public class UserMovementSystem {
 
     private Gamepad gamepad;
-    private StandardMecanumDrive drive = null;
+    private Drive drive = null;
     private DcMotorEx frontLeftMotor, rearLeftMotor, rearRightMotor, frontRightMotor;
 
-    public UserMovementSystem(Gamepad gamepad, StandardMecanumDrive drive) {
+    public UserMovementSystem(Gamepad gamepad, Drive drive) {
         this.gamepad = gamepad;
         this.drive = drive;
     }
@@ -25,21 +26,20 @@ public class UserMovementSystem {
     }
 
     public void tick() {
-
         double left = 0;
         double right = 0;
 
-        left += gamepad.left_stick_y;
-        right += gamepad.left_stick_y;
+        left -= gamepad.left_stick_y;
+        right -= gamepad.left_stick_y;
 
-        left -= gamepad.right_stick_x;
-        right += gamepad.right_stick_x;
+        left += gamepad.right_stick_x;
+        right -= gamepad.right_stick_x;
 
-        double frontLeft = left - gamepad.left_stick_x;
-        double backLeft = left + gamepad.left_stick_x;
+        double frontLeft = left + gamepad.left_stick_x;
+        double backLeft = left - gamepad.left_stick_x;
 
-        double frontRight = right + gamepad.left_stick_x;
-        double backRight = right - gamepad.left_stick_x;
+        double frontRight = right - gamepad.left_stick_x;
+        double backRight = right + gamepad.left_stick_x;
 
         frontLeft = withinRange(frontLeft);
         backLeft = withinRange(backLeft);

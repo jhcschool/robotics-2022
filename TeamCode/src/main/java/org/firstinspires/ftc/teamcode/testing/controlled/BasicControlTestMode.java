@@ -1,17 +1,28 @@
-package org.firstinspires.ftc.teamcode.testing;
+package org.firstinspires.ftc.teamcode.testing.controlled;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Mode;
+import org.firstinspires.ftc.teamcode.input.Button;
+import org.firstinspires.ftc.teamcode.input.ButtonAction;
+import org.firstinspires.ftc.teamcode.input.GrizzlyGamepad;
 
 @TeleOp(name = "Basic Control Test", group = "Iterative Opmode")
 public class BasicControlTestMode extends Mode {
 
-    Telemetry.Line line;
     private DcMotorEx frontLeftMotor, rearLeftMotor, rearRightMotor, frontRightMotor;
+
+    private Servo clipper;
+    private static double CLIPPED = 0.3;
+    private static double RELEASED = 0.55;
+
+    private boolean clip = false;
+
+    GrizzlyGamepad gamepad;
 
     @Override
     public void onInit() {
@@ -22,15 +33,11 @@ public class BasicControlTestMode extends Mode {
         frontRightMotor = hardwareMap.get(DcMotorEx.class, "frontRightMotor");
         rearRightMotor = hardwareMap.get(DcMotorEx.class, "rearRightMotor");
 
-        rearLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-    }
+        rearRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-    @Override
-    public void beforeStartLoop() {
-        super.beforeStartLoop();
-
-        line = telemetry.addLine("Looping before start");
+        gamepad = new GrizzlyGamepad(gamepad1);
+        clipper = hardwareMap.get(Servo.class, "clipper");
     }
 
     private double withinRange(double input) {
@@ -38,30 +45,32 @@ public class BasicControlTestMode extends Mode {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-
-        telemetry.removeLine(line);
-    }
-
-    @Override
     public void tick() {
         super.tick();
+        gamepad.update();
+
+        telemetry.addData("Clipped", clip);
+
+        clipper.setPosition(clip?CLIPPED:RELEASED);
+
+        if (gamepad.getButtonAction(Button.A) == ButtonAction.PRESS) {
+            clip = !clip;
+        }
 
         double left = 0;
         double right = 0;
 
-        left += gamepad1.left_stick_y;
-        right += gamepad1.left_stick_y;
+        left -= gamepad1.left_stick_y;
+        right -= gamepad1.left_stick_y;
 
-        left -= gamepad1.right_stick_x;
-        right += gamepad1.right_stick_x;
+        left += gamepad1.right_stick_x;
+        right -= gamepad1.right_stick_x;
 
-        double frontLeft = left - gamepad1.left_stick_x;
-        double backLeft = left + gamepad1.left_stick_x;
+        double frontLeft = left + gamepad1.left_stick_x;
+        double backLeft = left - gamepad1.left_stick_x;
 
-        double frontRight = right + gamepad1.left_stick_x;
-        double backRight = right - gamepad1.left_stick_x;
+        double frontRight = right - gamepad1.left_stick_x;
+        double backRight = right + gamepad1.left_stick_x;
 
         frontLeft = withinRange(frontLeft);
         backLeft = withinRange(backLeft);
