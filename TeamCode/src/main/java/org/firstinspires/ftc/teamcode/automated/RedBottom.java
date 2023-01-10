@@ -10,7 +10,7 @@ public class RedBottom extends Application {
 
     @Override
     public void onInit() {
-        super.init();
+        super.onInit();
 
         Pose2d startingPose = new Pose2d(63, -36);
         addLayer(new AutomatedLayer(startingPose));

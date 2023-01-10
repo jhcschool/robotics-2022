@@ -12,10 +12,13 @@ import org.firstinspires.ftc.teamcode.util.Encoder;
 
 // Alternate non-dead-wheel localizer mode that doesn't use the IMU.
 public class WheelEncoderLocalizer implements Localizer {
+    private final Encoder frontLeftEncoder;
+    private final Encoder rearLeftEncoder;
+    private final Encoder frontRightEncoder;
+    private final Encoder rearRightEncoder;
+    double lastFl = 0, lastFr = 0, lastRl = 0, lastRr = 0;
     private Pose2d poseEstimate = new Pose2d(0, 0, 0);
     private Pose2d lastPoseEstimate = new Pose2d(0, 0, 0);
-
-    private Encoder frontLeftEncoder, rearLeftEncoder, frontRightEncoder, rearRightEncoder;
 
     public WheelEncoderLocalizer(DcMotorEx frontLeftEncoder, DcMotorEx rearLeftEncoder, DcMotorEx rearRightEncoder, DcMotorEx frontRightEncoder) {
         this.frontLeftEncoder = new Encoder(frontLeftEncoder);
@@ -43,8 +46,6 @@ public class WheelEncoderLocalizer implements Localizer {
     public Pose2d getPoseVelocity() {
         return poseEstimate.minus(lastPoseEstimate);
     }
-
-    double lastFl = 0, lastFr = 0, lastRl = 0, lastRr = 0;
 
     @Override
     public void update() {

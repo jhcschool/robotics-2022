@@ -4,7 +4,6 @@ import org.firstinspires.ftc.robotcore.external.Function;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.CustomSleeve;
 import org.firstinspires.ftc.teamcode.FrameInfo;
-import org.firstinspires.ftc.teamcode.Hardware;
 
 public class SleeveSystem {
     private final int TARGET_DETECTIONS = 15;
@@ -15,6 +14,8 @@ public class SleeveSystem {
     public SleeveSystem(int viewId, WebcamName webcamName, Function<Float, Void> onNavigateBack) {
         sleeveDetector = new SleeveDetector(viewId, webcamName);
         this.onNavigateBack = onNavigateBack;
+
+        sleeveDetector.start();
     }
 
     public void update() {

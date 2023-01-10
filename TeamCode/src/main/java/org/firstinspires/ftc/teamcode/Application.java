@@ -85,8 +85,6 @@ public abstract class Application extends Mode {
     }
 
     public void addLayer(Layer layer) {
-        layers.add(layer);
-
         LayerInitInfo info = new LayerInitInfo();
         info.hardwareMap = hardwareMap;
         info.hardware = hardware;
@@ -94,6 +92,8 @@ public abstract class Application extends Mode {
         info.inputManager = inputManager;
 
         layer.init(info);
+
+        layers.add(layer);
     }
 
     public void removeLayer(Layer layer) {

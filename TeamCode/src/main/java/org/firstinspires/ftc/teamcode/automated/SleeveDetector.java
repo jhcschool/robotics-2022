@@ -20,9 +20,8 @@ public class SleeveDetector {
     private static final int NUM_DETECTIONS = 20;
 
     private final ObjectDetector objectDetector;
-
+    private final CustomSleeve[] lastDetections = new CustomSleeve[NUM_DETECTIONS];
     private CustomSleeve detectedSleeve = null;
-    private CustomSleeve[] lastDetections = new CustomSleeve[NUM_DETECTIONS];
     private int detectionIndex = 0;
 
     public SleeveDetector(int viewId, WebcamName webcamName) {
@@ -61,7 +60,7 @@ public class SleeveDetector {
             numDetections[i] = 0;
         }
 
-        for (CustomSleeve sleeve: lastDetections) {
+        for (CustomSleeve sleeve : lastDetections) {
             if (sleeve == null) continue;
             numDetections[sleeve.ordinal()]++;
         }

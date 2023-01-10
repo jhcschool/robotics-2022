@@ -1,28 +1,27 @@
 package org.firstinspires.ftc.teamcode.testing.controlled;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Mode;
 import org.firstinspires.ftc.teamcode.input.Button;
 import org.firstinspires.ftc.teamcode.input.ButtonAction;
 import org.firstinspires.ftc.teamcode.input.GrizzlyGamepad;
 
-@TeleOp(name = "Basic Control Test", group = "Iterative Opmode")
+//@TeleOp(name = "Basic Control Test", group = "Iterative Opmode")
+@Disabled
 public class BasicControlTestMode extends Mode {
 
+    private static final double CLIPPED = 0.3;
+    private static final double RELEASED = 0.55;
     private DcMotorEx frontLeftMotor, rearLeftMotor, rearRightMotor, frontRightMotor;
-
     private Servo clipper;
-    private static double CLIPPED = 0.3;
-    private static double RELEASED = 0.55;
-
     private boolean clip = false;
 
-    GrizzlyGamepad gamepad;
+    private GrizzlyGamepad gamepad;
 
     @Override
     public void onInit() {
@@ -51,7 +50,7 @@ public class BasicControlTestMode extends Mode {
 
         telemetry.addData("Clipped", clip);
 
-        clipper.setPosition(clip?CLIPPED:RELEASED);
+        clipper.setPosition(clip ? CLIPPED : RELEASED);
 
         if (gamepad.getButtonAction(Button.A) == ButtonAction.PRESS) {
             clip = !clip;
@@ -83,7 +82,7 @@ public class BasicControlTestMode extends Mode {
     private void setMotorPowers(double frontLeft, double rearLeft, double frontRight, double rearRight) {
         frontLeftMotor.setPower(frontLeft);
         rearLeftMotor.setPower(rearLeft);
-        frontRightMotor.setPower(frontRight);
         rearRightMotor.setPower(rearRight);
+        frontRightMotor.setPower(frontRight);
     }
 }

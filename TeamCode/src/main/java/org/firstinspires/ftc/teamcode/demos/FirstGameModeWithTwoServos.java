@@ -14,9 +14,8 @@ import org.firstinspires.ftc.teamcode.input.Button;
 import org.firstinspires.ftc.teamcode.input.ButtonAction;
 import org.firstinspires.ftc.teamcode.input.InputManager;
 
-@TeleOp(name = "First Simple Game Mode", group = "Iterative Opmode")
-public class FirstGameMode extends Mode {
-
+@TeleOp(name = "First Simple Two Servos", group = "Iterative Opmode")
+public class FirstGameModeWithTwoServos extends Mode {
     private Drive drive;
     private UserMovementSystem userMovementSystem;
 
@@ -33,7 +32,11 @@ public class FirstGameMode extends Mode {
         slideArmMotor = hardwareMap.get(DcMotorEx.class, "slideArmMotor");
 
         userMovementSystem = new UserMovementSystem(gamepad1, drive);
-        clipperSystem = new ClipperSystem(hardwareMap.get(Servo.class, "clipper"));
+
+        Servo leftServo = hardwareMap.get(Servo.class, "leftServo");
+        Servo rightServo = hardwareMap.get(Servo.class, "rightServo");
+
+        clipperSystem = new ClipperSystem(leftServo, rightServo);
 
         inputManager = new InputManager(gamepad1, gamepad2);
     }

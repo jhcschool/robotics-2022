@@ -13,15 +13,11 @@ import org.firstinspires.ftc.teamcode.input.InputManager;
 
 public class ControlledLayer extends Layer {
 
-    private final UserMovementSystem userMovementSystem;
+    private UserMovementSystem userMovementSystem;
     private Hardware hardware;
     private InputManager inputManager;
     private ControlMode controlMode = ControlMode.DRIVER_CONTROL;
     private Trajectory trajectory = null;
-
-    public ControlledLayer() {
-        userMovementSystem = new UserMovementSystem(hardware.gamepad1, hardware.drive);
-    }
 
     @Override
     public void init(LayerInitInfo info) {
@@ -30,6 +26,8 @@ public class ControlledLayer extends Layer {
         inputManager = info.inputManager;
 
         hardware.drive.setPoseEstimate(PoseStorage.robotPose);
+
+        userMovementSystem = new UserMovementSystem(hardware.gamepad1, hardware.drive);
     }
 
     @Override

@@ -6,8 +6,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.teamcode.Mode;
 import org.firstinspires.ftc.teamcode.arm.SlideConstants;
 import org.firstinspires.ftc.teamcode.input.Axis;
-import org.firstinspires.ftc.teamcode.input.Button;
-import org.firstinspires.ftc.teamcode.input.ButtonAction;
 import org.firstinspires.ftc.teamcode.input.InputManager;
 
 @TeleOp(name = "Simple Slide Arm Test", group = "Iterative Opmode")

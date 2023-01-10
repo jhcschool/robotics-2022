@@ -7,6 +7,7 @@ import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 
 public abstract class Drive extends MecanumDrive {
@@ -25,28 +26,46 @@ public abstract class Drive extends MecanumDrive {
     }
 
     public abstract TrajectoryBuilder trajectoryBuilder();
+
     public abstract TrajectoryBuilder trajectoryBuilder(Pose2d startPose);
+
     public abstract TrajectoryBuilder trajectoryBuilder(Pose2d startPose, boolean reversed);
+
     public abstract TrajectoryBuilder trajectoryBuilder(Pose2d startPose, double startHeading);
+
     public abstract TrajectorySequenceBuilder trajectorySequenceBuilder();
+
     public abstract TrajectorySequenceBuilder trajectorySequenceBuilder(Pose2d startPose);
 
     public abstract void turnAsync(double angle);
+
     public abstract void turn(double angle);
+
     public abstract void followTrajectoryAsync(Trajectory trajectory);
+
     public abstract void followTrajectory(Trajectory trajectory);
-    public abstract void followTrajectorySequenceAsync(TrajectorySequenceBuilder trajectorySequence);
-    public abstract void followTrajectorySequence(TrajectorySequenceBuilder trajectorySequence);
+
+    public abstract void followTrajectorySequenceAsync(TrajectorySequence trajectorySequence);
+
+    public abstract void followTrajectorySequence(TrajectorySequence trajectorySequence);
 
     public abstract Pose2d getLastError();
+
     public abstract void update();
+
     public abstract void waitForIdle();
+
     public abstract boolean isBusy();
 
     public abstract void setMode(DcMotor.RunMode mode);
+
     public abstract void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior behavior);
+
     public abstract void setPIDFCoefficients(DcMotor.RunMode mode, PIDFCoefficients coefficients);
+
     public abstract void setWeightedDrivePower(Pose2d drivePower);
+
+    public abstract void setMotorPowers(double frontLeft, double rearLeft, double rearRight, double frontRight);
 
     public abstract void breakFollowing();
 }

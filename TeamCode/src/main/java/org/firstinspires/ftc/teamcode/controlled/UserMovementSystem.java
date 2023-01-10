@@ -4,11 +4,10 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.drive.Drive;
-import org.firstinspires.ftc.teamcode.drive.GrizzlyDrive;
 
 public class UserMovementSystem {
 
-    private Gamepad gamepad;
+    private final Gamepad gamepad;
     private Drive drive = null;
     private DcMotorEx frontLeftMotor, rearLeftMotor, rearRightMotor, frontRightMotor;
 
@@ -47,15 +46,15 @@ public class UserMovementSystem {
         backRight = withinRange(backRight);
 
         if (drive != null)
-        drive.setMotorPowers(frontLeft, backLeft, frontRight, backRight);
-        else setPowers(frontLeft, backLeft, frontRight, backRight);
+            drive.setMotorPowers(frontLeft, backLeft, backRight, frontRight);
+        else setPowers(frontLeft, backLeft, backRight, frontRight);
     }
 
-    private void setPowers(double fl, double bl, double fr, double br) {
+    private void setPowers(double fl, double bl, double br, double fr) {
         frontLeftMotor.setPower(fl);
         rearLeftMotor.setPower(bl);
-        frontRightMotor.setPower(fr);
         rearRightMotor.setPower(br);
+        frontRightMotor.setPower(fr);
     }
 
     private double withinRange(double input) {

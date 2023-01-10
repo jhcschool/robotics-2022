@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 @Disabled
 public class Mode extends LinearOpMode {
 
-    private Object beforeStartLoopSync = new Object();
+    private final Object beforeStartLoopSync = new Object();
     private Thread beforeStartLoopThread;
     private boolean isBeforeStart = true;
 

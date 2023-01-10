@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.testing.controlled;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -8,16 +9,15 @@ import org.firstinspires.ftc.teamcode.input.Button;
 import org.firstinspires.ftc.teamcode.input.ButtonAction;
 import org.firstinspires.ftc.teamcode.input.GrizzlyGamepad;
 
-@TeleOp(name = "Clipper Test", group = "Iterative Opmode")
+@Disabled
+//@TeleOp(name = "Clipper Test", group = "Iterative Opmode")
 public class ClipperTestMode extends Mode {
 
-    private Servo clipper;
-    private static double CLIPPED = 0.3;
-    private static double RELEASED = 0.55;
-
-    private boolean clip = false;
-
+    private static final double CLIPPED = 0.3;
+    private static final double RELEASED = 0.55;
     GrizzlyGamepad gamepad;
+    private Servo clipper;
+    private boolean clip = false;
 
     @Override
     public void onInit() {
@@ -33,7 +33,7 @@ public class ClipperTestMode extends Mode {
 
         telemetry.addData("Clipped", clip);
 
-        clipper.setPosition(clip?CLIPPED:RELEASED);
+        clipper.setPosition(clip ? CLIPPED : RELEASED);
 
         if (gamepad.getButtonAction(Button.A) == ButtonAction.PRESS) {
             clip = !clip;

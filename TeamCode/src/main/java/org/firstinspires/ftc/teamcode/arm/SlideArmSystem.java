@@ -15,7 +15,7 @@ public class SlideArmSystem {
         put(JunctionHeight.HIGH, 34);
     }};
 
-    private DcMotorEx slideMotor;
+    private final DcMotorEx slideMotor;
 
     private JunctionHeight targetHeight = JunctionHeight.NONE;
     private JunctionHeight currentHeight = JunctionHeight.NONE;

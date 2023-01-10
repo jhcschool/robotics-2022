@@ -39,8 +39,8 @@ public class ServoTestMode extends Mode {
         telemetry.addData("Setting", setting);
         clipper.setPosition(setting);
 
-        if (inputManager.getButtonAction(Button.DPAD_RIGHT) == ButtonAction.PRESS) setting+=0.1;
-        if (inputManager.getButtonAction(Button.DPAD_LEFT) == ButtonAction.PRESS) setting-=0.1;
+        if (inputManager.getButtonAction(Button.DPAD_RIGHT) == ButtonAction.PRESS) setting += 0.1;
+        if (inputManager.getButtonAction(Button.DPAD_LEFT) == ButtonAction.PRESS) setting -= 0.1;
 
         setting = Math.max(setting, 0);
         setting = Math.min(setting, 1);

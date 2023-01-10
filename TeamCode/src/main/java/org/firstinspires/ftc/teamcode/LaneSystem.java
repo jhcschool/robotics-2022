@@ -7,17 +7,18 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 
 import org.firstinspires.ftc.teamcode.drive.Drive;
-import org.firstinspires.ftc.teamcode.drive.GrizzlyDrive;
 
 public class LaneSystem {
 
     private final float[] laneCoordinates;
     private final Drive drive;
-    private Vector2d[] nodes;
+    private final Vector2d[] nodes;
 
     public LaneSystem(Drive drive, float[] laneCoordinates) {
         this.drive = drive;
         this.laneCoordinates = laneCoordinates;
+
+        nodes = new Vector2d[laneCoordinates.length * laneCoordinates.length];
 
         int i = 0;
         for (float laneCoordinate : laneCoordinates) {

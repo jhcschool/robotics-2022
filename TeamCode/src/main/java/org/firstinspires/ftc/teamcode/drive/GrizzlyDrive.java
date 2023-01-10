@@ -17,7 +17,6 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.drive.DriveSignal;
-import com.acmerobotics.roadrunner.drive.MecanumDrive;
 import com.acmerobotics.roadrunner.followers.HolonomicPIDVAFollower;
 import com.acmerobotics.roadrunner.followers.TrajectoryFollower;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -88,8 +87,8 @@ public class GrizzlyDrive extends Drive {
 
         this.frontLeftMotor = hardwareMap.get(DcMotorEx.class, "frontLeftMotor");
         this.rearLeftMotor = hardwareMap.get(DcMotorEx.class, "rearLeftMotor");
-        this.frontRightMotor = hardwareMap.get(DcMotorEx.class, "frontRightMotor");
         this.rearRightMotor = hardwareMap.get(DcMotorEx.class, "rearRightMotor");
+        this.frontRightMotor = hardwareMap.get(DcMotorEx.class, "frontRightMotor");
 
         motors = Arrays.asList(this.frontLeftMotor, this.rearLeftMotor, this.rearRightMotor, this.frontRightMotor);
 
@@ -193,19 +192,11 @@ public class GrizzlyDrive extends Drive {
     }
 
     @Override
-    public void followTrajectorySequenceAsync(TrajectorySequenceBuilder trajectorySequence) {
-
-    }
-
-    @Override
-    public void followTrajectorySequence(TrajectorySequenceBuilder trajectorySequence) {
-
-    }
-
     public void followTrajectorySequenceAsync(TrajectorySequence trajectorySequence) {
         trajectorySequenceRunner.followTrajectorySequenceAsync(trajectorySequence);
     }
 
+    @Override
     public void followTrajectorySequence(TrajectorySequence trajectorySequence) {
         followTrajectorySequenceAsync(trajectorySequence);
         waitForIdle();
@@ -301,11 +292,11 @@ public class GrizzlyDrive extends Drive {
     }
 
     @Override
-    public void setMotorPowers(double frontLeft, double rearLeft, double frontRight, double rearRight) {
+    public void setMotorPowers(double frontLeft, double rearLeft, double rearRight, double frontRight) {
         frontLeftMotor.setPower(frontLeft);
         rearLeftMotor.setPower(rearLeft);
-        frontRightMotor.setPower(frontRight);
         rearRightMotor.setPower(rearRight);
+        frontRightMotor.setPower(frontRight);
     }
 
     @Override

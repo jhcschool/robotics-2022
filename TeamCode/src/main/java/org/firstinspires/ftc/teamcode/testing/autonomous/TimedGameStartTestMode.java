@@ -1,19 +1,19 @@
 package org.firstinspires.ftc.teamcode.testing.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.CustomSleeve;
 import org.firstinspires.ftc.teamcode.Mode;
 import org.firstinspires.ftc.teamcode.automated.SleeveDetector;
+import org.firstinspires.ftc.teamcode.drive.Drive;
+import org.firstinspires.ftc.teamcode.drive.GyroDrive;
 
 
 @Autonomous(name = "Game Start Test", group = "Iterative Opmode")
 public class TimedGameStartTestMode extends Mode {
-
     private static final int WAIT_TIME = 1000;
     private static final int MOVE_TIME = 1000;
     private static final int STRAFE_TIME = 1200;
@@ -21,7 +21,7 @@ public class TimedGameStartTestMode extends Mode {
     private static final double POWER = 0.5;
     private final ElapsedTime runtime = new ElapsedTime();
     private SleeveDetector sleeveDetector;
-    private DcMotorEx frontLeftMotor, rearLeftMotor, rearRightMotor, frontRightMotor;
+    private Drive drive;
 
     @Override
     public void onInit() {
@@ -30,13 +30,8 @@ public class TimedGameStartTestMode extends Mode {
         int viewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         WebcamName webcamName = hardwareMap.get(WebcamName.class, "webcam");
 
-        frontLeftMotor = hardwareMap.get(DcMotorEx.class, "frontLeftMotor");
-        rearLeftMotor = hardwareMap.get(DcMotorEx.class, "rearLeftMotor");
-        frontRightMotor = hardwareMap.get(DcMotorEx.class, "frontRightMotor");
-        rearRightMotor = hardwareMap.get(DcMotorEx.class, "rearRightMotor");
-
-        rearRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        drive = new GyroDrive(hardwareMap);
+        drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         sleeveDetector = new SleeveDetector(viewId, webcamName);
         sleeveDetector.start();
@@ -58,31 +53,27 @@ public class TimedGameStartTestMode extends Mode {
     }
 
     private void strafeLeft() {
-        frontLeftMotor.setPower(-POWER);
-        rearLeftMotor.setPower(POWER);
-        frontRightMotor.setPower(POWER);
-        rearRightMotor.setPower(-POWER);
+        final double frontLeft = -POWER;
+        final double frontRight = POWER;
+        final double backLeft = POWER;
+        final double backRight = -POWER;
+        drive.setMotorPowers(frontLeft, backLeft, backRight, frontRight);
     }
 
     private void strafeRight() {
-        frontLeftMotor.setPower(POWER);
-        rearLeftMotor.setPower(-POWER);
-        frontRightMotor.setPower(-POWER);
-        rearRightMotor.setPower(POWER);
+        final double frontLeft = POWER;
+        final double frontRight = -POWER;
+        final double backLeft = -POWER;
+        final double backRight = POWER;
+        drive.setMotorPowers(frontLeft, backLeft, backRight, frontRight);
     }
 
     private void stopMotors() {
-        frontLeftMotor.setPower(0);
-        rearLeftMotor.setPower(0);
-        frontRightMotor.setPower(0);
-        rearRightMotor.setPower(0);
+        drive.setMotorPowers(0, 0, 0, 0);
     }
 
     private void moveForward() {
-        frontLeftMotor.setPower(POWER);
-        rearLeftMotor.setPower(POWER);
-        frontRightMotor.setPower(POWER);
-        rearRightMotor.setPower(POWER);
+        drive.setMotorPowers(POWER, POWER, POWER, POWER);
     }
 
     @Override
