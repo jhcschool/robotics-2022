@@ -10,6 +10,9 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 
+/**
+ * Base class for all drive types.
+ */
 public abstract class Drive extends MecanumDrive {
 
 
@@ -68,4 +71,6 @@ public abstract class Drive extends MecanumDrive {
     public abstract void setMotorPowers(double frontLeft, double rearLeft, double rearRight, double frontRight);
 
     public abstract void breakFollowing();
+
+    public abstract DriveConstants getDriveConstants();
 }

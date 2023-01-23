@@ -6,19 +6,20 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.Mode;
 import org.firstinspires.ftc.teamcode.drive.Drive;
 import org.firstinspires.ftc.teamcode.drive.GyroDrive;
+import org.firstinspires.ftc.teamcode.drive.ToeBreakerDriveConstants;
 
 
-@Autonomous(name = "Left On Start Test", group = "Iterative Opmode")
-public class LeftOnStartTestMode extends Mode {
+@Autonomous(name = "Forward On Start Test", group = "Iterative Opmode")
+public class ForwardOnStartTestMode extends Mode {
 
-    private static final double DISTANCE_STRAFE = 150;
+    private static final double DISTANCE_STRAFE = 36;
     private Drive drive;
 
     @Override
     public void onInit() {
         super.onInit();
 
-        drive = new GyroDrive(hardwareMap);
+        drive = new GyroDrive(hardwareMap, new ToeBreakerDriveConstants());
     }
 
     @Override
@@ -26,7 +27,7 @@ public class LeftOnStartTestMode extends Mode {
         super.onStart();
 
         Trajectory trajectory = drive.trajectoryBuilder()
-                .strafeLeft(DISTANCE_STRAFE)
+                .forward(DISTANCE_STRAFE)
                 .build();
 
         drive.followTrajectoryAsync(trajectory);

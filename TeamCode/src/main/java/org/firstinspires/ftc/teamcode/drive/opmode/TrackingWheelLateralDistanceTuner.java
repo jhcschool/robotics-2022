@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.util.RobotLog;
 import org.firstinspires.ftc.teamcode.drive.DeadWheelLocalizer;
 import org.firstinspires.ftc.teamcode.drive.Drive;
 import org.firstinspires.ftc.teamcode.drive.GyroDrive;
+import org.firstinspires.ftc.teamcode.drive.ToeBreakerDriveConstants;
 
 /**
  * Opmode designed to assist the user in tuning the `DeadWheelLocalizer`'s
@@ -69,7 +70,7 @@ public class TrackingWheelLateralDistanceTuner extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Drive drive = new GyroDrive(hardwareMap);
+        Drive drive = new GyroDrive(hardwareMap, new ToeBreakerDriveConstants());
 
         if (!(drive.getLocalizer() instanceof DeadWheelLocalizer)) {
             RobotLog.setGlobalErrorMsg("DeadWheelLocalizer is not being set in the "

@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.drive.Drive;
 import org.firstinspires.ftc.teamcode.drive.GyroDrive;
+import org.firstinspires.ftc.teamcode.drive.ToeBreakerDriveConstants;
 
 import java.util.Objects;
 
@@ -33,7 +34,7 @@ public class MaxAngularVeloTuner extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Drive drive = new GyroDrive(hardwareMap);
+        Drive drive = new GyroDrive(hardwareMap, new ToeBreakerDriveConstants());
 
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 

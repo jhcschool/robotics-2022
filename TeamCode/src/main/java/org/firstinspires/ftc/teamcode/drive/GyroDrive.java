@@ -1,17 +1,5 @@
 package org.firstinspires.ftc.teamcode.drive;
 
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_ACCEL;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_ANG_ACCEL;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_ANG_VEL;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_VEL;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MOTOR_VELO_PID;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.RUN_USING_ENCODER;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.TRACK_WIDTH;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.encoderTicksToInches;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kA;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kStatic;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
-
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
@@ -38,6 +26,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.ImuOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
+import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -57,8 +46,10 @@ import java.util.List;
  */
 @Config
 public class GyroDrive extends Drive {
-    private static final TrajectoryVelocityConstraint VEL_CONSTRAINT = getVelocityConstraint(MAX_VEL, MAX_ANG_VEL, TRACK_WIDTH);
-    private static final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = getAccelerationConstraint(MAX_ACCEL);
+
+    private DriveConstants driveConstants;
+    private TrajectoryVelocityConstraint velocityConstraint;
+    private TrajectoryAccelerationConstraint accelerationConstraint;
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
     public static double LATERAL_MULTIPLIER = 1;
@@ -68,17 +59,20 @@ public class GyroDrive extends Drive {
     private final DcMotorEx frontLeftMotor;
     private final DcMotorEx rearLeftMotor;
     private final DcMotorEx rearRightMotor;
-    private final DcMotorSimple frontRightMotor;
+    private final DcMotorEx frontRightMotor;
     private final TrajectorySequenceRunner trajectorySequenceRunner;
     private final TrajectoryFollower follower;
-    private final List<DcMotorSimple> motors;
-    private final List<Encoder> motorEncoders;
+    private final List<DcMotorEx> motors;
 
     private final IMU imu;
     private final VoltageSensor batteryVoltageSensor;
 
-    public GyroDrive(HardwareMap hardwareMap) {
-        super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
+    public GyroDrive(HardwareMap hardwareMap, DriveConstants driveConstants) {
+        super(driveConstants.getKV(), driveConstants.getKA(), driveConstants.getKStatic(), driveConstants.getTrackWidth(), driveConstants.getTrackWidth(), LATERAL_MULTIPLIER);
+        this.driveConstants = driveConstants;
+
+        velocityConstraint = getVelocityConstraint(driveConstants.getMaxVel(), driveConstants.getMaxAngVel(), driveConstants.getTrackWidth());
+        accelerationConstraint = getAccelerationConstraint(driveConstants.getMaxAccel());
 
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
                 new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
@@ -99,32 +93,24 @@ public class GyroDrive extends Drive {
         this.frontLeftMotor = hardwareMap.get(DcMotorEx.class, "frontLeftMotor");
         this.rearLeftMotor = hardwareMap.get(DcMotorEx.class, "rearLeftMotor");
         this.rearRightMotor = hardwareMap.get(DcMotorEx.class, "rearRightMotor");
-        this.frontRightMotor = hardwareMap.get(DcMotorSimple.class, "frontRightMotor");
+        this.frontRightMotor = hardwareMap.get(DcMotorEx.class, "frontRightMotor");
 
         motors = Arrays.asList(this.frontLeftMotor, this.rearLeftMotor, this.rearRightMotor, this.frontRightMotor);
 
-        DcMotorEx frontRightEncoderMotor = hardwareMap.get(DcMotorEx.class, "slideArmMotor");
+        for (DcMotorEx motor : motors) {
+            MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
+            motorConfigurationType.setAchieveableMaxRPMFraction(1.0);
+            motor.setMotorType(motorConfigurationType);
+        }
 
-        motorEncoders = new ArrayList<>();
-        motorEncoders.add(new Encoder(frontLeftMotor));
-        motorEncoders.add(new Encoder(rearLeftMotor));
-        motorEncoders.add(new Encoder(rearRightMotor));
-        motorEncoders.add(new Encoder(frontRightEncoderMotor));
-
-//        for (DcMotorEx motor : motors) {
-//            MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
-//            motorConfigurationType.setAchieveableMaxRPMFraction(1.0);
-//            motor.setMotorType(motorConfigurationType);
-//        }
-
-        if (RUN_USING_ENCODER) {
+        if (driveConstants.shouldFeedForward()) {
             setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
 
         setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        if (RUN_USING_ENCODER && MOTOR_VELO_PID != null) {
-            setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, MOTOR_VELO_PID);
+        if (driveConstants.shouldFeedForward() && driveConstants.getMotorVelocityPID() != null) {
+            setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, driveConstants.getMotorVelocityPID());
         }
 
         // TODO: reverse any motors using DcMotor.setDirection()
@@ -151,17 +137,17 @@ public class GyroDrive extends Drive {
 
     @Override
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
-        return new TrajectoryBuilder(startPose, VEL_CONSTRAINT, ACCEL_CONSTRAINT);
+        return new TrajectoryBuilder(startPose, velocityConstraint, accelerationConstraint);
     }
 
     @Override
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose, boolean reversed) {
-        return new TrajectoryBuilder(startPose, reversed, VEL_CONSTRAINT, ACCEL_CONSTRAINT);
+        return new TrajectoryBuilder(startPose, reversed, velocityConstraint, accelerationConstraint);
     }
 
     @Override
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose, double startHeading) {
-        return new TrajectoryBuilder(startPose, startHeading, VEL_CONSTRAINT, ACCEL_CONSTRAINT);
+        return new TrajectoryBuilder(startPose, startHeading, velocityConstraint, accelerationConstraint);
     }
 
     @Override
@@ -173,8 +159,8 @@ public class GyroDrive extends Drive {
     public TrajectorySequenceBuilder trajectorySequenceBuilder(Pose2d startPose) {
         return new TrajectorySequenceBuilder(
                 startPose,
-                VEL_CONSTRAINT, ACCEL_CONSTRAINT,
-                MAX_ANG_VEL, MAX_ANG_ACCEL
+                velocityConstraint, accelerationConstraint,
+                driveConstants.getMaxAngVel(), driveConstants.getMaxAngAccel()
         );
     }
 
@@ -242,16 +228,16 @@ public class GyroDrive extends Drive {
 
     @Override
     public void setMode(DcMotor.RunMode runMode) {
-//        for (DcMotor motor : motors) {
-//            motor.setMode(runMode);
-//        }
+        for (DcMotor motor : motors) {
+            motor.setMode(runMode);
+        }
     }
 
     @Override
     public void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior zeroPowerBehavior) {
-//        for (DcMotor motor : motors) {
-//            motor.setZeroPowerBehavior(zeroPowerBehavior);
-//        }
+        for (DcMotor motor : motors) {
+            motor.setZeroPowerBehavior(zeroPowerBehavior);
+        }
     }
 
     @Override
@@ -261,9 +247,9 @@ public class GyroDrive extends Drive {
                 coefficients.f * 12 / batteryVoltageSensor.getVoltage()
         );
 
-//        for (DcMotorEx motor : motors) {
-//            motor.setPIDFCoefficients(runMode, compensatedCoefficients);
-//        }
+        for (DcMotorEx motor : motors) {
+            motor.setPIDFCoefficients(runMode, compensatedCoefficients);
+        }
     }
 
     @Override
@@ -292,8 +278,8 @@ public class GyroDrive extends Drive {
     public List<Double> getWheelPositions() {
         List<Double> wheelPositions = new ArrayList<>();
 
-        for (Encoder encoder : motorEncoders) {
-            wheelPositions.add(encoderTicksToInches(encoder.getCurrentPosition()));
+        for (DcMotorEx motor : motors) {
+            wheelPositions.add(driveConstants.encoderTicksToInches(motor.getCurrentPosition()));
         }
 
         return wheelPositions;
@@ -303,8 +289,8 @@ public class GyroDrive extends Drive {
     public List<Double> getWheelVelocities() {
         List<Double> wheelVelocities = new ArrayList<>();
 
-        for (Encoder encoder : motorEncoders) {
-            wheelVelocities.add(encoderTicksToInches(encoder.getCorrectedVelocity()));
+        for (DcMotorEx motor : motors) {
+            wheelVelocities.add(driveConstants.encoderTicksToInches(motor.getVelocity()));
         }
 
         return wheelVelocities;
@@ -320,7 +306,7 @@ public class GyroDrive extends Drive {
 
     @Override
     public double getRawExternalHeading() {
-        return imu.getRobotOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.RADIANS).firstAngle;
+        return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
     }
 
     @Override
@@ -332,4 +318,5 @@ public class GyroDrive extends Drive {
     public void breakFollowing() {
         trajectorySequenceRunner.breakFollowing();
     }
+    public DriveConstants getDriveConstants() { return driveConstants; }
 }

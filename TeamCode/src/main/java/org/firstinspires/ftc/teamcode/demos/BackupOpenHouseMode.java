@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode.demos;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.Mode;
 
-@TeleOp(name = "Backup Open House Mode", group = "Iterative Opmode")
+@Disabled
+//@TeleOp(name = "Backup Open House Mode", group = "Iterative Opmode")
 public class BackupOpenHouseMode extends Mode {
 
     private DcMotorEx frontLeftMotor, rearLeftMotor, rearRightMotor, frontRightMotor;

@@ -7,6 +7,8 @@ import org.firstinspires.ftc.teamcode.FrameInfo;
 
 public class SleeveSystem {
     private final int TARGET_DETECTIONS = 15;
+    private static final int DISTANCE_STRAFE = 27;
+
     private final SleeveDetector sleeveDetector;
     // Returns the distance that the robot move to the right to get into the signal zone
     private Function<Float, Void> onNavigateBack;
@@ -33,9 +35,9 @@ public class SleeveSystem {
             float distanceRight = 0;
 
             if (sleeveColor == CustomSleeve.RIGHT) {
-                distanceRight += 12;
+                distanceRight += DISTANCE_STRAFE;
             } else if (sleeveColor == CustomSleeve.LEFT) {
-                distanceRight -= 12;
+                distanceRight -= DISTANCE_STRAFE;
             }
 
             onNavigateBack.apply(distanceRight);

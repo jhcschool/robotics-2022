@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.Mode;
 import org.firstinspires.ftc.teamcode.automated.SleeveDetector;
 import org.firstinspires.ftc.teamcode.drive.Drive;
 import org.firstinspires.ftc.teamcode.drive.GyroDrive;
+import org.firstinspires.ftc.teamcode.drive.ToeBreakerDriveConstants;
 
 
 @Autonomous(name = "Game Start Test", group = "Iterative Opmode")
@@ -30,7 +31,7 @@ public class TimedGameStartTestMode extends Mode {
         int viewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         WebcamName webcamName = hardwareMap.get(WebcamName.class, "webcam");
 
-        drive = new GyroDrive(hardwareMap);
+        drive = new GyroDrive(hardwareMap, new ToeBreakerDriveConstants());
         drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         sleeveDetector = new SleeveDetector(viewId, webcamName);

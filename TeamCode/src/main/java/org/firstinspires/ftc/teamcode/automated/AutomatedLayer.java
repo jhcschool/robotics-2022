@@ -3,9 +3,10 @@ package org.firstinspires.ftc.teamcode.automated;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.ArmSystem;
+import org.firstinspires.ftc.teamcode.arm.TimedArmSystem;
 import org.firstinspires.ftc.teamcode.FrameInfo;
 import org.firstinspires.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.teamcode.LaneSystem;
@@ -26,8 +27,10 @@ public class AutomatedLayer extends Layer {
     private Telemetry telemetry;
     private Hardware hardware;
     private LaneSystem laneSystem;
-    private ArmSystem armSystem;
+    private TimedArmSystem timedArmSystem;
     private ClipperSystem clipperSystem;
+
+    private Vector2d currentJunction = null;
 
     public AutomatedLayer(Pose2d startingPose) {
         super();
@@ -45,7 +48,7 @@ public class AutomatedLayer extends Layer {
         int viewId = initInfo.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", initInfo.hardwareMap.appContext.getPackageName());
 
         laneSystem = new LaneSystem(hardware.drive, GameConstants.LANE_COORDINATES);
-        armSystem = new ArmSystem();
+        timedArmSystem = new TimedArmSystem(hardware.slideArmMotor);
 
         sleeveSystem = new SleeveSystem(viewId, hardware.webcamName, (Float f) -> {
             navigateBack(f);
@@ -56,7 +59,7 @@ public class AutomatedLayer extends Layer {
             navigateToNearestJunction();
         });
 
-        clipperSystem = new ClipperSystem(hardware.clipper);
+        clipperSystem = new ClipperSystem(hardware.leftServo, hardware.rightServo);
     }
 
     @Override
@@ -78,7 +81,7 @@ public class AutomatedLayer extends Layer {
     public void tick(FrameInfo frameInfo) {
         super.tick(frameInfo);
 
-        armSystem.tick();
+        timedArmSystem.tick();
 
         if (currentTrajectory != null && !hardware.drive.isBusy()) {
             hardware.drive.followTrajectoryAsync(currentTrajectory);
@@ -95,11 +98,32 @@ public class AutomatedLayer extends Layer {
     }
 
     private void onJunctionArrival() {
-        armSystem.signalBegin(JunctionHeight.HIGH, () -> {
-            currentTrajectory = null;
-            acquireCone();
+        timedArmSystem.signalBegin(JunctionHeight.HIGH, () -> {
+            moveOnTop();
         });
     }
+
+    private void moveOnTop()
+    {
+        float distance = (float) hardware.drive.getPoseEstimate().vec().distTo(currentJunction);
+        currentTrajectory = hardware.drive.trajectoryBuilder().forward(distance).addDisplacementMarker(() -> {
+            currentTrajectory = null;
+            releaseCone();
+        }).build();
+    }
+
+    private void releaseCone()
+    {
+        clipperSystem.beginRelease();
+        try {
+            Thread.currentThread().sleep(100);
+        } catch (InterruptedException exc) {
+            navigateToNearestJunction();
+        }
+
+        acquireCone();
+    }
+
 
     private void acquireCone() {
         currentTrajectory = laneSystem.beginNavigatingTo(CONE_POSITION_BLUE, 0, () -> {
@@ -114,17 +138,17 @@ public class AutomatedLayer extends Layer {
     private void navigateToNearestJunction() {
         Pose2d pose = hardware.drive.getPoseEstimate();
 
-        Vector2d nearestJunction = GameConstants.HIGH_JUNCTIONS[0];
+        currentJunction = GameConstants.HIGH_JUNCTIONS[0];
 
         for (Vector2d junction : GameConstants.HIGH_JUNCTIONS) {
 
             double distance = pose.vec().distTo(junction);
-            if (distance < pose.vec().distTo(nearestJunction)) {
-                nearestJunction = junction;
+            if (distance < pose.vec().distTo(currentJunction)) {
+                currentJunction = junction;
             }
         }
 
-        currentTrajectory = laneSystem.beginNavigatingTo(nearestJunction, 0, () -> {
+        currentTrajectory = laneSystem.beginNavigatingTo(currentJunction, 0, () -> {
             currentTrajectory = null;
             onJunctionArrival();
         });
@@ -138,15 +162,50 @@ public class AutomatedLayer extends Layer {
     }
 
     private void navigateBack(float distanceRight) {
+        hardware.drive.breakFollowing();
         currentTrajectory = laneSystem.beginNavigatingTo(startingPose.vec(), 0, () -> {
-            float left = distanceRight > 0 ? 0 : -distanceRight;
-            float right = distanceRight < 0 ? 0 : distanceRight;
-            currentTrajectory = hardware.drive.trajectoryBuilder(hardware.drive.getPoseEstimate()).lineToLinearHeading(startingPose)
-                    .forward(10).strafeLeft(left).strafeRight(right).build();
+            boolean forward = distanceRight == 0;
+
+            if (forward)
+            {
+                moveForward();
+                return;
+            }
+
+            boolean left = distanceRight < 0;
+            float distance = Math.abs(distanceRight);
+
+            TrajectoryBuilder builder = hardware.drive.trajectoryBuilder(hardware.drive.getPoseEstimate());
+
+            if (left) {
+                builder.strafeLeft(distance);
+            } else {
+                builder.strafeRight(distance);
+            }
+
+            builder.addDisplacementMarker(() -> {
+                currentTrajectory = null;
+                moveForward();
+            });
+
+            currentTrajectory = builder.build();
         });
     }
 
+    private void moveForward()
+    {
+        final float FORWARD_DISTANCE = 36;
+
+        currentTrajectory = hardware.drive.trajectoryBuilder(hardware.drive.getPoseEstimate()).forward(FORWARD_DISTANCE).addDisplacementMarker(() -> { currentTrajectory = null;}).build();
+    }
+
+
     private void pickUpCone() {
         clipperSystem.beginClip();
+        try {
+            Thread.currentThread().sleep(100);
+        } catch (InterruptedException exc) {
+            navigateToNearestJunction();
+        }
     }
 }

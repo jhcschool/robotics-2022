@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.ObjectDetector;
 import org.firstinspires.ftc.teamcode.opencv.AprilTagPipeline;
 import org.firstinspires.ftc.teamcode.opencv.OpenObjectDetector;
 import org.firstinspires.ftc.teamcode.opencv.OpenPipeline;
+import org.openftc.easyopencv.OpenCvCameraException;
 
 import java.util.HashMap;
 
@@ -49,7 +50,11 @@ public class SleeveDetector {
     }
 
     public void onGameStart() {
-        objectDetector.stop();
+        try {
+            objectDetector.stop();
+        } catch (OpenCvCameraException cameraException) {
+            detectedSleeve = CustomSleeve.CENTER;
+        }
 
         int detectionIndex = 1;
         int maxDetection = 0;

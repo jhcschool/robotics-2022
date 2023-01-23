@@ -7,13 +7,20 @@ public class ClipperSystem {
     private static final float SINGLE_CLIP_POSITION = 0.55f;
     private static final float SINGLE_RELEASE_POSITION = 0.2f;
 
-    private static final float DOUBLE_CLIP_POSITION = 0.9f;
-    private static final float DOUBLE_RELEASE_POSITION = 0.4f;
+    public static float SINGLE_INITIAL_POSITION = 0.3f;
+
+    private static final float DOUBLE_CLIP_POSITION = 1.f;
+    private static final float DOUBLE_RELEASE_POSITION = 0.6f;
+
+    public static float DOUBLE_INITIAL_POSITION = 0.4f;
 
     private static final double CLIP_TOLERANCE = 0.1;
 
     private Runnable onClip = null;
     private Runnable onRelease = null;
+
+    private float clipPosition;
+    private float releasePosition;
 
     private Servo clipper = null;
 
@@ -26,7 +33,10 @@ public class ClipperSystem {
     public ClipperSystem(Servo clipper) {
         this.clipper = clipper;
 
-        clipper.setPosition(SINGLE_RELEASE_POSITION);
+        clipPosition = SINGLE_CLIP_POSITION;
+        releasePosition = SINGLE_INITIAL_POSITION;
+
+        clipper.setPosition(releasePosition);
     }
 
     public ClipperSystem(Servo leftClipper, Servo rightClipper) {
@@ -35,27 +45,24 @@ public class ClipperSystem {
 
         leftClipper.setDirection(Servo.Direction.REVERSE);
 
-        leftClipper.setPosition(DOUBLE_RELEASE_POSITION);
-        rightClipper.setPosition(DOUBLE_RELEASE_POSITION);
+        clipPosition = DOUBLE_CLIP_POSITION;
+        releasePosition = DOUBLE_INITIAL_POSITION;
+
+        leftClipper.setPosition(releasePosition);
+        rightClipper.setPosition(releasePosition);
     }
 
     public ClipperSystem(Servo clipper, Runnable onClip, Runnable onRelease) {
-        this.clipper = clipper;
+        this(clipper);
         this.onClip = onClip;
         this.onRelease = onRelease;
-
-        clipper.setPosition(SINGLE_RELEASE_POSITION);
     }
 
 
     public ClipperSystem(Servo leftClipper, Servo rightClipper, Runnable onClip, Runnable onRelease) {
-        this.leftClipper = leftClipper;
-        this.rightClipper = rightClipper;
+        this(leftClipper, rightClipper);
         this.onClip = onClip;
         this.onRelease = onRelease;
-
-        leftClipper.setPosition(DOUBLE_RELEASE_POSITION);
-        rightClipper.setPosition(DOUBLE_RELEASE_POSITION);
     }
 
     public void setOnClip(Runnable onClip) {
@@ -77,40 +84,36 @@ public class ClipperSystem {
     }
 
     public boolean isReleasedWithinTolerance() {
-        if (clipper == null) {
-            double lowerBound = DOUBLE_RELEASE_POSITION - CLIP_TOLERANCE;
-            double upperBound = DOUBLE_RELEASE_POSITION + CLIP_TOLERANCE;
+        double lowerBound = releasePosition - CLIP_TOLERANCE;
+        double upperBound = releasePosition + CLIP_TOLERANCE;
 
+        if (clipper == null) {
             return leftClipper.getPosition() >= lowerBound && leftClipper.getPosition() <= upperBound && rightClipper.getPosition() >= lowerBound && rightClipper.getPosition() <= upperBound;
         }
-
-        double lowerBound = SINGLE_RELEASE_POSITION - CLIP_TOLERANCE;
-        double upperBound = SINGLE_RELEASE_POSITION + CLIP_TOLERANCE;
 
         return clipper.getPosition() >= lowerBound && clipper.getPosition() <= upperBound;
     }
 
     public boolean isClippedWithinTolerance() {
-        if (clipper == null) {
-            double lowerBound = DOUBLE_CLIP_POSITION - CLIP_TOLERANCE;
-            double upperBound = DOUBLE_CLIP_POSITION + CLIP_TOLERANCE;
+        double lowerBound = clipPosition - CLIP_TOLERANCE;
+        double upperBound = clipPosition + CLIP_TOLERANCE;
 
+        if (clipper == null) {
             return leftClipper.getPosition() >= lowerBound && leftClipper.getPosition() <= upperBound && rightClipper.getPosition() >= lowerBound && rightClipper.getPosition() <= upperBound;
         }
-
-        double lowerBound = SINGLE_CLIP_POSITION - CLIP_TOLERANCE;
-        double upperBound = SINGLE_CLIP_POSITION + CLIP_TOLERANCE;
 
         return clipper.getPosition() >= lowerBound && clipper.getPosition() <= upperBound;
     }
 
     public void beginClip() {
+        releasePosition = clipper == null? DOUBLE_RELEASE_POSITION : SINGLE_RELEASE_POSITION;
+
         if (!clipped) {
             if (clipper != null) {
-                clipper.setPosition(SINGLE_CLIP_POSITION);
+                clipper.setPosition(clipPosition);
             } else {
-                leftClipper.setPosition(DOUBLE_CLIP_POSITION);
-                rightClipper.setPosition(DOUBLE_CLIP_POSITION);
+                leftClipper.setPosition(clipPosition);
+                rightClipper.setPosition(clipPosition);
             }
             clipped = true;
             shouldRun = true;
@@ -120,10 +123,10 @@ public class ClipperSystem {
     public void beginRelease() {
         if (clipped) {
             if (clipper != null) {
-                clipper.setPosition(SINGLE_RELEASE_POSITION);
+                clipper.setPosition(releasePosition);
             } else {
-                leftClipper.setPosition(DOUBLE_RELEASE_POSITION);
-                rightClipper.setPosition(DOUBLE_RELEASE_POSITION);
+                leftClipper.setPosition(releasePosition);
+                rightClipper.setPosition(releasePosition);
             }
             clipped = false;
             shouldRun = true;
@@ -144,6 +147,12 @@ public class ClipperSystem {
         } else {
             beginRelease();
         }
+    }
+
+    public static void resetInitialPosition()
+    {
+        SINGLE_INITIAL_POSITION = 0.3f;
+        DOUBLE_INITIAL_POSITION = 0.4f;
     }
 
 }
