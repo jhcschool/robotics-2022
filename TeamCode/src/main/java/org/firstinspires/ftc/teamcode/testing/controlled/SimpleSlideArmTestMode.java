@@ -1,15 +1,15 @@
 package org.firstinspires.ftc.teamcode.testing.controlled;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.Mode;
-import org.firstinspires.ftc.teamcode.arm.SlideConstants;
 import org.firstinspires.ftc.teamcode.input.Axis;
 import org.firstinspires.ftc.teamcode.input.InputManager;
 
-@TeleOp(name = "Simple Slide Arm Test", group = "Iterative Opmode")
+@Disabled
+//@TeleOp(name = "Simple Slide Arm Test", group = "Iterative Opmode")
 public class SimpleSlideArmTestMode extends Mode {
 
     private DcMotorSimple slideArmMotor;

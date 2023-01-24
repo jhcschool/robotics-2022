@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.testing.controlled;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -11,8 +10,8 @@ import org.firstinspires.ftc.teamcode.input.Button;
 import org.firstinspires.ftc.teamcode.input.ButtonAction;
 import org.firstinspires.ftc.teamcode.input.GrizzlyGamepad;
 
-//@TeleOp(name = "Basic Control Test", group = "Iterative Opmode")
 @Disabled
+//@TeleOp(name = "Basic Control Test", group = "Iterative Opmode")
 public class BasicControlTestMode extends Mode {
 
     private static final double CLIPPED = 0.3;

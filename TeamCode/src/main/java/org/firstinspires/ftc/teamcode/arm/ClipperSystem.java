@@ -6,20 +6,14 @@ public class ClipperSystem {
 
     private static final float SINGLE_CLIP_POSITION = 0.55f;
     private static final float SINGLE_RELEASE_POSITION = 0.2f;
-
-    public static float SINGLE_INITIAL_POSITION = 0.3f;
-
     private static final float DOUBLE_CLIP_POSITION = 1.f;
     private static final float DOUBLE_RELEASE_POSITION = 0.6f;
-
-    public static float DOUBLE_INITIAL_POSITION = 0.4f;
-
     private static final double CLIP_TOLERANCE = 0.1;
-
+    public static float SINGLE_INITIAL_POSITION = 0.3f;
+    public static float DOUBLE_INITIAL_POSITION = 0.4f;
+    private final float clipPosition;
     private Runnable onClip = null;
     private Runnable onRelease = null;
-
-    private float clipPosition;
     private float releasePosition;
 
     private Servo clipper = null;
@@ -65,6 +59,11 @@ public class ClipperSystem {
         this.onRelease = onRelease;
     }
 
+    public static void resetInitialPosition() {
+        SINGLE_INITIAL_POSITION = 0.3f;
+        DOUBLE_INITIAL_POSITION = 0.4f;
+    }
+
     public void setOnClip(Runnable onClip) {
         this.onClip = onClip;
     }
@@ -106,7 +105,7 @@ public class ClipperSystem {
     }
 
     public void beginClip() {
-        releasePosition = clipper == null? DOUBLE_RELEASE_POSITION : SINGLE_RELEASE_POSITION;
+        releasePosition = clipper == null ? DOUBLE_RELEASE_POSITION : SINGLE_RELEASE_POSITION;
 
         if (!clipped) {
             if (clipper != null) {
@@ -147,12 +146,6 @@ public class ClipperSystem {
         } else {
             beginRelease();
         }
-    }
-
-    public static void resetInitialPosition()
-    {
-        SINGLE_INITIAL_POSITION = 0.3f;
-        DOUBLE_INITIAL_POSITION = 0.4f;
     }
 
 }

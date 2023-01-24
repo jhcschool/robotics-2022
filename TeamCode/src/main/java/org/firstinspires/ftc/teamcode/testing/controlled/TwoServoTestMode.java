@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.testing.controlled;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -8,7 +9,8 @@ import org.firstinspires.ftc.teamcode.input.Button;
 import org.firstinspires.ftc.teamcode.input.ButtonAction;
 import org.firstinspires.ftc.teamcode.input.InputManager;
 
-@TeleOp(name = "Two Servo Test", group = "Iterative Opmode")
+@Disabled
+//@TeleOp(name = "Two Servo Test", group = "Iterative Opmode")
 public class TwoServoTestMode extends Mode {
 
     private Servo leftServo;

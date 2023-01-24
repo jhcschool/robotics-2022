@@ -30,6 +30,7 @@ public class EncoderGameStartTestMode extends Mode {
     private ClipperSystem clipperSystem;
     private Servo leftServo;
     private Servo rightServo;
+    private Trajectory trajectory = null;
 
     @Override
     public void onInit() {
@@ -43,8 +44,8 @@ public class EncoderGameStartTestMode extends Mode {
         sleeveDetector = new SleeveDetector(viewId, webcamName);
         sleeveDetector.start();
 
-         leftServo = hardwareMap.get(Servo.class, "leftServo");
-         rightServo = hardwareMap.get(Servo.class, "rightServo");
+        leftServo = hardwareMap.get(Servo.class, "leftServo");
+        rightServo = hardwareMap.get(Servo.class, "rightServo");
 
         clipperSystem = new ClipperSystem(leftServo, rightServo);
 
@@ -69,8 +70,6 @@ public class EncoderGameStartTestMode extends Mode {
         clipperSystem.beginRelease();
     }
 
-    private Trajectory trajectory = null;
-
     @Override
     public void tick() {
         super.tick();
@@ -83,8 +82,7 @@ public class EncoderGameStartTestMode extends Mode {
             return;
         }
 
-        while (trajectory != null && !drive.isBusy())
-        {
+        while (trajectory != null && !drive.isBusy()) {
             drive.followTrajectoryAsync(trajectory);
         }
 
@@ -98,10 +96,14 @@ public class EncoderGameStartTestMode extends Mode {
 
             switch (sleeve) {
                 case LEFT:
-                    trajectoryBuilder.strafeLeft(DISTANCE_STRAFE).addDisplacementMarker(() -> {moveForward();});
+                    trajectoryBuilder.strafeLeft(DISTANCE_STRAFE).addDisplacementMarker(() -> {
+                        moveForward();
+                    });
                     break;
                 case RIGHT:
-                    trajectoryBuilder.strafeRight(DISTANCE_STRAFE).addDisplacementMarker(() -> {moveForward();});
+                    trajectoryBuilder.strafeRight(DISTANCE_STRAFE).addDisplacementMarker(() -> {
+                        moveForward();
+                    });
                     break;
                 case CENTER:
                     moveForward();
@@ -115,12 +117,13 @@ public class EncoderGameStartTestMode extends Mode {
     }
 
     public void moveForward() {
-        trajectory = drive.trajectoryBuilder().forward(FORWARD_DISTANCE).addDisplacementMarker(() -> {trajectory = null;}).build();
+        trajectory = drive.trajectoryBuilder().forward(FORWARD_DISTANCE).addDisplacementMarker(() -> {
+            trajectory = null;
+        }).build();
     }
 
     @Override
-    public void onEnd()
-    {
+    public void onEnd() {
         super.onEnd();
 
         ClipperSystem.DOUBLE_INITIAL_POSITION = (float) ((leftServo.getPosition() + rightServo.getPosition()) / 2.0);

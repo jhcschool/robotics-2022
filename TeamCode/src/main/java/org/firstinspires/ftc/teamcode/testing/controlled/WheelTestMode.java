@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.testing.controlled;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.Mode;
@@ -8,17 +9,17 @@ import org.firstinspires.ftc.teamcode.Mode;
 @TeleOp(name = "Wheel Test", group = "Iterative Opmode")
 public class WheelTestMode extends Mode {
 
-    private final DcMotorSimple[] motors = new DcMotorSimple[4];
+    private final DcMotorEx[] motors = new DcMotorEx[4];
     private int motorIndex;
 
     @Override
     public void onInit() {
         super.onInit();
 
-        motors[0] = hardwareMap.get(DcMotorSimple.class, "frontLeftMotor");
-        motors[1] = hardwareMap.get(DcMotorSimple.class, "rearLeftMotor");
-        motors[2] = hardwareMap.get(DcMotorSimple.class, "rearRightMotor");
-        motors[3] = hardwareMap.get(DcMotorSimple.class, "frontRightMotor");
+        motors[0] = hardwareMap.get(DcMotorEx.class, "frontLeftMotor");
+        motors[1] = hardwareMap.get(DcMotorEx.class, "rearLeftMotor");
+        motors[2] = hardwareMap.get(DcMotorEx.class, "rearRightMotor");
+        motors[3] = hardwareMap.get(DcMotorEx.class, "frontRightMotor");
 
         motors[2].setDirection(DcMotorSimple.Direction.REVERSE);
         motors[3].setDirection(DcMotorSimple.Direction.REVERSE);
@@ -39,10 +40,12 @@ public class WheelTestMode extends Mode {
         }
 
 
-        for (DcMotorSimple motor : motors) {
+        for (DcMotorEx motor : motors) {
             motor.setPower(0);
         }
         motors[motorIndex].setPower(gamepad1.right_trigger - gamepad1.left_trigger);
+
+        telemetry.addData("Motor velocity: ", motors[motorIndex].getVelocity());
 
         telemetry.addData("Motor index:", motorIndex);
     }

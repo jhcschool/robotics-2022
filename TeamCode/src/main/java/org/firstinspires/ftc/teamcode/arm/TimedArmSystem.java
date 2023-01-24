@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.arm;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -10,40 +9,35 @@ import java.util.HashMap;
 
 public class TimedArmSystem {
 
-    private DcMotorSimple slideArmMotor;
-
-    public TimedArmSystem(DcMotorSimple slideArmMotor) {
-        this.slideArmMotor = slideArmMotor;
-
-    }
-
-    private JunctionHeight height = JunctionHeight.NONE;
-    private Runnable endCallback;
-
-    private static HashMap<JunctionHeight, Double> upTimes = new HashMap<JunctionHeight, Double>(){
+    private static final HashMap<JunctionHeight, Double> upTimes = new HashMap<JunctionHeight, Double>() {
         {
             put(JunctionHeight.LOW, 0.2);
             put(JunctionHeight.MID, 0.4);
             put(JunctionHeight.HIGH, 0.6);
         }
     };
-
+    private final DcMotorSimple slideArmMotor;
+    private JunctionHeight height = JunctionHeight.NONE;
+    private Runnable endCallback;
     private ElapsedTime timeSinceActivation;
     private boolean hasRunCallback = false;
 
-    public void tick() {
+    public TimedArmSystem(DcMotorSimple slideArmMotor) {
+        this.slideArmMotor = slideArmMotor;
+
+    }
+
+    public void update() {
         if (height == null || height == JunctionHeight.NONE) {
             slideArmMotor.setPower(-0.2);
-        };
+        }
 
         double time = upTimes.get(height);
-        if (timeSinceActivation.milliseconds() < time)
-        {
+        if (timeSinceActivation.milliseconds() < time) {
             return;
         }
 
-        if (!hasRunCallback)
-        {
+        if (!hasRunCallback) {
             endCallback.run();
             hasRunCallback = true;
         }

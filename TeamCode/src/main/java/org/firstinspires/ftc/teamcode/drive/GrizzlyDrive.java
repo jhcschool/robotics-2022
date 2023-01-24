@@ -43,31 +43,26 @@ import java.util.List;
  */
 @Config
 public class GrizzlyDrive extends Drive {
-    private DriveConstants driveConstants;
-    private TrajectoryVelocityConstraint velocityConstraint;
-    private TrajectoryAccelerationConstraint accelerationConstraint;
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
-    public static double LATERAL_MULTIPLIER = 1;
     public static double VX_WEIGHT = 1;
     public static double VY_WEIGHT = 1;
     public static double OMEGA_WEIGHT = 1;
     private final TrajectorySequenceRunner trajectorySequenceRunner;
     private final TrajectoryFollower follower;
-
     private final DcMotorEx frontLeftMotor;
     private final DcMotorEx rearLeftMotor;
     private final DcMotorEx rearRightMotor;
     private final DcMotorEx frontRightMotor;
     private final List<DcMotorEx> motors;
-
     private final VoltageSensor batteryVoltageSensor;
+    private final DriveConstants driveConstants;
+    private TrajectoryVelocityConstraint velocityConstraint;
+    private TrajectoryAccelerationConstraint accelerationConstraint;
 
     public GrizzlyDrive(HardwareMap hardwareMap, DriveConstants driveConstants) {
-        super(driveConstants.getKV(), driveConstants.getKA(), driveConstants.getKStatic(), driveConstants.getTrackWidth(), driveConstants.getTrackWidth(), LATERAL_MULTIPLIER);
+        super(driveConstants.getKV(), driveConstants.getKA(), driveConstants.getKStatic(), driveConstants.getTrackWidth(), driveConstants.getTrackWidth(), driveConstants.getLateralMultiplier());
         this.driveConstants = driveConstants;
 
-        follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
+        follower = new HolonomicPIDVAFollower(driveConstants.getTranslationalPID(), driveConstants.getTranslationalPID(), driveConstants.getHeadingPID(),
                 new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
 
         LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
@@ -106,7 +101,7 @@ public class GrizzlyDrive extends Drive {
         frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         setLocalizer(new DeadWheelLocalizer(hardwareMap));
-        trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
+        trajectorySequenceRunner = new TrajectorySequenceRunner(follower, driveConstants.getHeadingPID());
     }
 
     public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {

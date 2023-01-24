@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.demos;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -60,8 +59,7 @@ public class FirstGameModeWithTwoServos extends Mode {
     }
 
     @Override
-    public void onEnd()
-    {
+    public void onEnd() {
         super.onEnd();
         ClipperSystem.resetInitialPosition();
     }

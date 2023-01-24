@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 /*
@@ -26,26 +27,41 @@ public interface DriveConstants {
      * from DriveVelocityPIDTuner.
      */
     boolean shouldFeedForward();
-     double getTicksPerRev();
+
+    double getTicksPerRev();
+
     double getMaxRpm();
+
     PIDFCoefficients getMotorVelocityPID();
+    PIDCoefficients getTranslationalPID();
+    PIDCoefficients getHeadingPID();
+
+    double getLateralMultiplier();
 
     double getWheelRadius();
+
     double getGearRatio();
 
     double getKV();
+
     double getTrackWidth();
+
     double getKA();
+
     double getKStatic();
 
     double getMaxVel();
+
     double getMaxAccel();
 
     double getMaxAngVel();
+
     double getMaxAngAccel();
 
     double encoderTicksToInches(double ticks);
+
     double rpmToVelocity(double rpm);
+
     double getMotorVelocityF(double ticksPerSecond);
 
 }

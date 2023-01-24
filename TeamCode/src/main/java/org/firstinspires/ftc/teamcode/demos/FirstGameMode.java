@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.demos;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -17,8 +16,8 @@ import org.firstinspires.ftc.teamcode.input.Button;
 import org.firstinspires.ftc.teamcode.input.ButtonAction;
 import org.firstinspires.ftc.teamcode.input.InputManager;
 
-//@Disabled
-@TeleOp(name = "First Simple Game Mode", group = "Iterative Opmode")
+@Disabled
+//@TeleOp(name = "First Simple Game Mode", group = "Iterative Opmode")
 public class FirstGameMode extends Mode {
 
     private Drive drive;

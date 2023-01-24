@@ -5,15 +5,15 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.Application;
 
-@Autonomous(name = "Red bottom", group = "Automated")
-public class RedBottom extends Application {
+@Autonomous(name = "Red substation", group = "Automated")
+public class RedSubstation extends Application {
 
     @Override
     public void onInit() {
         super.onInit();
 
-        Pose2d startingPose = new Pose2d(63, -36);
-        addLayer(new AutomatedLayer(startingPose));
+        Pose2d startingPose = new Pose2d(63, -36, Math.toRadians(180));
+        addLayer(new AutomatedLayer(startingPose, AutomatedLayer.AllianceMember.RED));
     }
 
 }
