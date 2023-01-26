@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.demos;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -46,7 +45,7 @@ public class FirstGameMode extends Mode {
         super.tick();
         inputManager.update();
 
-        userMovementSystem.tick();
+        userMovementSystem.update();
 
         if (inputManager.getButtonAction(Button.RIGHT_BUMPER) == ButtonAction.PRESS) {
             clipperSystem.toggle();

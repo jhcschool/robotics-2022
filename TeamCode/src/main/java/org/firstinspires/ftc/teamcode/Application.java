@@ -33,7 +33,7 @@ public abstract class Application extends Mode {
 
         FrameInfo frameInfo = new FrameInfo();
         {
-            frameInfo.time = runtime.milliseconds();
+            frameInfo.time = runtime.seconds();
             frameInfo.deltaTime = frameInfo.time - time;
 
             time = frameInfo.time;
@@ -64,7 +64,7 @@ public abstract class Application extends Mode {
 
         FrameInfo frameInfo = new FrameInfo();
         {
-            frameInfo.time = runtime.milliseconds();
+            frameInfo.time = runtime.seconds();
             frameInfo.deltaTime = frameInfo.time - time;
 
             time = frameInfo.time;

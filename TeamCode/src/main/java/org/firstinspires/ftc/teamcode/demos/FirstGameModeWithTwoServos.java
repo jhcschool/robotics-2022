@@ -47,7 +47,7 @@ public class FirstGameModeWithTwoServos extends Mode {
         super.tick();
         inputManager.update();
 
-        userMovementSystem.tick();
+        userMovementSystem.update();
 
         if (inputManager.getButtonAction(Button.RIGHT_BUMPER) == ButtonAction.PRESS) {
             clipperSystem.toggle();

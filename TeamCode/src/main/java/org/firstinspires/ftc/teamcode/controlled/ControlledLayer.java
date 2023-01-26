@@ -2,21 +2,27 @@ package org.firstinspires.ftc.teamcode.controlled;
 
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 
+import org.checkerframework.checker.units.qual.C;
 import org.firstinspires.ftc.teamcode.FrameInfo;
 import org.firstinspires.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.teamcode.Layer;
 import org.firstinspires.ftc.teamcode.LayerInitInfo;
 import org.firstinspires.ftc.teamcode.PoseStorage;
+import org.firstinspires.ftc.teamcode.arm.ClipperSystem;
+import org.firstinspires.ftc.teamcode.input.Axis;
 import org.firstinspires.ftc.teamcode.input.Button;
 import org.firstinspires.ftc.teamcode.input.ButtonAction;
 import org.firstinspires.ftc.teamcode.input.InputManager;
 
 public class ControlledLayer extends Layer {
 
-    private UserMovementSystem userMovementSystem;
     private Hardware hardware;
     private InputManager inputManager;
     private ControlMode controlMode = ControlMode.DRIVER_CONTROL;
+
+    private UserMovementSystem userMovementSystem;
+    private ClipperSystem clipperSystem;
+
     private Trajectory trajectory = null;
 
     @Override
@@ -28,6 +34,7 @@ public class ControlledLayer extends Layer {
         hardware.drive.setPoseEstimate(PoseStorage.robotPose);
 
         userMovementSystem = new UserMovementSystem(hardware.gamepad1, hardware.drive);
+        clipperSystem = new ClipperSystem(hardware.leftServo, hardware.rightServo);
     }
 
     @Override
@@ -55,7 +62,20 @@ public class ControlledLayer extends Layer {
     }
 
     private void tickDriver(FrameInfo frameInfo) {
-        userMovementSystem.tick();
+        userMovementSystem.update();
+
+        if (inputManager.getButtonAction(Button.LEFT_BUMPER) == ButtonAction.PRESS) {
+            userMovementSystem.toggleMovementMode();
+        }
+
+        if (inputManager.getButtonAction(Button.RIGHT_BUMPER) == ButtonAction.PRESS) {
+            clipperSystem.toggle();
+        }
+
+        {
+            float total = inputManager.getAxis(Axis.RIGHT_TRIGGER) - inputManager.getAxis(Axis.LEFT_TRIGGER);
+            hardware.slideArmMotor.setPower(total);
+        }
     }
 
     private enum ControlMode {

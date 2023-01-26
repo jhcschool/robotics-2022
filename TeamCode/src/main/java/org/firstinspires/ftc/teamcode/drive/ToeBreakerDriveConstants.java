@@ -51,13 +51,19 @@ public class ToeBreakerDriveConstants implements DriveConstants {
     }
 
     @Override
-    public PIDCoefficients getTranslationalPID() { return TRANSLATIONAL_PID; }
+    public PIDCoefficients getTranslationalPID() {
+        return TRANSLATIONAL_PID;
+    }
 
     @Override
-    public PIDCoefficients getHeadingPID() { return HEADING_PID; }
+    public PIDCoefficients getHeadingPID() {
+        return HEADING_PID;
+    }
 
     @Override
-    public double getLateralMultiplier() { return LATERAL_MULTIPLIER; }
+    public double getLateralMultiplier() {
+        return LATERAL_MULTIPLIER;
+    }
 
     @Override
     public double getWheelRadius() {

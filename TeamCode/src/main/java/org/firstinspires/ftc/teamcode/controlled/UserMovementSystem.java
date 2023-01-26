@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.controlled;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
@@ -10,10 +12,16 @@ public class UserMovementSystem {
     private final Gamepad gamepad;
     private Drive drive = null;
     private DcMotorEx frontLeftMotor, rearLeftMotor, rearRightMotor, frontRightMotor;
-
+    private MovementMode movementMode = MovementMode.ROBOT_ORIENTED;
     public UserMovementSystem(Gamepad gamepad, Drive drive) {
         this.gamepad = gamepad;
         this.drive = drive;
+    }
+
+    public UserMovementSystem(Gamepad gamepad, Drive drive, MovementMode movementMode) {
+        this(gamepad, drive);
+
+        this.movementMode = movementMode;
     }
 
     public UserMovementSystem(Gamepad gamepad, DcMotorEx frontLeft, DcMotorEx rearLeft, DcMotorEx rearRight, DcMotorEx frontRight) {
@@ -24,7 +32,11 @@ public class UserMovementSystem {
         this.frontRightMotor = frontRight;
     }
 
-    public void tick() {
+    public void update() {
+        if (movementMode == MovementMode.FIELD_ORIENTED) {
+            setFieldCentricPowers();
+        }
+
         double left = 0;
         double right = 0;
 
@@ -57,8 +69,43 @@ public class UserMovementSystem {
         frontRightMotor.setPower(fr);
     }
 
+    private void setFieldCentricPowers() {
+        Vector2d input = new Vector2d(
+                -gamepad.left_stick_y,
+                -gamepad.left_stick_x
+        ).rotated(-drive.getPoseEstimate().getHeading());
+
+        drive.setWeightedDrivePower(
+                new Pose2d(
+                        input.getX(),
+                        input.getY(),
+                        -gamepad.right_stick_x
+                )
+        );
+    }
+
     private double withinRange(double input) {
         return Math.max(-1, Math.min(1, input));
+    }
+
+
+    public void setMovementMode(MovementMode movementMode) {
+        this.movementMode = movementMode;
+    }
+
+    public void toggleMovementMode() {
+        if (movementMode == MovementMode.ROBOT_ORIENTED) {
+            movementMode = MovementMode.FIELD_ORIENTED;
+        } else {
+            movementMode = MovementMode.ROBOT_ORIENTED;
+        }
+    }
+
+
+
+    enum MovementMode {
+        ROBOT_ORIENTED,
+        FIELD_ORIENTED
     }
 
 }

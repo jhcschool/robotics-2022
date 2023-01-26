@@ -66,4 +66,8 @@ public class InputManager {
 
         return action;
     }
+
+
+    public GrizzlyGamepad getGamepad1() { return gamepad1; }
+    public GrizzlyGamepad getGamepad2() { return gamepad2; }
 }

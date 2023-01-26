@@ -8,6 +8,8 @@ import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 
 import org.firstinspires.ftc.teamcode.drive.Drive;
 
+import java.util.List;
+
 public class LaneSystem {
 
     private final float[] laneCoordinates;
@@ -44,10 +46,12 @@ public class LaneSystem {
         Pose2d currentPose = drive.getPoseEstimate();
 
         // might be wrong
-        float absoluteHeading = (float) target.angleBetween(targetNode);
+        double absoluteHeading = targetNode.angleBetween(target);
+//        float absoluteHeading = (float) target.angleBetween(targetNode);
 
         TrajectoryBuilder trajectoryBuilder = drive.trajectoryBuilder(currentPose);
 
+        // Will need to modify in the future
         trajectoryBuilder.lineToLinearHeading(new Pose2d(targetNode.getX(), currentPose.getY(), absoluteHeading + relativeHeading));
         trajectoryBuilder.lineToLinearHeading(new Pose2d(targetNode.getX(), targetNode.getY(), absoluteHeading + relativeHeading));
 

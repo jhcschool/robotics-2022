@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.game.JunctionHeight;
 
 import java.util.HashMap;
 
-public class SlideArmSystem {
+public class EncoderArmSystem {
     // IN INCHES
     private static final HashMap<JunctionHeight, Integer> ARM_POSITIONS = new HashMap() {{
         put(JunctionHeight.NONE, 0);
@@ -22,7 +22,7 @@ public class SlideArmSystem {
     private boolean setHeight = false;
     private boolean currentlyMoving = false;
 
-    public SlideArmSystem(DcMotorEx slideMotor) {
+    public EncoderArmSystem(DcMotorEx slideMotor) {
         this.slideMotor = slideMotor;
 
         slideMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);

@@ -33,7 +33,9 @@ public interface DriveConstants {
     double getMaxRpm();
 
     PIDFCoefficients getMotorVelocityPID();
+
     PIDCoefficients getTranslationalPID();
+
     PIDCoefficients getHeadingPID();
 
     double getLateralMultiplier();

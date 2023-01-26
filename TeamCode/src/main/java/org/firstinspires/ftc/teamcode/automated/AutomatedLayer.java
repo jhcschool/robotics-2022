@@ -20,11 +20,6 @@ import org.firstinspires.ftc.teamcode.game.JunctionHeight;
 
 public class AutomatedLayer extends Layer {
 
-    enum AllianceMember {
-        RED,
-        BLUE
-    }
-
     private final Vector2d CONE_POSITION_BLUE = new Vector2d(-63, 0);
     private final Vector2d CONE_POSITION_RED = new Vector2d(63, 0);
     private Pose2d startingPose = new Pose2d(0, 0, Math.toRadians(0));
@@ -33,13 +28,11 @@ public class AutomatedLayer extends Layer {
     private Telemetry telemetry;
     private Hardware hardware;
     private LaneSystem laneSystem;
-//    private TimedArmSystem timedArmSystem;
+    //    private TimedArmSystem timedArmSystem;
     private SimpleArmSystem simpleArmSystem;
     private ClipperSystem clipperSystem;
-
     private Vector2d currentJunction = null;
-
-    private AllianceMember allianceMember;
+    private final AllianceMember allianceMember;
 
     public AutomatedLayer(Pose2d startingPose, AllianceMember allianceMember) {
         super();
@@ -110,7 +103,9 @@ public class AutomatedLayer extends Layer {
     }
 
     private void onJunctionArrival() {
-        simpleArmSystem.setRaised(true, () -> {moveOnTop();});
+        simpleArmSystem.setRaised(true, () -> {
+            moveOnTop();
+        });
     }
 
     private void moveOnTop() {
@@ -132,7 +127,6 @@ public class AutomatedLayer extends Layer {
             acquireCone();
         });
     }
-
 
     private void acquireCone() {
 
@@ -211,7 +205,6 @@ public class AutomatedLayer extends Layer {
         }).build();
     }
 
-
     private void pickUpCone() {
         clipperSystem.beginClip();
         try {
@@ -219,5 +212,11 @@ public class AutomatedLayer extends Layer {
         } catch (InterruptedException exc) {
         }
         navigateToNearestJunction();
+    }
+
+
+    enum AllianceMember {
+        RED,
+        BLUE
     }
 }

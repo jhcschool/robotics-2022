@@ -22,9 +22,9 @@ public class RightyLucyDriveConstants implements DriveConstants {
     private static final double MAX_ANG_VEL = 2;
     private static final double MAX_ANG_ACCEL = 2;
 
-    private static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(8, 0, 0);
-    private static PIDCoefficients HEADING_PID = new PIDCoefficients(8, 0, 0);
-    private static double LATERAL_MULTIPLIER = 1.0682;
+    private static final PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(8, 0, 0);
+    private static final PIDCoefficients HEADING_PID = new PIDCoefficients(8, 0, 0);
+    private static final double LATERAL_MULTIPLIER = 1.0682;
 
     private static double getMotorVelocityFStatic(double ticksPerSecond) {
         // see https://docs.google.com/document/d/1tyWrXDfMidwYyP_5H4mZyVgaEswhOC35gvdmP-V-5hA/edit#heading=h.61g9ixenznbx
@@ -52,13 +52,19 @@ public class RightyLucyDriveConstants implements DriveConstants {
     }
 
     @Override
-    public PIDCoefficients getTranslationalPID() { return TRANSLATIONAL_PID; }
+    public PIDCoefficients getTranslationalPID() {
+        return TRANSLATIONAL_PID;
+    }
 
     @Override
-    public PIDCoefficients getHeadingPID() { return HEADING_PID; }
+    public PIDCoefficients getHeadingPID() {
+        return HEADING_PID;
+    }
 
     @Override
-    public double getLateralMultiplier() { return LATERAL_MULTIPLIER; }
+    public double getLateralMultiplier() {
+        return LATERAL_MULTIPLIER;
+    }
 
     @Override
     public double getWheelRadius() {

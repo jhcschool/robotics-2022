@@ -29,6 +29,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceRunner;
@@ -79,9 +80,7 @@ public class GyroDrive extends Drive {
         }
 
         imu = hardwareMap.get(IMU.class, "imu");
-        ImuOrientationOnRobot orientation = new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.FORWARD);
-        IMU.Parameters parameters = new IMU.Parameters(orientation);
-        imu.initialize(parameters);
+        initializeIMU();
 
         this.frontLeftMotor = hardwareMap.get(DcMotorEx.class, "frontLeftMotor");
         this.rearLeftMotor = hardwareMap.get(DcMotorEx.class, "rearLeftMotor");
@@ -110,6 +109,12 @@ public class GyroDrive extends Drive {
         rearRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         trajectorySequenceRunner = new TrajectorySequenceRunner(follower, driveConstants.getHeadingPID());
+    }
+
+    private void initializeIMU() {
+        ImuOrientationOnRobot orientation = new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.FORWARD);
+        IMU.Parameters parameters = new IMU.Parameters(orientation);
+        imu.initialize(parameters);
     }
 
     private static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {
@@ -266,17 +271,17 @@ public class GyroDrive extends Drive {
         setDrivePower(vel);
     }
 
-        @NonNull
-        @Override
-        public List<Double> getWheelPositions() {
-            List<Double> wheelPositions = new ArrayList<>();
+    @NonNull
+    @Override
+    public List<Double> getWheelPositions() {
+        List<Double> wheelPositions = new ArrayList<>();
 
-            for (DcMotorEx motor : motors) {
-                wheelPositions.add(driveConstants.encoderTicksToInches(motor.getCurrentPosition()));
-            }
-
-            return wheelPositions;
+        for (DcMotorEx motor : motors) {
+            wheelPositions.add(driveConstants.encoderTicksToInches(motor.getCurrentPosition()));
         }
+
+        return wheelPositions;
+    }
 
     @Override
     public List<Double> getWheelVelocities() {
