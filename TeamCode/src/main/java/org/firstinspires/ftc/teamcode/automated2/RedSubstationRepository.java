@@ -6,27 +6,30 @@ import org.firstinspires.ftc.teamcode.CustomSleeve;
 import org.firstinspires.ftc.teamcode.drive.Drive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-public class BlueSubstationRepository extends TrajectoryRepository {
+public class RedSubstationRepository extends TrajectoryRepository {
 
-    private static final Pose2d INITIAL_POSITION = new Pose2d(-36, 63, Math.toRadians(270));
-    private static final Pose2d JUNCTION_POSITION = new Pose2d(-24, 12, Math.toRadians(270));
-    private static final Pose2d STACK_POSITION = new Pose2d(-58, 12, Math.toRadians(180));
+    private static final Pose2d INITIAL_POSITION = new Pose2d(-36, -63, Math.toRadians(90));
+    private static final Pose2d JUNCTION_POSITION = new Pose2d(-24, -12, Math.toRadians(90));
+    private static final Pose2d STACK_POSITION = new Pose2d(-58, -12, Math.toRadians(180));
 
-    public BlueSubstationRepository() {
+    private final Drive drive;
+
+    public RedSubstationRepository(Drive drive) {
         super(INITIAL_POSITION);
+        this.drive = drive;
     }
 
     @Override
     public void build(Drive drive) {
         initialNavigation = drive.trajectorySequenceBuilder(getInitialPose())
-                .setTangent(Math.toRadians(270))
-                .lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(270)))
+                .setTangent(Math.toRadians(90))
+                .lineToLinearHeading(new Pose2d(-36, -12, Math.toRadians(90)))
                 .lineToLinearHeading(JUNCTION_POSITION)
                 .build();
 
         coneStackMove = drive.trajectorySequenceBuilder(JUNCTION_POSITION)
-                .setTangent(Math.toRadians(170))
-                .splineToLinearHeading(STACK_POSITION, Math.toRadians(195))
+                .setTangent(Math.toRadians(190))
+                .splineToLinearHeading(STACK_POSITION, Math.toRadians(165))
                 .build();
 
         junctionMove = drive.trajectorySequenceBuilder(STACK_POSITION)
@@ -37,17 +40,17 @@ public class BlueSubstationRepository extends TrajectoryRepository {
         {
             parkingLocationMove.put(CustomSleeve.LEFT,
                     drive.trajectorySequenceBuilder(JUNCTION_POSITION)
-                            .strafeLeft(12)
+                            .strafeLeft(36)
                             .build()
             );
             parkingLocationMove.put(CustomSleeve.CENTER,
                     drive.trajectorySequenceBuilder(JUNCTION_POSITION)
-                            .strafeRight(12)
+                            .strafeLeft(12)
                             .build()
             );
             parkingLocationMove.put(CustomSleeve.RIGHT,
                     drive.trajectorySequenceBuilder(JUNCTION_POSITION)
-                            .strafeRight(36)
+                            .strafeRight(12)
                             .build()
             );
         }

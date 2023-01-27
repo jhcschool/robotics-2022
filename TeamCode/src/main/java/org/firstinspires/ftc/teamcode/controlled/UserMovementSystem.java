@@ -13,6 +13,7 @@ public class UserMovementSystem {
     private Drive drive = null;
     private DcMotorEx frontLeftMotor, rearLeftMotor, rearRightMotor, frontRightMotor;
     private MovementMode movementMode = MovementMode.ROBOT_ORIENTED;
+
     public UserMovementSystem(Gamepad gamepad, Drive drive) {
         this.gamepad = gamepad;
         this.drive = drive;
@@ -35,6 +36,7 @@ public class UserMovementSystem {
     public void update() {
         if (movementMode == MovementMode.FIELD_ORIENTED) {
             setFieldCentricPowers();
+            return;
         }
 
         double left = 0;
@@ -88,11 +90,6 @@ public class UserMovementSystem {
         return Math.max(-1, Math.min(1, input));
     }
 
-
-    public void setMovementMode(MovementMode movementMode) {
-        this.movementMode = movementMode;
-    }
-
     public void toggleMovementMode() {
         if (movementMode == MovementMode.ROBOT_ORIENTED) {
             movementMode = MovementMode.FIELD_ORIENTED;
@@ -101,6 +98,13 @@ public class UserMovementSystem {
         }
     }
 
+    public MovementMode getMovementMode() {
+        return movementMode;
+    }
+
+    public void setMovementMode(MovementMode movementMode) {
+        this.movementMode = movementMode;
+    }
 
 
     enum MovementMode {

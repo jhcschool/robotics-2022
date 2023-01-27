@@ -9,7 +9,7 @@ public class ControlledApplication extends Application {
 
     @Override
     public void onInit() {
-        super.init();
+        super.onInit();
 
         addLayer(new ControlledLayer());
     }

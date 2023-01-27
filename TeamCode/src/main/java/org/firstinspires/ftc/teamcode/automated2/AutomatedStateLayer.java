@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.LayerInitInfo;
 import org.firstinspires.ftc.teamcode.PoseStorage;
 import org.firstinspires.ftc.teamcode.arm.ClipperSystem;
 import org.firstinspires.ftc.teamcode.arm.SimpleArmSystem;
+import org.firstinspires.ftc.teamcode.arm.TimedClipperSystem;
 import org.firstinspires.ftc.teamcode.automated.SleeveDetector;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
@@ -16,19 +17,16 @@ public class AutomatedStateLayer extends Layer {
     /* Very different from the standard automated layer. It uses hardcoded trajectories and a finite state machine.
        It isn't the best code, but I don't have much time left in this season. */
 
+    private static final double RETURN_TIME = 8;
+    private final TrajectoryRepository trajectoryRepository;
     private Telemetry telemetry;
     private Hardware hardware;
-
-    private final TrajectoryRepository trajectoryRepository;
-
     private double currentTime = 0.0;
-    private double stateBeginTime;
     private AutomatedState lastMovementState = null;
     private AutomatedState lastState = null;
     private AutomatedState currentState = null;
-
     private SimpleArmSystem simpleArmSystem;
-    private ClipperSystem clipperSystem;
+    private TimedClipperSystem clipperSystem;
     private SleeveDetector sleeveDetector;
     private Runnable lastCallback = null;
 
@@ -50,7 +48,7 @@ public class AutomatedStateLayer extends Layer {
         int viewId = initInfo.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", initInfo.hardwareMap.appContext.getPackageName());
         sleeveDetector = new SleeveDetector(viewId, hardware.webcamName);
         simpleArmSystem = new SimpleArmSystem(hardware.slideArmMotor);
-        clipperSystem = new ClipperSystem(hardware.leftServo, hardware.rightServo);
+        clipperSystem = new TimedClipperSystem(hardware.leftServo, hardware.rightServo);
     }
 
     @Override
@@ -80,6 +78,8 @@ public class AutomatedStateLayer extends Layer {
 
         currentTime = frameInfo.time;
 
+        telemetry.addLine("Current state is: " + currentState.name());
+
         switch (currentState) {
             case INITIAL_NAVIGATION:
             case JUNCTION_MOVE:
@@ -104,17 +104,7 @@ public class AutomatedStateLayer extends Layer {
                 break;
 
             case CONE_CLIPPING:
-                if (doneClip()) {
-                    afterConeClip();
-                }
-                break;
-
             case CONE_RELEASING:
-                if (doneClip()) {
-                    afterConeRelease();
-                }
-                break;
-
             case SLIDE_UP_FOR_CONE:
             case SLIDE_UP_PAST_CONE:
             case PARKING_LOCATION_MOVE:
@@ -130,7 +120,6 @@ public class AutomatedStateLayer extends Layer {
     private void moveToState(AutomatedState automatedState) {
         lastState = currentState;
         currentState = automatedState;
-        stateBeginTime = currentTime;
 
         switch (automatedState) {
             case INITIAL_NAVIGATION:
@@ -168,12 +157,16 @@ public class AutomatedStateLayer extends Layer {
 
     private void beginClip() {
         moveToState(AutomatedState.CONE_CLIPPING);
-        clipperSystem.beginClip();
+        clipperSystem.beginClip(() -> {
+            afterConeClip();
+        });
     }
 
     private void beginRelease() {
         moveToState(AutomatedState.CONE_RELEASING);
-        clipperSystem.beginRelease();
+        clipperSystem.beginRelease(() -> {
+            afterConeRelease();
+        });
     }
 
     private void afterConeClip() {
@@ -199,11 +192,6 @@ public class AutomatedStateLayer extends Layer {
         });
     }
 
-    private static double CLIP_TIME = 0.1;
-    private boolean doneClip() {
-        return currentTime > (stateBeginTime + CLIP_TIME);
-    }
-
     private void beginSlideUp() {
         moveToState(AutomatedState.MAIN_SLIDE_UP);
         simpleArmSystem.setRaised(true, () -> {
@@ -216,13 +204,10 @@ public class AutomatedStateLayer extends Layer {
     private void beginSlideDown() {
         moveToState(AutomatedState.MAIN_SLIDE_DOWN);
         simpleArmSystem.setRaised(false, () -> {
-            moveToState(AutomatedState.CONE_RELEASING);
             beginRelease();
         });
     }
 
-
-    private static final double RETURN_TIME = 8;
     private boolean shouldReturnToPark() {
         return currentTime > (30 - RETURN_TIME);
     }

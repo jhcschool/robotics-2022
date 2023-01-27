@@ -2,10 +2,12 @@ package org.firstinspires.ftc.teamcode.automated;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.Application;
 
-@Autonomous(name = "Blue substation", group = "Automated")
+@Disabled
+//@Autonomous(name = "Blue substation", group = "Automated")
 public class BlueSubstation extends Application {
 
     @Override

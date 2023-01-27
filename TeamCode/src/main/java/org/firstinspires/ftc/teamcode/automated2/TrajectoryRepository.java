@@ -14,22 +14,22 @@ import java.util.Map;
 public abstract class TrajectoryRepository {
 
     public static double INCH_DISTANCE = 3;
-
-    public TrajectoryRepository(Pose2d initialPose)
-    {
-        this.initialPose = initialPose;
-    }
-
     public TrajectorySequence initialNavigation = null;
     public TrajectorySequence coneStackMove = null;
     public TrajectorySequence junctionMove = null;
     public HashMap<CustomSleeve, TrajectorySequence> parkingLocationMove = new HashMap<>();
     public HashMap<AutomatedState, TrajectorySequence> inchForwardTrajectories = new HashMap<>();
     public HashMap<AutomatedState, TrajectorySequence> inchBackwardTrajectories = new HashMap<>();
+    private final Pose2d initialPose;
 
+
+    public TrajectoryRepository(Pose2d initialPose) {
+        this.initialPose = initialPose;
+    }
 
     public abstract void build(Drive drive);
 
-    public Pose2d getInitialPose() { return initialPose; }
-    private Pose2d initialPose;
+    public Pose2d getInitialPose() {
+        return initialPose;
+    }
 }

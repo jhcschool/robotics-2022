@@ -3,43 +3,28 @@ package org.firstinspires.ftc.teamcode.arm;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.game.JunctionHeight;
-
 public class SimpleArmSystem {
 
-    private enum State {
-        IDLE,
-
-        MAIN_UPWARDS,
-        MAIN_DOWNWARDS,
-
-        CONE_UPWARDS,
-        CONE_POST
-    }
-
+    private static final double MAIN_WAIT_TIME = 0.4;
     public static double CONE_FORCE = 0.5;
 
     public static double UPWARD_FORCE = 0.9;
     public static double DOWNWARD_FORCE = -0.65;
     public static double CONSTANT_FORCE = -0.2;
+    public static double MAINTAIN_FORCE = 0.06;
 
-    public static double STACK_TIMES_UP[] = {
-            0.1,
-            0.1,
-            0.1,
-            0.1,
-            0.1
+    public static double[] STACK_TIMES_UP = {
+            0.0,
+            0.06,
+            0.10,
+            0.14,
+            0.18
     };
-    public static double POST_TIME = 0.1;
-
-    private static final double MAIN_WAIT_TIME = 0.4;
-
+    public static double POST_TIME = 0.08;
     private final DcMotorSimple slideArmMotor;
-
     private Runnable endCallback;
-    private ElapsedTime timeSinceActivation;
-    private State currentState = State.IDLE;
-
+    private final ElapsedTime timeSinceActivation = new ElapsedTime();
+    private State currentState = State.CONSTANT;
     private int stackedCones = 5;
 
     public SimpleArmSystem(DcMotorSimple slideArmMotor) {
@@ -47,10 +32,13 @@ public class SimpleArmSystem {
     }
 
     public void update() {
-        switch (currentState)
-        {
-            case IDLE:
+        switch (currentState) {
+            case CONSTANT:
                 slideArmMotor.setPower(CONSTANT_FORCE);
+                break;
+
+            case MAINTAIN:
+                slideArmMotor.setPower(MAINTAIN_FORCE);
                 break;
 
             case MAIN_UPWARDS:
@@ -65,7 +53,7 @@ public class SimpleArmSystem {
 
             case CONE_UPWARDS:
                 slideArmMotor.setPower(CONE_FORCE);
-                idleIfTime(STACK_TIMES_UP[stackedCones]);
+                stateIfTime(STACK_TIMES_UP[stackedCones], State.MAINTAIN);
                 break;
 
             case CONE_POST:
@@ -75,20 +63,24 @@ public class SimpleArmSystem {
         }
     }
 
-    private void idleIfTime(double time)
-    {
-        if (time > timeSinceActivation.seconds()) {
-            moveToState(State.IDLE);
+    private void stateIfTime(double time, State state) {
+        if (timeSinceActivation.seconds() > time) {
+            moveToState(state);
+        }
+
+        if (endCallback != null) {
+            endCallback.run();
         }
     }
 
+    private void idleIfTime(double time) {
+        stateIfTime(time, State.CONSTANT);
+    }
 
-    private void moveToState(State state)
-    {
+    private void moveToState(State state) {
         timeSinceActivation.reset();
         currentState = state;
     }
-
 
     public void setRaised(boolean raised, Runnable endCallback) {
         this.endCallback = endCallback;
@@ -97,14 +89,25 @@ public class SimpleArmSystem {
         currentState = raised ? State.MAIN_UPWARDS : State.MAIN_DOWNWARDS;
     }
 
-    public void liftToCone(Runnable endCallback)
-    {
+    public void liftToCone(Runnable endCallback) {
+        this.endCallback = endCallback;
         moveToState(State.CONE_UPWARDS);
         stackedCones--;
     }
 
-    public void liftPastCone(Runnable endCallback)
-    {
+    public void liftPastCone(Runnable endCallback) {
+        this.endCallback = endCallback;
         moveToState(State.CONE_POST);
+    }
+
+    private enum State {
+        CONSTANT,
+        MAINTAIN,
+
+        MAIN_UPWARDS,
+        MAIN_DOWNWARDS,
+
+        CONE_UPWARDS,
+        CONE_POST
     }
 }

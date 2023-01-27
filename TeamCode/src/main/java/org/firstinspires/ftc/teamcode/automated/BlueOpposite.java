@@ -2,10 +2,12 @@ package org.firstinspires.ftc.teamcode.automated;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.Application;
 
-@Autonomous(name = "Blue opposite", group = "Automated")
+@Disabled
+//@Autonomous(name = "Blue opposite", group = "Automated")
 public class BlueOpposite extends Application {
 
     @Override

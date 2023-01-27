@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.controlled;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 
 import org.checkerframework.checker.units.qual.C;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.FrameInfo;
 import org.firstinspires.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.teamcode.Layer;
@@ -17,6 +18,7 @@ import org.firstinspires.ftc.teamcode.input.InputManager;
 public class ControlledLayer extends Layer {
 
     private Hardware hardware;
+    private Telemetry telemetry;
     private InputManager inputManager;
     private ControlMode controlMode = ControlMode.DRIVER_CONTROL;
 
@@ -30,6 +32,7 @@ public class ControlledLayer extends Layer {
         super.init(info);
         hardware = info.hardware;
         inputManager = info.inputManager;
+        telemetry = info.telemetry;
 
         hardware.drive.setPoseEstimate(PoseStorage.robotPose);
 
@@ -39,6 +42,7 @@ public class ControlledLayer extends Layer {
 
     @Override
     public void tick(FrameInfo frameInfo) {
+        super.tick(frameInfo);
         switch (controlMode) {
             case DRIVER_CONTROL:
                 tickDriver(frameInfo);
@@ -76,6 +80,8 @@ public class ControlledLayer extends Layer {
             float total = inputManager.getAxis(Axis.RIGHT_TRIGGER) - inputManager.getAxis(Axis.LEFT_TRIGGER);
             hardware.slideArmMotor.setPower(total);
         }
+
+        telemetry.addData("Movement Mode", userMovementSystem.getMovementMode().name());
     }
 
     private enum ControlMode {

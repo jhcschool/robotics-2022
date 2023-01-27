@@ -20,6 +20,12 @@ public class MeepMeepTesting {
                 .setDimensions(15, 17.5).build();
 
         DriveShim drive = entity.getDrive();
+        TrajectorySequence fromStart = drive.trajectorySequenceBuilder(new Pose2d(-36, 63, Math.toRadians(270)))
+                .setTangent(Math.toRadians(270))
+                .lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(270)))
+                .lineToLinearHeading(new Pose2d(-24, 12, Math.toRadians(270)))
+                .build();
+
         TrajectorySequence toStack = drive.trajectorySequenceBuilder(new Pose2d(-24, 12, Math.toRadians(270)))
                 .setTangent(Math.toRadians(190))
                 .splineToLinearHeading(new Pose2d(-58, 12, Math.toRadians(180)), Math.toRadians(195))
@@ -28,12 +34,6 @@ public class MeepMeepTesting {
         TrajectorySequence toJunction = drive.trajectorySequenceBuilder(new Pose2d(-58, 12, Math.toRadians(180)))
                 .setTangent(Math.toRadians(15))
                 .splineToLinearHeading(new Pose2d(-24, 12, Math.toRadians(270)), Math.toRadians(10))
-                .build();
-
-        TrajectorySequence fromStart = drive.trajectorySequenceBuilder(new Pose2d(-36, 63, Math.toRadians(270)))
-                .setTangent(Math.toRadians(270))
-                .lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(270)))
-                .lineToLinearHeading(new Pose2d(-24, 12, Math.toRadians(270)))
                 .build();
 
         TrajectorySequence signalOne = drive.trajectorySequenceBuilder(new Pose2d(-24, 12, Math.toRadians(270)))

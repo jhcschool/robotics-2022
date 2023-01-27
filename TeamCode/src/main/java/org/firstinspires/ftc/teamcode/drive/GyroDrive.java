@@ -111,12 +111,6 @@ public class GyroDrive extends Drive {
         trajectorySequenceRunner = new TrajectorySequenceRunner(follower, driveConstants.getHeadingPID());
     }
 
-    private void initializeIMU() {
-        ImuOrientationOnRobot orientation = new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.FORWARD);
-        IMU.Parameters parameters = new IMU.Parameters(orientation);
-        imu.initialize(parameters);
-    }
-
     private static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {
         return new MinVelocityConstraint(Arrays.asList(
                 new AngularVelocityConstraint(maxAngularVel),
@@ -126,6 +120,12 @@ public class GyroDrive extends Drive {
 
     private static TrajectoryAccelerationConstraint getAccelerationConstraint(double maxAccel) {
         return new ProfileAccelerationConstraint(maxAccel);
+    }
+
+    private void initializeIMU() {
+        ImuOrientationOnRobot orientation = new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.FORWARD);
+        IMU.Parameters parameters = new IMU.Parameters(orientation);
+        imu.initialize(parameters);
     }
 
     @Override

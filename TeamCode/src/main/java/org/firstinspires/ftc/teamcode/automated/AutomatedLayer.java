@@ -22,6 +22,7 @@ public class AutomatedLayer extends Layer {
 
     private final Vector2d CONE_POSITION_BLUE = new Vector2d(-63, 0);
     private final Vector2d CONE_POSITION_RED = new Vector2d(63, 0);
+    private final AllianceMember allianceMember;
     private Pose2d startingPose = new Pose2d(0, 0, Math.toRadians(0));
     private SleeveSystem sleeveSystem;
     private Trajectory currentTrajectory = null;
@@ -32,7 +33,6 @@ public class AutomatedLayer extends Layer {
     private SimpleArmSystem simpleArmSystem;
     private ClipperSystem clipperSystem;
     private Vector2d currentJunction = null;
-    private final AllianceMember allianceMember;
 
     public AutomatedLayer(Pose2d startingPose, AllianceMember allianceMember) {
         super();
