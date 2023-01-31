@@ -1,10 +1,8 @@
-package org.firstinspires.ftc.teamcode.automated2;
+package com.jhcs.meepmeeptesting;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-
-import org.firstinspires.ftc.teamcode.CustomSleeve;
-import org.firstinspires.ftc.teamcode.drive.Drive;
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
+import com.noahbres.meepmeep.roadrunner.DriveShim;
+import com.noahbres.meepmeep.roadrunner.trajectorysequence.TrajectorySequence;
 
 public class RedSubstationRepository extends TrajectoryRepository {
 
@@ -18,7 +16,7 @@ public class RedSubstationRepository extends TrajectoryRepository {
     }
 
     @Override
-    public void build(Drive drive) {
+    public void build(DriveShim drive) {
         initialNavigation = drive.trajectorySequenceBuilder(getInitialPose())
                 .setTangent(Math.toRadians(90))
                 .lineToLinearHeading(new Pose2d(-36, -12, Math.toRadians(90)))

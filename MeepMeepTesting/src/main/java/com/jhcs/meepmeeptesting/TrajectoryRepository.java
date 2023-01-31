@@ -1,33 +1,42 @@
-package org.firstinspires.ftc.teamcode.automated2;
+package com.jhcs.meepmeeptesting;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
-
-import org.firstinspires.ftc.teamcode.CustomSleeve;
-import org.firstinspires.ftc.teamcode.drive.Drive;
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
+import com.noahbres.meepmeep.roadrunner.DriveShim;
+import com.noahbres.meepmeep.roadrunner.trajectorysequence.TrajectorySequence;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public abstract class TrajectoryRepository {
 
+    public enum AutomatedState {
+        // Trajectory states
+        INITIAL_NAVIGATION,
+        CONE_STACK_MOVE,
+        JUNCTION_MOVE,
+    }
+
+    public enum CustomSleeve {
+        LEFT,
+        CENTER,
+        RIGHT
+    }
+
+
     public static double INCH_DISTANCE = 3;
-    private final Pose2d initialPose;
     public TrajectorySequence initialNavigation = null;
     public TrajectorySequence coneStackMove = null;
     public TrajectorySequence junctionMove = null;
     public HashMap<CustomSleeve, TrajectorySequence> parkingLocationMove = new HashMap<>();
     public HashMap<AutomatedState, TrajectorySequence> inchForwardTrajectories = new HashMap<>();
     public HashMap<AutomatedState, TrajectorySequence> inchBackwardTrajectories = new HashMap<>();
+    private final Pose2d initialPose;
 
 
-    public TrajectoryRepository(Pose2d initialPose) {
+    protected TrajectoryRepository(Pose2d initialPose) {
         this.initialPose = initialPose;
     }
 
-    public abstract void build(Drive drive);
+    public abstract void build(DriveShim drive);
 
     public Pose2d getInitialPose() {
         return initialPose;

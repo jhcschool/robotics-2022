@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.PoseStorage;
 import org.firstinspires.ftc.teamcode.arm.ClipperSystem;
 import org.firstinspires.ftc.teamcode.arm.SimpleArmSystem;
 import org.firstinspires.ftc.teamcode.arm.TimedArmSystem;
+import org.firstinspires.ftc.teamcode.game.AllianceMember;
 import org.firstinspires.ftc.teamcode.game.GameConstants;
 import org.firstinspires.ftc.teamcode.game.JunctionHeight;
 
@@ -212,11 +213,5 @@ public class AutomatedLayer extends Layer {
         } catch (InterruptedException exc) {
         }
         navigateToNearestJunction();
-    }
-
-
-    enum AllianceMember {
-        RED,
-        BLUE
     }
 }

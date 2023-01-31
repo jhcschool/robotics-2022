@@ -1,16 +1,12 @@
 package org.firstinspires.ftc.teamcode.arm;
 
+import org.firstinspires.ftc.teamcode.arm.ClipperConstants;
+
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class ClipperSystem {
+    public static final double CLIP_TOLERANCE = 0.1;
 
-    private static final float SINGLE_CLIP_POSITION = 0.55f;
-    private static final float SINGLE_RELEASE_POSITION = 0.2f;
-    private static final float DOUBLE_CLIP_POSITION = 1.f;
-    private static final float DOUBLE_RELEASE_POSITION = 0.6f;
-    private static final double CLIP_TOLERANCE = 0.1;
-    public static float SINGLE_INITIAL_POSITION = 0.3f;
-    public static float DOUBLE_INITIAL_POSITION = 0.4f;
     private final float clipPosition;
     private Runnable onClip = null;
     private Runnable onRelease = null;
@@ -27,8 +23,8 @@ public class ClipperSystem {
     public ClipperSystem(Servo clipper) {
         this.clipper = clipper;
 
-        clipPosition = SINGLE_CLIP_POSITION;
-        releasePosition = SINGLE_INITIAL_POSITION;
+        clipPosition = ClipperConstants.SINGLE_CLIP_POSITION;
+        releasePosition = ClipperConstants.SINGLE_INITIAL_POSITION;
 
         clipper.setPosition(releasePosition);
     }
@@ -39,8 +35,8 @@ public class ClipperSystem {
 
         leftClipper.setDirection(Servo.Direction.REVERSE);
 
-        clipPosition = DOUBLE_CLIP_POSITION;
-        releasePosition = DOUBLE_INITIAL_POSITION;
+        clipPosition = ClipperConstants.DOUBLE_CLIP_POSITION;
+        releasePosition = ClipperConstants.DOUBLE_INITIAL_POSITION;
 
         leftClipper.setPosition(releasePosition);
         rightClipper.setPosition(releasePosition);
@@ -57,11 +53,6 @@ public class ClipperSystem {
         this(leftClipper, rightClipper);
         this.onClip = onClip;
         this.onRelease = onRelease;
-    }
-
-    public static void resetInitialPosition() {
-        SINGLE_INITIAL_POSITION = 0.3f;
-        DOUBLE_INITIAL_POSITION = 0.4f;
     }
 
     public void setOnClip(Runnable onClip) {
@@ -105,7 +96,7 @@ public class ClipperSystem {
     }
 
     public void beginClip() {
-        releasePosition = clipper == null ? DOUBLE_RELEASE_POSITION : SINGLE_RELEASE_POSITION;
+        releasePosition = clipper == null ? ClipperConstants.DOUBLE_RELEASE_POSITION : ClipperConstants.SINGLE_RELEASE_POSITION;
 
         if (!clipped) {
             if (clipper != null) {
@@ -146,6 +137,10 @@ public class ClipperSystem {
         } else {
             beginRelease();
         }
+    }
+
+    public void adjustInitialPosition() {
+        ClipperConstants.DOUBLE_INITIAL_POSITION = (float) ((leftClipper.getPosition() + rightClipper.getPosition()) / 2.0);
     }
 
 }

@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Mode;
+import org.firstinspires.ftc.teamcode.arm.ClipperConstants;
 import org.firstinspires.ftc.teamcode.arm.ClipperSystem;
 import org.firstinspires.ftc.teamcode.controlled.UserMovementSystem;
 import org.firstinspires.ftc.teamcode.drive.Drive;
@@ -61,6 +62,6 @@ public class FirstGameModeWithTwoServos extends Mode {
     @Override
     public void onEnd() {
         super.onEnd();
-        ClipperSystem.resetInitialPosition();
+        ClipperConstants.resetInitialPosition();
     }
 }

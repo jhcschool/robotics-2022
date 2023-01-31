@@ -12,10 +12,9 @@ import org.firstinspires.ftc.teamcode.arm.TimedClipperSystem;
 import org.firstinspires.ftc.teamcode.automated.SleeveDetector;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-public class AutomatedStateLayer extends Layer {
+public class AutomatedStateLayerSlideMove extends Layer {
 
-    /* Very different from the standard automated layer. It uses hardcoded trajectories and a finite state machine.
-       It isn't the best code, but I don't have much time left in this season. */
+    /* Same as automated state layer, but moves arm at the same time as the drivetrain */
     private static final double RETURN_TIME = 8;
     private final TrajectoryRepository trajectoryRepository;
     private final Object buildSync = new Object();
@@ -31,8 +30,9 @@ public class AutomatedStateLayer extends Layer {
     private Runnable lastCallback = null;
     private Thread buildThread;
     private boolean built = false;
+    private boolean doneMovingSlide = false;
 
-    public AutomatedStateLayer(TrajectoryRepository trajectoryRepository) {
+    public AutomatedStateLayerSlideMove(TrajectoryRepository trajectoryRepository) {
         super();
 
         this.trajectoryRepository = trajectoryRepository;
@@ -95,6 +95,8 @@ public class AutomatedStateLayer extends Layer {
         });
     }
 
+    private boolean initialBeganSlide = false;
+
     @Override
     public void tick(FrameInfo frameInfo) {
         super.tick(frameInfo);
@@ -108,9 +110,16 @@ public class AutomatedStateLayer extends Layer {
 
         switch (currentState) {
             case INITIAL_NAVIGATION:
-            case JUNCTION_MOVE:
-                if (!hardware.drive.isBusy()) {
+                if (!initialBeganSlide && hardware.drive.getPoseEstimate().vec().distTo(trajectoryRepository.initialNavigation.end().vec()) < 10) {
                     beginSlideUp();
+                    initialBeganSlide = false;
+                }
+            case JUNCTION_MOVE:
+                if (!hardware.drive.isBusy() && doneMovingSlide) {
+                    beginInchingForward(() -> {
+                        beginSlideDown();
+                    });
+                    doneMovingSlide = false;
                 }
                 break;
 
@@ -201,6 +210,7 @@ public class AutomatedStateLayer extends Layer {
             beginInchingBackward(() -> {
                 moveToState(AutomatedState.JUNCTION_MOVE);
                 hardware.drive.followTrajectorySequenceAsync(trajectoryRepository.junctionMove);
+                beginSlideUp();
             });
         });
     }
@@ -219,11 +229,9 @@ public class AutomatedStateLayer extends Layer {
     }
 
     private void beginSlideUp() {
-        moveToState(AutomatedState.MAIN_SLIDE_UP);
+//        moveToState(AutomatedState.MAIN_SLIDE_UP);
         simpleArmSystem.setRaised(true, () -> {
-            beginInchingForward(() -> {
-                beginSlideDown();
-            });
+            doneMovingSlide = true;
         });
     }
 

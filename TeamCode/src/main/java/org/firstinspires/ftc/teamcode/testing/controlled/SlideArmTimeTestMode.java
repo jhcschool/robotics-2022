@@ -16,9 +16,6 @@ import java.util.Map;
 @TeleOp(name = "Slide Arm Time Test", group = "Iterative Opmode")
 public class SlideArmTimeTestMode extends Mode {
 
-    private DcMotorSimple slideArmMotor;
-    private InputManager inputManager;
-    private ElapsedTime elapsedTime;
     private final HashMap<Modifier, Double> modifiers = new HashMap<Modifier, Double>() {{
         put(Modifier.DOWN, 0.4);
         put(Modifier.UP, 0.5);
@@ -26,6 +23,9 @@ public class SlideArmTimeTestMode extends Mode {
         put(Modifier.CONSTANT, 0.2);
         put(Modifier.TIME, 0.2);
     }};
+    private DcMotorSimple slideArmMotor;
+    private InputManager inputManager;
+    private ElapsedTime elapsedTime;
     private Modifier modifier = Modifier.TIME;
 
     // Times: 0.18 for fifth cone, 0.14 for fourth, 0.10 for three, 0.06 for two,

@@ -5,11 +5,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class SimpleArmSystem {
 
-    private static final double MAIN_WAIT_TIME = 0.4;
+    private static final double MAIN_WAIT_TIME = 1.1;
+    private static final double MAIN_DOWN_TIME = 0.3;
     public static double CONE_FORCE = 0.5;
 
-    public static double UPWARD_FORCE = 0.9;
-    public static double DOWNWARD_FORCE = -0.65;
+    public static double UPWARD_FORCE = 1.0;
+    public static double DOWNWARD_FORCE = -0.68;
     public static double CONSTANT_FORCE = -0.2;
     public static double MAINTAIN_FORCE = 0.06;
 
@@ -22,8 +23,8 @@ public class SimpleArmSystem {
     };
     public static double POST_TIME = 0.08;
     private final DcMotorSimple slideArmMotor;
-    private Runnable endCallback;
     private final ElapsedTime timeSinceActivation = new ElapsedTime();
+    private Runnable endCallback;
     private State currentState = State.CONSTANT;
     private int stackedCones = 5;
 
@@ -43,12 +44,12 @@ public class SimpleArmSystem {
 
             case MAIN_UPWARDS:
                 slideArmMotor.setPower(UPWARD_FORCE);
-                idleIfTime(MAIN_WAIT_TIME);
+                stateIfTime(MAIN_WAIT_TIME, State.MAINTAIN);
                 break;
 
             case MAIN_DOWNWARDS:
                 slideArmMotor.setPower(DOWNWARD_FORCE);
-                idleIfTime(MAIN_WAIT_TIME);
+                idleIfTime(MAIN_DOWN_TIME);
                 break;
 
             case CONE_UPWARDS:
@@ -66,10 +67,10 @@ public class SimpleArmSystem {
     private void stateIfTime(double time, State state) {
         if (timeSinceActivation.seconds() > time) {
             moveToState(state);
-        }
 
-        if (endCallback != null) {
-            endCallback.run();
+            if (endCallback != null) {
+                endCallback.run();
+            }
         }
     }
 

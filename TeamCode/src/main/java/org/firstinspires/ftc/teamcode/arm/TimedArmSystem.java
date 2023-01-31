@@ -17,9 +17,9 @@ public class TimedArmSystem {
         }
     };
     private final DcMotorSimple slideArmMotor;
+    private final ElapsedTime timeSinceActivation = new ElapsedTime();
     private JunctionHeight height = JunctionHeight.NONE;
     private Runnable endCallback;
-    private final ElapsedTime timeSinceActivation = new ElapsedTime();
     private boolean hasRunCallback = false;
 
     public TimedArmSystem(DcMotorSimple slideArmMotor) {

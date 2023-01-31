@@ -5,7 +5,9 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.teamcode.PoseStorage;
 import org.firstinspires.ftc.teamcode.drive.Drive;
+import org.firstinspires.ftc.teamcode.game.AllianceMember;
 
 public class UserMovementSystem {
 
@@ -13,10 +15,13 @@ public class UserMovementSystem {
     private Drive drive = null;
     private DcMotorEx frontLeftMotor, rearLeftMotor, rearRightMotor, frontRightMotor;
     private MovementMode movementMode = MovementMode.ROBOT_ORIENTED;
+    private double allianceCorrection = 0;
 
     public UserMovementSystem(Gamepad gamepad, Drive drive) {
         this.gamepad = gamepad;
         this.drive = drive;
+
+        allianceCorrection = PoseStorage.allianceMember == AllianceMember.RED ? Math.toRadians(90): Math.toRadians(270);
     }
 
     public UserMovementSystem(Gamepad gamepad, Drive drive, MovementMode movementMode) {
@@ -75,7 +80,7 @@ public class UserMovementSystem {
         Vector2d input = new Vector2d(
                 -gamepad.left_stick_y,
                 -gamepad.left_stick_x
-        ).rotated(-drive.getPoseEstimate().getHeading());
+        ).rotated(-drive.getPoseEstimate().getHeading() + allianceCorrection);
 
         drive.setWeightedDrivePower(
                 new Pose2d(
@@ -101,10 +106,12 @@ public class UserMovementSystem {
     public MovementMode getMovementMode() {
         return movementMode;
     }
-
     public void setMovementMode(MovementMode movementMode) {
         this.movementMode = movementMode;
     }
+
+    public double getAllianceCorrection() { return allianceCorrection; }
+    public void setAllianceCorrection(double allianceCorrection) { this.allianceCorrection = allianceCorrection; }
 
 
     enum MovementMode {

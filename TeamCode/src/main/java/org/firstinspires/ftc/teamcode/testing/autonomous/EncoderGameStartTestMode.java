@@ -126,6 +126,6 @@ public class EncoderGameStartTestMode extends Mode {
     public void onEnd() {
         super.onEnd();
 
-        ClipperSystem.DOUBLE_INITIAL_POSITION = (float) ((leftServo.getPosition() + rightServo.getPosition()) / 2.0);
+        clipperSystem.adjustInitialPosition();
     }
 }

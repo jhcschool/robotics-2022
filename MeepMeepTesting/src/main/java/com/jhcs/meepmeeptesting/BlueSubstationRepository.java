@@ -1,33 +1,30 @@
-package org.firstinspires.ftc.teamcode.automated2;
+package com.jhcs.meepmeeptesting;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.noahbres.meepmeep.roadrunner.DriveShim;
+import com.noahbres.meepmeep.roadrunner.trajectorysequence.TrajectorySequence;
 
-import org.firstinspires.ftc.teamcode.CustomSleeve;
-import org.firstinspires.ftc.teamcode.drive.Drive;
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
+public class BlueSubstationRepository extends TrajectoryRepository {
 
-public class RedSubstationRepository extends TrajectoryRepository {
+    private static final Pose2d INITIAL_POSITION = new Pose2d(-36, 63, Math.toRadians(270));
+    private static final Pose2d JUNCTION_POSITION = new Pose2d(-24, 12, Math.toRadians(270));
+    private static final Pose2d STACK_POSITION = new Pose2d(-58, 12, Math.toRadians(180));
 
-    private static final Pose2d INITIAL_POSITION = new Pose2d(-36, -63, Math.toRadians(90));
-    private static final Pose2d JUNCTION_POSITION = new Pose2d(-24, -12, Math.toRadians(90));
-    private static final Pose2d STACK_POSITION = new Pose2d(-58, -12, Math.toRadians(180));
-
-
-    public RedSubstationRepository() {
+    public BlueSubstationRepository() {
         super(INITIAL_POSITION);
     }
 
     @Override
-    public void build(Drive drive) {
+    public void build(DriveShim drive) {
         initialNavigation = drive.trajectorySequenceBuilder(getInitialPose())
-                .setTangent(Math.toRadians(90))
-                .lineToLinearHeading(new Pose2d(-36, -12, Math.toRadians(90)))
+                .setTangent(Math.toRadians(270))
+                .lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(270)))
                 .lineToLinearHeading(JUNCTION_POSITION)
                 .build();
 
         coneStackMove = drive.trajectorySequenceBuilder(JUNCTION_POSITION)
-                .setTangent(Math.toRadians(190))
-                .splineToLinearHeading(STACK_POSITION, Math.toRadians(165))
+                .setTangent(Math.toRadians(170))
+                .splineToLinearHeading(STACK_POSITION, Math.toRadians(195))
                 .build();
 
         junctionMove = drive.trajectorySequenceBuilder(STACK_POSITION)
@@ -38,17 +35,17 @@ public class RedSubstationRepository extends TrajectoryRepository {
         {
             parkingLocationMove.put(CustomSleeve.LEFT,
                     drive.trajectorySequenceBuilder(JUNCTION_POSITION)
-                            .strafeLeft(36)
+                            .strafeLeft(12)
                             .build()
             );
             parkingLocationMove.put(CustomSleeve.CENTER,
                     drive.trajectorySequenceBuilder(JUNCTION_POSITION)
-                            .strafeLeft(12)
+                            .strafeRight(12)
                             .build()
             );
             parkingLocationMove.put(CustomSleeve.RIGHT,
                     drive.trajectorySequenceBuilder(JUNCTION_POSITION)
-                            .strafeRight(12)
+                            .strafeRight(36)
                             .build()
             );
         }

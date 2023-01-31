@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.Layer;
 import org.firstinspires.ftc.teamcode.LayerInitInfo;
 import org.firstinspires.ftc.teamcode.PoseStorage;
 import org.firstinspires.ftc.teamcode.arm.ClipperSystem;
+import org.firstinspires.ftc.teamcode.game.AllianceMember;
 import org.firstinspires.ftc.teamcode.input.Axis;
 import org.firstinspires.ftc.teamcode.input.Button;
 import org.firstinspires.ftc.teamcode.input.ButtonAction;
@@ -26,6 +27,7 @@ public class ControlledLayer extends Layer {
     private ClipperSystem clipperSystem;
 
     private Trajectory trajectory = null;
+    private boolean clipped = false;
 
     @Override
     public void init(LayerInitInfo info) {
@@ -73,15 +75,34 @@ public class ControlledLayer extends Layer {
         }
 
         if (inputManager.getButtonAction(Button.RIGHT_BUMPER) == ButtonAction.PRESS) {
-            clipperSystem.toggle();
+            clipped = !clipped;
+            clipperSystem.setClipped(clipped);
         }
 
         {
             float total = inputManager.getAxis(Axis.RIGHT_TRIGGER) - inputManager.getAxis(Axis.LEFT_TRIGGER);
             hardware.slideArmMotor.setPower(total);
+
+            if (Math.abs(total) < 0.03) {
+                if (clipped) {
+                    hardware.slideArmMotor.setPower(0.13);
+                } else {
+                    hardware.slideArmMotor.setPower(0.07);
+                }
+            }
+        }
+
+        double allianceCorrection = userMovementSystem.getAllianceCorrection();
+        if (inputManager.getButtonAction(Button.DPAD_RIGHT) == ButtonAction.PRESS) {
+            allianceCorrection += Math.toRadians(90);
+            userMovementSystem.setAllianceCorrection(allianceCorrection);
+        } else if (inputManager.getButtonAction(Button.DPAD_LEFT) == ButtonAction.PRESS) {
+            allianceCorrection -= Math.toRadians(90);
+            userMovementSystem.setAllianceCorrection(allianceCorrection);
         }
 
         telemetry.addData("Movement Mode", userMovementSystem.getMovementMode().name());
+        telemetry.addData("Alliance Correction (in degrees): ", Math.toDegrees(allianceCorrection));
     }
 
     private enum ControlMode {

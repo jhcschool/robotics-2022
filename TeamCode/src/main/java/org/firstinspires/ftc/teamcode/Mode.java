@@ -14,6 +14,9 @@ public class Mode extends LinearOpMode {
     public void runOpMode() {
         onInit();
         beforeStart();
+        if (isStopRequested()) {
+            return;
+        }
         onStart();
         while (opModeIsActive() && !isStopRequested()) {
             tick();

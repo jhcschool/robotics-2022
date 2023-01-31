@@ -20,40 +20,21 @@ public class MeepMeepTesting {
                 .setDimensions(15, 17.5).build();
 
         DriveShim drive = entity.getDrive();
-        TrajectorySequence fromStart = drive.trajectorySequenceBuilder(new Pose2d(-36, 63, Math.toRadians(270)))
-                .setTangent(Math.toRadians(270))
-                .lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(270)))
-                .lineToLinearHeading(new Pose2d(-24, 12, Math.toRadians(270)))
-                .build();
+        TrajectoryRepository repository = new BlueOppositeRepository();
+        repository.build(drive);
 
-        TrajectorySequence toStack = drive.trajectorySequenceBuilder(new Pose2d(-24, 12, Math.toRadians(270)))
-                .setTangent(Math.toRadians(190))
-                .splineToLinearHeading(new Pose2d(-58, 12, Math.toRadians(180)), Math.toRadians(195))
-                .build();
-
-        TrajectorySequence toJunction = drive.trajectorySequenceBuilder(new Pose2d(-58, 12, Math.toRadians(180)))
-                .setTangent(Math.toRadians(15))
-                .splineToLinearHeading(new Pose2d(-24, 12, Math.toRadians(270)), Math.toRadians(10))
-                .build();
-
-        TrajectorySequence signalOne = drive.trajectorySequenceBuilder(new Pose2d(-24, 12, Math.toRadians(270)))
-                .strafeLeft(12)
-                .build();
-
-        TrajectorySequence signalTwo = drive.trajectorySequenceBuilder(new Pose2d(-24, 12, Math.toRadians(270)))
-                .strafeRight(12)
-                .build();
-
-        TrajectorySequence signalThree = drive.trajectorySequenceBuilder(new Pose2d(-24, 12, Math.toRadians(270)))
-                .strafeRight(36)
-                .build();
-
-        entity.followTrajectorySequence(fromStart);
-//        entity.followTrajectorySequence(toStack);
-//        entity.followTrajectorySequence(toJunction);
-//        entity.followTrajectorySequence(signalOne);
-//        entity.followTrajectorySequence(signalTwo);
-//        entity.followTrajectorySequence(signalThree);
+//        entity.followTrajectorySequence(repository.initialNavigation);
+        entity.followTrajectorySequence(repository.inchForwardTrajectories.get(TrajectoryRepository.AutomatedState.INITIAL_NAVIGATION));
+//        entity.followTrajectorySequence(repository.inchBackwardTrajectories.get(TrajectoryRepository.AutomatedState.INITIAL_NAVIGATION));
+//        entity.followTrajectorySequence(repository.coneStackMove);
+//        entity.followTrajectorySequence(repository.inchForwardTrajectories.get(TrajectoryRepository.AutomatedState.CONE_STACK_MOVE));
+//        entity.followTrajectorySequence(repository.inchBackwardTrajectories.get(TrajectoryRepository.AutomatedState.CONE_STACK_MOVE));
+//        entity.followTrajectorySequence(repository.junctionMove);
+//                entity.followTrajectorySequence(repository.inchForwardTrajectories.get(TrajectoryRepository.AutomatedState.JUNCTION_MOVE));
+//        entity.followTrajectorySequence(repository.inchBackwardTrajectories.get(TrajectoryRepository.AutomatedState.JUNCTION_MOVE));
+//        entity.followTrajectorySequence(repository.parkingLocationMove.get(TrajectoryRepository.CustomSleeve.LEFT));
+//        entity.followTrajectorySequence(repository.parkingLocationMove.get(TrajectoryRepository.CustomSleeve.CENTER));
+//        entity.followTrajectorySequence(repository.parkingLocationMove.get(TrajectoryRepository.CustomSleeve.RIGHT));
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_OFFICIAL)
                 .setDarkMode(true)
