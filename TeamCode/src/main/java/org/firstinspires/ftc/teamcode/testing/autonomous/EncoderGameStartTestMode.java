@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.arm.ClipperSystem;
 import org.firstinspires.ftc.teamcode.automated.SleeveDetector;
 import org.firstinspires.ftc.teamcode.drive.Drive;
 import org.firstinspires.ftc.teamcode.drive.GyroDrive;
+import org.firstinspires.ftc.teamcode.drive.RightyLucyDriveConstants;
 import org.firstinspires.ftc.teamcode.drive.ToeBreakerDriveConstants;
 
 
@@ -21,8 +22,8 @@ import org.firstinspires.ftc.teamcode.drive.ToeBreakerDriveConstants;
 public class EncoderGameStartTestMode extends Mode {
 
     private static final int WAIT_TIME = 4000;
-    private static final int DISTANCE_STRAFE = 33; // usually 27
-    private static final int FORWARD_DISTANCE = 36;
+    private static final int DISTANCE_STRAFE = 27; // usually 27
+    private static final int FORWARD_DISTANCE = 30;
     private final ElapsedTime runtime = new ElapsedTime();
     private SleeveDetector sleeveDetector;
     private Drive drive;
@@ -39,7 +40,7 @@ public class EncoderGameStartTestMode extends Mode {
         int viewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         WebcamName webcamName = hardwareMap.get(WebcamName.class, "webcam");
 
-        drive = new GyroDrive(hardwareMap, new ToeBreakerDriveConstants());
+        drive = new GyroDrive(hardwareMap, new RightyLucyDriveConstants());
 
         sleeveDetector = new SleeveDetector(viewId, webcamName);
         sleeveDetector.start();

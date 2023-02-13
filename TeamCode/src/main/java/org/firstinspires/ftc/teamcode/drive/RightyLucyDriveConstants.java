@@ -11,7 +11,7 @@ public class RightyLucyDriveConstants implements DriveConstants {
     private static final PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0,
             getMotorVelocityFStatic(MAX_RPM / 60 * TICKS_PER_REV));
     private static final double WHEEL_RADIUS = 1.88976378; // in
-    private static final double GEAR_RATIO = 0.051298333; // output (wheel) speed / input (motor) speed
+    private static final double GEAR_RATIO = 0.05216; // output (wheel) speed / input (motor) speed
     //    private static final double GEAR_RATIO = 1.0 / 20.0; // output (wheel) speed / input (motor) speed
     private static final double kV = 0.018;
     private static final double TRACK_WIDTH = 9.9; // in
@@ -22,9 +22,9 @@ public class RightyLucyDriveConstants implements DriveConstants {
     private static final double MAX_ANG_VEL = 2;
     private static final double MAX_ANG_ACCEL = 2;
 
-    private static final PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(8, 0, 0);
-    private static final PIDCoefficients HEADING_PID = new PIDCoefficients(8, 0, 0);
-    private static final double LATERAL_MULTIPLIER = 1.0682;
+    private static final PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(10, 0, 0);
+    private static final PIDCoefficients HEADING_PID = new PIDCoefficients(9, 0, 0);
+    private static final double LATERAL_MULTIPLIER = 1.147;
 
     private static double getMotorVelocityFStatic(double ticksPerSecond) {
         // see https://docs.google.com/document/d/1tyWrXDfMidwYyP_5H4mZyVgaEswhOC35gvdmP-V-5hA/edit#heading=h.61g9ixenznbx

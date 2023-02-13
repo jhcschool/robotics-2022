@@ -13,11 +13,9 @@ import org.firstinspires.ftc.teamcode.Layer;
 import org.firstinspires.ftc.teamcode.LayerInitInfo;
 import org.firstinspires.ftc.teamcode.PoseStorage;
 import org.firstinspires.ftc.teamcode.arm.ClipperSystem;
-import org.firstinspires.ftc.teamcode.arm.SimpleArmSystem;
 import org.firstinspires.ftc.teamcode.arm.TimedArmSystem;
 import org.firstinspires.ftc.teamcode.game.AllianceMember;
 import org.firstinspires.ftc.teamcode.game.GameConstants;
-import org.firstinspires.ftc.teamcode.game.JunctionHeight;
 
 public class AutomatedLayer extends Layer {
 
@@ -30,8 +28,7 @@ public class AutomatedLayer extends Layer {
     private Telemetry telemetry;
     private Hardware hardware;
     private LaneSystem laneSystem;
-    //    private TimedArmSystem timedArmSystem;
-    private SimpleArmSystem simpleArmSystem;
+    private TimedArmSystem simpleArmSystem;
     private ClipperSystem clipperSystem;
     private Vector2d currentJunction = null;
 
@@ -52,8 +49,7 @@ public class AutomatedLayer extends Layer {
         int viewId = initInfo.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", initInfo.hardwareMap.appContext.getPackageName());
 
         laneSystem = new LaneSystem(hardware.drive, GameConstants.LANE_COORDINATES);
-//        timedArmSystem = new TimedArmSystem(hardware.slideArmMotor);
-        simpleArmSystem = new SimpleArmSystem(hardware.slideArmMotor);
+        simpleArmSystem = new TimedArmSystem(hardware.slideArmMotor);
 
         sleeveSystem = new SleeveSystem(viewId, hardware.webcamName, (Float f) -> {
             navigateBack(f);

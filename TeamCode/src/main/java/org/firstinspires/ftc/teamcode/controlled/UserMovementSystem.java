@@ -16,12 +16,13 @@ public class UserMovementSystem {
     private DcMotorEx frontLeftMotor, rearLeftMotor, rearRightMotor, frontRightMotor;
     private MovementMode movementMode = MovementMode.ROBOT_ORIENTED;
     private double allianceCorrection = 0;
+    private double powerMultiplier = 1.0;
 
     public UserMovementSystem(Gamepad gamepad, Drive drive) {
         this.gamepad = gamepad;
         this.drive = drive;
 
-        allianceCorrection = PoseStorage.allianceMember == AllianceMember.RED ? Math.toRadians(90): Math.toRadians(270);
+//        allianceCorrection = PoseStorage.allianceMember == AllianceMember.RED ? Math.toRadians(90): Math.toRadians(270);
     }
 
     public UserMovementSystem(Gamepad gamepad, Drive drive, MovementMode movementMode) {
@@ -77,10 +78,11 @@ public class UserMovementSystem {
     }
 
     private void setFieldCentricPowers() {
-        Vector2d input = new Vector2d(
+        Vector2d inputBefore = new Vector2d(
                 -gamepad.left_stick_y,
                 -gamepad.left_stick_x
         ).rotated(-drive.getPoseEstimate().getHeading() + allianceCorrection);
+        Vector2d input = inputBefore.times(powerMultiplier);
 
         drive.setWeightedDrivePower(
                 new Pose2d(
@@ -92,7 +94,8 @@ public class UserMovementSystem {
     }
 
     private double withinRange(double input) {
-        return Math.max(-1, Math.min(1, input));
+        double output = input * powerMultiplier;
+        return Math.max(-1, Math.min(1, output));
     }
 
     public void toggleMovementMode() {
@@ -112,6 +115,11 @@ public class UserMovementSystem {
 
     public double getAllianceCorrection() { return allianceCorrection; }
     public void setAllianceCorrection(double allianceCorrection) { this.allianceCorrection = allianceCorrection; }
+
+    public void setPowerMultiplier(double powerMultiplier) {
+        this.powerMultiplier = powerMultiplier;
+    }
+
 
 
     enum MovementMode {

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.controlled;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 
 import org.checkerframework.checker.units.qual.C;
@@ -37,6 +38,7 @@ public class ControlledLayer extends Layer {
         telemetry = info.telemetry;
 
         hardware.drive.setPoseEstimate(PoseStorage.robotPose);
+        PoseStorage.robotPose = new Pose2d();
 
         userMovementSystem = new UserMovementSystem(hardware.gamepad1, hardware.drive);
         clipperSystem = new ClipperSystem(hardware.leftServo, hardware.rightServo);
@@ -70,8 +72,14 @@ public class ControlledLayer extends Layer {
     private void tickDriver(FrameInfo frameInfo) {
         userMovementSystem.update();
 
-        if (inputManager.getButtonAction(Button.LEFT_BUMPER) == ButtonAction.PRESS) {
+        if (inputManager.getButtonAction(Button.X) == ButtonAction.PRESS) {
             userMovementSystem.toggleMovementMode();
+        }
+
+        if (inputManager.getButton(Button.LEFT_BUMPER)) {
+            userMovementSystem.setPowerMultiplier(0.4);
+        } else {
+            userMovementSystem.setPowerMultiplier(1.0);
         }
 
         if (inputManager.getButtonAction(Button.RIGHT_BUMPER) == ButtonAction.PRESS) {
@@ -80,7 +88,7 @@ public class ControlledLayer extends Layer {
         }
 
         {
-            float total = inputManager.getAxis(Axis.RIGHT_TRIGGER) - inputManager.getAxis(Axis.LEFT_TRIGGER);
+            float total = inputManager.getAxis(Axis.RIGHT_TRIGGER) - inputManager.getAxis(Axis.LEFT_TRIGGER) * 0.7f;
             hardware.slideArmMotor.setPower(total);
 
             if (Math.abs(total) < 0.03) {

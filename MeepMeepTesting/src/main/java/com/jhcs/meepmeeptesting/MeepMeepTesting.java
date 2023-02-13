@@ -20,11 +20,11 @@ public class MeepMeepTesting {
                 .setDimensions(15, 17.5).build();
 
         DriveShim drive = entity.getDrive();
-        TrajectoryRepository repository = new BlueOppositeRepository();
+        TrajectoryRepositoryV2 repository = new BlueOppositeRepositoryV2();
         repository.build(drive);
 
-//        entity.followTrajectorySequence(repository.initialNavigation);
-        entity.followTrajectorySequence(repository.inchForwardTrajectories.get(TrajectoryRepository.AutomatedState.INITIAL_NAVIGATION));
+        entity.followTrajectorySequence(repository.initialNavigation);
+//        entity.followTrajectorySequence(repository.inchForwardTrajectories.get(TrajectoryRepository.AutomatedState.INITIAL_NAVIGATION));
 //        entity.followTrajectorySequence(repository.inchBackwardTrajectories.get(TrajectoryRepository.AutomatedState.INITIAL_NAVIGATION));
 //        entity.followTrajectorySequence(repository.coneStackMove);
 //        entity.followTrajectorySequence(repository.inchForwardTrajectories.get(TrajectoryRepository.AutomatedState.CONE_STACK_MOVE));

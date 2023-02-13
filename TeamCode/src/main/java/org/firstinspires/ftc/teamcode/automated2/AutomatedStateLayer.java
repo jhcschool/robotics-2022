@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.Layer;
 import org.firstinspires.ftc.teamcode.LayerInitInfo;
 import org.firstinspires.ftc.teamcode.PoseStorage;
 import org.firstinspires.ftc.teamcode.arm.ClipperSystem;
-import org.firstinspires.ftc.teamcode.arm.SimpleArmSystem;
+import org.firstinspires.ftc.teamcode.arm.TimedArmSystem;
 import org.firstinspires.ftc.teamcode.arm.TimedClipperSystem;
 import org.firstinspires.ftc.teamcode.automated.SleeveDetector;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
@@ -25,7 +25,7 @@ public class AutomatedStateLayer extends Layer {
     private AutomatedState lastMovementState = null;
     private AutomatedState lastState = null;
     private AutomatedState currentState = null;
-    private SimpleArmSystem simpleArmSystem;
+    private TimedArmSystem simpleArmSystem;
     private TimedClipperSystem clipperSystem;
     private SleeveDetector sleeveDetector;
     private Runnable lastCallback = null;
@@ -47,7 +47,7 @@ public class AutomatedStateLayer extends Layer {
 
         int viewId = initInfo.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", initInfo.hardwareMap.appContext.getPackageName());
         sleeveDetector = new SleeveDetector(viewId, hardware.webcamName);
-        simpleArmSystem = new SimpleArmSystem(hardware.slideArmMotor);
+        simpleArmSystem = new TimedArmSystem(hardware.slideArmMotor);
         clipperSystem = new TimedClipperSystem(hardware.leftServo, hardware.rightServo);
 
         buildThread = new Thread(() -> {
