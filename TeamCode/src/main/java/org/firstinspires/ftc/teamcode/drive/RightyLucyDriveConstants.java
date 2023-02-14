@@ -18,7 +18,7 @@ public class RightyLucyDriveConstants implements DriveConstants {
     private static final double kA = 0.0030;
     private static final double kStatic = 0.0725;
     private static final double MAX_VEL = 45;
-    private static final double MAX_ACCEL = 25;
+    private static final double MAX_ACCEL = 22.5;
     private static final double MAX_ANG_VEL = 2.3;
     private static final double MAX_ANG_ACCEL = 2.3;
 

@@ -7,10 +7,10 @@ import org.firstinspires.ftc.teamcode.drive.Drive;
 
 public class BlueOppositeRepository extends TrajectoryRepository {
 
-    private static final Pose2d INITIAL_POSITION = new Pose2d(36, 64, Math.toRadians(270));
-    private static final Pose2d JUNCTION_POSITION = new Pose2d(24, 14, Math.toRadians(270));
+    public static Pose2d INITIAL_POSITION = new Pose2d(40.7, 64, Math.toRadians(270));
+    public static Pose2d JUNCTION_POSITION = new Pose2d(24, 13, Math.toRadians(270));
 //    private static final Pose2d JUNCTION_POSITION = new Pose2d(23.25, 11, Math.toRadians(270));
-    private static final Pose2d STACK_POSITION = new Pose2d(56.25, 12, Math.toRadians(0));
+    public static Pose2d STACK_POSITION = new Pose2d(56.25, 12, Math.toRadians(0));
 
     public BlueOppositeRepository() {
         super(INITIAL_POSITION);
@@ -19,18 +19,18 @@ public class BlueOppositeRepository extends TrajectoryRepository {
     @Override
     public void build(Drive drive) {
         initialNavigation = drive.trajectorySequenceBuilder(getInitialPose())
-                .setTangent(Math.toRadians(260))
+                .setTangent(Math.toRadians(235))
                 .splineToLinearHeading(JUNCTION_POSITION, Math.toRadians(170))
                 .build();
 
         coneStackMove = drive.trajectorySequenceBuilder(JUNCTION_POSITION)
-                .setTangent(Math.toRadians(20))
+                .setTangent(Math.toRadians(10))
                 .splineToSplineHeading(STACK_POSITION, Math.toRadians(-15))
                 .build();
 
         junctionMove = drive.trajectorySequenceBuilder(STACK_POSITION)
                 .setTangent(Math.toRadians(165))
-                .splineToSplineHeading(JUNCTION_POSITION, Math.toRadians(200))
+                .splineToSplineHeading(JUNCTION_POSITION, Math.toRadians(190))
                 .build();
 
         {
