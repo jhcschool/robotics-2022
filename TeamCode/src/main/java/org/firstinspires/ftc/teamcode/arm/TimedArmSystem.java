@@ -6,22 +6,22 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class TimedArmSystem {
 
     public double mainWaitTime = 1.7;
-    public double mainDownTime = 0.6;
+    public double mainDownTime = 0.3;
     public double coneForce = 0.5;
 
     public double upwardForce = 1.0;
     public double downwardForce = -0.70;
-    public double constantForce = -0.2;
+    public double constantForce = -0.3;
     public double maintainForce = 0.06;
 
     public double[] stackTimesUp = {
             0.0,
-            0.06,
-            0.10,
-            0.14,
-            0.18
+            0.08,
+            0.12,
+            0.16,
+            0.20
     };
-    public static double postTime = 0.08;
+    public static double postTime = 0.19;
     private final DcMotorSimple slideArmMotor;
     private final ElapsedTime timeSinceActivation = new ElapsedTime();
     private Runnable endCallback;
@@ -70,7 +70,7 @@ public class TimedArmSystem {
 
             case CONE_POST:
                 slideArmMotor.setPower(coneForce);
-                idleIfTime(postTime);
+                stateIfTime(postTime, State.MAINTAIN);
                 break;
         }
     }
@@ -99,6 +99,7 @@ public class TimedArmSystem {
         timeSinceActivation.reset();
 
         currentState = raised ? State.MAIN_UPWARDS : State.MAIN_DOWNWARDS;
+        slideArmMotor.setPower(raised ? upwardForce : downwardForce);
     }
 
     public void liftToCone(Runnable endCallback) {

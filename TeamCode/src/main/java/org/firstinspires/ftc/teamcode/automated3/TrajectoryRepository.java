@@ -17,9 +17,9 @@ public abstract class TrajectoryRepository {
     public TrajectorySequence junctionMove = null;
     public HashMap<CustomSleeve, TrajectorySequence> parkingLocationMove = new HashMap<>();
 
-    public double initialNavigationEstimatedTime = 3.8; // estimated 4.2
-    public double coneStackMoveEstimatedTime = 3.2; // estimated 3.6
-    public double junctionMoveEstimatedTime = 3.2; // estimated 3.6
+    public double initialNavigationEstimatedTime = 2.7; // estimated 4.2
+    public double coneStackMoveEstimatedTime = 2.3; // estimated 3.6
+    public double junctionMoveEstimatedTime = 2.3; // estimated 3.6
 
     public TrajectoryRepository(Pose2d initialPose) {
         this.initialPose = initialPose;

@@ -60,6 +60,7 @@ public class GyroDrive extends Drive {
     private final DriveConstants driveConstants;
     private final TrajectoryVelocityConstraint velocityConstraint;
     private final TrajectoryAccelerationConstraint accelerationConstraint;
+    private Pose2d lastPose;
 
     public GyroDrive(HardwareMap hardwareMap, DriveConstants driveConstants) {
         super(driveConstants.getKV(), driveConstants.getKA(), driveConstants.getKStatic(), driveConstants.getTrackWidth(), driveConstants.getTrackWidth(), driveConstants.getLateralMultiplier());
@@ -208,6 +209,7 @@ public class GyroDrive extends Drive {
 
     @Override
     public void update() {
+        lastPose = getPoseEstimate();
         updatePoseEstimate();
         DriveSignal signal = trajectorySequenceRunner.update(getPoseEstimate(), getPoseVelocity());
         if (signal != null) setDriveSignal(signal);

@@ -19,6 +19,9 @@ import org.firstinspires.ftc.teamcode.input.InputManager;
 
 public class ControlledLayer extends Layer {
 
+    private static final double DEFAULT_POWER_STATE = 0.60;
+    private static final double TOGGLE_POWER_STATE = 1.0;
+
     private Hardware hardware;
     private Telemetry telemetry;
     private InputManager inputManager;
@@ -77,9 +80,9 @@ public class ControlledLayer extends Layer {
         }
 
         if (inputManager.getButton(Button.LEFT_BUMPER)) {
-            userMovementSystem.setPowerMultiplier(0.4);
+            userMovementSystem.setPowerMultiplier(TOGGLE_POWER_STATE);
         } else {
-            userMovementSystem.setPowerMultiplier(1.0);
+            userMovementSystem.setPowerMultiplier(DEFAULT_POWER_STATE);
         }
 
         if (inputManager.getButtonAction(Button.RIGHT_BUMPER) == ButtonAction.PRESS) {

@@ -132,7 +132,7 @@ public class FastAutomatedStateLayer extends Layer {
                 break;
 
             case CONE_STACK_MOVE:
-                if (timeSinceStateActivation.seconds() > (trajectoryRepository.coneStackMoveEstimatedTime - armSystem.mainWaitTime) && !startedMovingSlide) {
+                if (timeSinceStateActivation.seconds() > (trajectoryRepository.coneStackMoveEstimatedTime - 0.6) && !startedMovingSlide) {
                     startedMovingSlide = true;
                     beginConeRetrieval();
                 }

@@ -35,8 +35,8 @@ public class Hardware {
         this.gamepad1 = gamepad1;
         this.gamepad2 = gamepad2;
 
-//        drive = new GyroDrive(map, new RightyLucyDriveConstants());
-        drive = new GyroDrive(map, new ToeBreakerDriveConstants());
+        drive = new GyroDrive(map, new RightyLucyDriveConstants());
+//        drive = new GyroDrive(map, new ToeBreakerDriveConstants());
 
         slideArmMotor = map.get(DcMotorSimple.class, "slideArmMotor");
     }
