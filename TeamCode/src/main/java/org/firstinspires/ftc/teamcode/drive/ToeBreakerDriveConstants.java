@@ -16,13 +16,13 @@ public class ToeBreakerDriveConstants implements DriveConstants {
     private static final double TRACK_WIDTH = 10.64; // in
     private static final double kA = 0.003;
     private static final double kStatic = 0.045;
-    private static final double MAX_VEL = 30;
-    private static final double MAX_ACCEL = 15;
-    private static final double MAX_ANG_VEL = Math.toRadians(60);
-    private static final double MAX_ANG_ACCEL = Math.toRadians(60);
+    private static final double MAX_VEL = 40;
+    private static final double MAX_ACCEL = 20;
+    private static final double MAX_ANG_VEL = 2.3;
+    private static final double MAX_ANG_ACCEL = 2.3;
 
-    private static final PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(10, 0, 0);
-    private static final PIDCoefficients HEADING_PID = new PIDCoefficients(9, 0, 0);
+    private static final PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(15, 0, 0);
+    private static final PIDCoefficients HEADING_PID = new PIDCoefficients(15, 0, 0);
     private static final double LATERAL_MULTIPLIER = 1.129;
 
     private static double getMotorVelocityFStatic(double ticksPerSecond) {

@@ -22,8 +22,8 @@ public class RightyLucyDriveConstants implements DriveConstants {
     private static final double MAX_ANG_VEL = 2.3;
     private static final double MAX_ANG_ACCEL = 2.3;
 
-    private static final PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(10, 0, 0);
-    private static final PIDCoefficients HEADING_PID = new PIDCoefficients(9, 0, 0);
+    private static final PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(15, 0, 0);
+    private static final PIDCoefficients HEADING_PID = new PIDCoefficients(15, 0, 0);
     private static final double LATERAL_MULTIPLIER = 1.147;
 
     private static double getMotorVelocityFStatic(double ticksPerSecond) {

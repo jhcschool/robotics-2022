@@ -16,14 +16,14 @@ public class MeepMeepTesting {
         RoadRunnerBotEntity entity = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setColorScheme(new ColorSchemeBlueDark())
-                .setConstraints(30, 15, 2, 2, 9.9)
+                .setConstraints(40, 20, 2.3, 2.3, 9.9)
                 .setDimensions(15, 17.5).build();
 
         DriveShim drive = entity.getDrive();
         TrajectoryRepositoryV2 repository = new BlueOppositeRepositoryV2();
         repository.build(drive);
 
-        entity.followTrajectorySequence(repository.initialNavigation);
+//        entity.followTrajectorySequence(repository.initialNavigation);
 //        entity.followTrajectorySequence(repository.inchForwardTrajectories.get(TrajectoryRepository.AutomatedState.INITIAL_NAVIGATION));
 //        entity.followTrajectorySequence(repository.inchBackwardTrajectories.get(TrajectoryRepository.AutomatedState.INITIAL_NAVIGATION));
 //        entity.followTrajectorySequence(repository.coneStackMove);
@@ -32,7 +32,7 @@ public class MeepMeepTesting {
 //        entity.followTrajectorySequence(repository.junctionMove);
 //                entity.followTrajectorySequence(repository.inchForwardTrajectories.get(TrajectoryRepository.AutomatedState.JUNCTION_MOVE));
 //        entity.followTrajectorySequence(repository.inchBackwardTrajectories.get(TrajectoryRepository.AutomatedState.JUNCTION_MOVE));
-//        entity.followTrajectorySequence(repository.parkingLocationMove.get(TrajectoryRepository.CustomSleeve.LEFT));
+        entity.followTrajectorySequence(repository.parkingLocationMove.get(TrajectoryRepository.CustomSleeve.LEFT));
 //        entity.followTrajectorySequence(repository.parkingLocationMove.get(TrajectoryRepository.CustomSleeve.CENTER));
 //        entity.followTrajectorySequence(repository.parkingLocationMove.get(TrajectoryRepository.CustomSleeve.RIGHT));
 

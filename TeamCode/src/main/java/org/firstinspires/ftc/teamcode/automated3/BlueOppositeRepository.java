@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.drive.Drive;
 public class BlueOppositeRepository extends TrajectoryRepository {
 
     public static Pose2d INITIAL_POSITION = new Pose2d(40.7, 64, Math.toRadians(270));
-    public static Pose2d JUNCTION_POSITION = new Pose2d(24, 13, Math.toRadians(270));
+    public static Pose2d JUNCTION_POSITION = new Pose2d(24, 13.5, Math.toRadians(270));
 //    private static final Pose2d JUNCTION_POSITION = new Pose2d(23.25, 11, Math.toRadians(270));
     public static Pose2d STACK_POSITION = new Pose2d(56.25, 12, Math.toRadians(0));
 

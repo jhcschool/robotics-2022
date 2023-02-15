@@ -36,6 +36,8 @@ public abstract class Application extends Mode {
             frameInfo.time = runtime.seconds();
             frameInfo.deltaTime = frameInfo.time - time;
 
+            telemetry.addData("Frame Time", frameInfo.deltaTime);
+
             time = frameInfo.time;
 
             for (Layer layer : layers) {
@@ -66,6 +68,8 @@ public abstract class Application extends Mode {
         {
             frameInfo.time = runtime.seconds();
             frameInfo.deltaTime = frameInfo.time - time;
+
+            telemetry.addData("Frame Time", frameInfo.deltaTime);
 
             time = frameInfo.time;
 

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.automated3;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.CustomSleeve;
 import org.firstinspires.ftc.teamcode.FrameInfo;
 import org.firstinspires.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.teamcode.Layer;
@@ -16,7 +17,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 public class FastAutomatedStateLayer extends Layer {
 
     // ALERT!!!!!: Very bad code I made because time is limited
-    private static final double RETURN_TIME = 8;
+    private static final double RETURN_TIME = 6;
     private final TrajectoryRepository trajectoryRepository;
     private final Object buildSync = new Object();
     private Telemetry telemetry;
@@ -27,6 +28,7 @@ public class FastAutomatedStateLayer extends Layer {
     private TimedArmSystem armSystem;
     private TimedClipperSystem clipperSystem;
     private SleeveDetector sleeveDetector;
+    private CustomSleeve sleeveResult = null;
     private Thread buildThread;
     private boolean built = false;
 
@@ -58,6 +60,7 @@ public class FastAutomatedStateLayer extends Layer {
             }
         });
         buildThread.start();
+        sleeveDetector.start();
     }
 
     @Override
@@ -94,6 +97,8 @@ public class FastAutomatedStateLayer extends Layer {
             moveToState(AutomatedState.INITIAL_NAVIGATION);
             hardware.drive.followTrajectorySequenceAsync(trajectoryRepository.initialNavigation);
         });
+
+        sleeveResult = sleeveDetector.getResult();
     }
 
     @Override
@@ -106,6 +111,7 @@ public class FastAutomatedStateLayer extends Layer {
         currentTime = frameInfo.time;
 
         telemetry.addLine("Current state is: " + currentState.name());
+        telemetry.addData("Sleeve Result", sleeveResult.name());
 
         switch (currentState) {
             case INITIAL_NAVIGATION:
@@ -193,7 +199,7 @@ public class FastAutomatedStateLayer extends Layer {
     private void afterConeRelease() {
             if (shouldReturnToPark()) {
                 moveToState(AutomatedState.PARKING_LOCATION_MOVE);
-                TrajectorySequence returnTrajectory = trajectoryRepository.parkingLocationMove.get(sleeveDetector.getResult());
+                TrajectorySequence returnTrajectory = trajectoryRepository.parkingLocationMove.get(sleeveResult);
                 hardware.drive.followTrajectorySequenceAsync(returnTrajectory);
             } else {
                 moveToState(AutomatedState.CONE_STACK_MOVE);
