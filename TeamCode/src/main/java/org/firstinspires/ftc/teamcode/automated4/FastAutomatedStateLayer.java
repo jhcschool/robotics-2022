@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.automated3;
+package org.firstinspires.ftc.teamcode.automated4;
 
 import com.acmerobotics.roadrunner.trajectory.MarkerCallback;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
@@ -33,6 +33,8 @@ public class FastAutomatedStateLayer extends Layer {
     private CustomSleeve sleeveResult = null;
     private Thread buildThread;
     private boolean built = false;
+    private int cycle = 0;
+
     private boolean startedMovingSlide = false;
     private boolean doneMovingSlide = false;
 
@@ -113,6 +115,7 @@ public class FastAutomatedStateLayer extends Layer {
 
         telemetry.addLine("Current state is: " + currentState.name());
         telemetry.addData("Sleeve result", sleeveResult.name());
+        telemetry.addData("Current cycle", cycle);
 
         switch (currentState) {
             case INITIAL_NAVIGATION:
@@ -194,7 +197,7 @@ public class FastAutomatedStateLayer extends Layer {
         moveToState(AutomatedState.SLIDE_UP_PAST_CONE);
         armSystem.liftPastCone(() -> {
                 moveToState(AutomatedState.JUNCTION_MOVE);
-                hardware.drive.followTrajectorySequenceAsync(trajectoryRepository.junctionMove);
+                hardware.drive.followTrajectorySequenceAsync(trajectoryRepository.getJunctionMove(hardware.drive));
         });
     }
 
@@ -204,8 +207,9 @@ public class FastAutomatedStateLayer extends Layer {
                 TrajectorySequence returnTrajectory = trajectoryRepository.parkingLocationMove.get(sleeveResult);
                 hardware.drive.followTrajectorySequenceAsync(returnTrajectory);
             } else {
+                cycle++;
                 moveToState(AutomatedState.CONE_STACK_MOVE);
-                hardware.drive.followTrajectorySequenceAsync(trajectoryRepository.coneStackMove);
+                hardware.drive.followTrajectorySequenceAsync(trajectoryRepository.getConeStackMove(hardware.drive));
             }
     }
 

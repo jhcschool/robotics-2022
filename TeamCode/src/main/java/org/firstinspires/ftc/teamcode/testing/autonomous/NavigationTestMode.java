@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.CustomSleeve;
 import org.firstinspires.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.teamcode.Mode;
-import org.firstinspires.ftc.teamcode.automated3.AutomatedState;
 import org.firstinspires.ftc.teamcode.automated3.BlueOppositeRepository;
 import org.firstinspires.ftc.teamcode.automated3.TrajectoryRepository;
 import org.firstinspires.ftc.teamcode.drive.Drive;

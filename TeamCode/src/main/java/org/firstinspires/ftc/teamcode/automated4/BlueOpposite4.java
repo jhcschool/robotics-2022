@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.automated3;
+package org.firstinspires.ftc.teamcode.automated4;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
@@ -6,8 +6,8 @@ import org.firstinspires.ftc.teamcode.Application;
 import org.firstinspires.ftc.teamcode.PoseStorage;
 import org.firstinspires.ftc.teamcode.game.AllianceMember;
 
-@Autonomous(name = "Blue Opposite 3", group = "Automated")
-public class BlueOpposite3 extends Application {
+@Autonomous(name = "Blue Opposite 4", group = "Automated")
+public class BlueOpposite4 extends Application {
     @Override
     public void onInit() {
         super.onInit();

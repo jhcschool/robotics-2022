@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class TimedArmSystem {
 
     public double mainWaitTime = 1.7;
-    public double mainDownTime = 0.3;
+    public double mainDownTime = 0.1;
     public double coneForce = 0.5;
 
     public double upwardForce = 1.0;
