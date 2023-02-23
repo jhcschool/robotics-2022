@@ -21,8 +21,8 @@ public class ToeBreakerDriveConstants implements DriveConstants {
     private static final double MAX_ANG_VEL = 2.3;
     private static final double MAX_ANG_ACCEL = 2.3;
 
-    private static final PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(18, 0, 0);
-    private static final PIDCoefficients HEADING_PID = new PIDCoefficients(18, 0, 0);
+    private static final PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(30, 0, 1.5);
+    private static final PIDCoefficients HEADING_PID = new PIDCoefficients(20, 0, 1.5);
     private static final double LATERAL_MULTIPLIER = 1.129;
 
     private static double getMotorVelocityFStatic(double ticksPerSecond) {
