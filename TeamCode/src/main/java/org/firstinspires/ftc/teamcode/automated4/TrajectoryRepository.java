@@ -15,6 +15,8 @@ public abstract class TrajectoryRepository {
     public abstract TrajectorySequence getConeStackMove(Drive drive);
     public abstract TrajectorySequence getJunctionMove(Drive drive);
 
+    public abstract boolean canDoFourthCycle(CustomSleeve sleeve);
+
     public TrajectorySequence initialNavigation = null;
     public HashMap<CustomSleeve, TrajectorySequence> parkingLocationMove = new HashMap<>();
 

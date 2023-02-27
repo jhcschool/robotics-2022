@@ -6,13 +6,14 @@ import org.firstinspires.ftc.teamcode.CustomSleeve;
 import org.firstinspires.ftc.teamcode.drive.Drive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-public class BlueOppositeRepository extends TrajectoryRepository {
+public class BlueAlignedRepository extends TrajectoryRepository {
 
-    public static Pose2d INITIAL_POSITION = new Pose2d(40.5, 64.5, Math.toRadians(270));
-    public static Pose2d JUNCTION_POSITION = new Pose2d(24, 12.5, Math.toRadians(270));
-    public static Pose2d STACK_POSITION = new Pose2d(58, 14.5, Math.toRadians(0));
+    public static Pose2d INITIAL_POSITION = new Pose2d(40.8, 64, Math.toRadians(270));
+    public static Pose2d JUNCTION_POSITION = new Pose2d(24, 14.75, Math.toRadians(270));
+    //    private static final Pose2d JUNCTION_POSITION = new Pose2d(23.25, 11, Math.toRadians(270));
+    public static Pose2d STACK_POSITION = new Pose2d(55.5, 14.5, Math.toRadians(0));
 
-    public BlueOppositeRepository() {
+    public BlueAlignedRepository() {
         super(INITIAL_POSITION);
     }
 

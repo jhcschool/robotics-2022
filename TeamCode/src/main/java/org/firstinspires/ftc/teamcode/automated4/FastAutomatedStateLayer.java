@@ -227,6 +227,10 @@ public class FastAutomatedStateLayer extends Layer {
     }
 
     private boolean shouldReturnToPark() {
+        if (cycle == 3) {
+            if (!trajectoryRepository.canDoFourthCycle(sleeveResult)) return true;
+        }
+
         return currentTime > (30 - RETURN_TIME);
     }
 
