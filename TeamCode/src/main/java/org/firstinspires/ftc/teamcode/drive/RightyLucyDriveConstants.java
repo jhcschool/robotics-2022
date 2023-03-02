@@ -11,7 +11,7 @@ public class RightyLucyDriveConstants implements DriveConstants {
     private static final PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0,
             getMotorVelocityFStatic(MAX_RPM / 60 * TICKS_PER_REV));
     private static final double WHEEL_RADIUS = 1.88976378; // in
-    private static final double GEAR_RATIO = 0.0542; // output (wheel) speed / input (motor) speed // reduced gear ratio = increased distance
+    private static final double GEAR_RATIO = 0.0547; // output (wheel) speed / input (motor) speed // reduced gear ratio = increased distance
 //     private static final double GEAR_RATIO = 0.0.0524505; // output (wheel) speed / input (motor) speed
     private static final double kV = 0.0158;
     private static final double TRACK_WIDTH = 9.9; // in
@@ -22,8 +22,8 @@ public class RightyLucyDriveConstants implements DriveConstants {
     private static final double MAX_ANG_VEL = 2.3;
     private static final double MAX_ANG_ACCEL = 2.3;
 
-    private static final PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(20, 0, 1.5); // TODO: change back to 1.6 if terrible
-    private static final PIDCoefficients HEADING_PID = new PIDCoefficients(15, 0, 1.4);
+    private static final PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(20, 0, 1.65); // TODO: change back to 1.6 if terrible
+    private static final PIDCoefficients HEADING_PID = new PIDCoefficients(15, 0, 1.5);
 //    private static final double LATERAL_MULTIPLIER = 1.14949;
     private static final double LATERAL_MULTIPLIER = 1.06; // the higher the value, the longer the distance it moves
 
