@@ -6,13 +6,13 @@ import org.firstinspires.ftc.teamcode.Application;
 import org.firstinspires.ftc.teamcode.PoseStorage;
 import org.firstinspires.ftc.teamcode.game.AllianceMember;
 
-@Autonomous(name = "Blue Aligned 4", group = "Automated")
-public class BlueAligned4 extends Application {
+@Autonomous(name = "LEFT MAIN!!!", group = "Automated")
+public class LeftAuto extends Application {
     @Override
     public void onInit() {
         super.onInit();
 
         PoseStorage.allianceMember = AllianceMember.BLUE;
-        addLayer(new FastAutomatedStateLayer(new BlueAlignedRepository()));
+        addLayer(new FastAutomatedStateLayer(new LeftRepository()));
     }
 }
