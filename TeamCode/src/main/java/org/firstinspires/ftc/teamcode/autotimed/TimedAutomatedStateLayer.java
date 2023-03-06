@@ -13,12 +13,10 @@ import org.firstinspires.ftc.teamcode.PoseStorage;
 import org.firstinspires.ftc.teamcode.arm.TimedArmSystem;
 import org.firstinspires.ftc.teamcode.arm.TimedClipperSystem;
 import org.firstinspires.ftc.teamcode.automated.SleeveDetector;
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 public class TimedAutomatedStateLayer extends Layer {
 
-    // ALERT!!!!!: Very bad code I made because time is limited
-    private final TrajectoryRepository trajectoryRepository;
+    private final TimedRepository timedRepository;
     private Telemetry telemetry;
     private Hardware hardware;
     private double currentTime = 0.0;
@@ -31,10 +29,10 @@ public class TimedAutomatedStateLayer extends Layer {
     private boolean startedMovingSlide = false;
     private boolean doneMovingSlide = false;
 
-    public TimedAutomatedStateLayer(TrajectoryRepository trajectoryRepository) {
+    public TimedAutomatedStateLayer(TimedRepository timedRepository) {
         super();
 
-        this.trajectoryRepository = trajectoryRepository;
+        this.timedRepository = timedRepository;
     }
 
     @Override
@@ -87,11 +85,11 @@ public class TimedAutomatedStateLayer extends Layer {
 
         switch (currentState) {
             case INITIAL_FORWARD:
-                if (timeSinceStateActivation.seconds() > (trajectoryRepository.initialNavigationEstimatedTime - armSystem.mainWaitTime) && !startedMovingSlide) {
+                if (timeSinceStateActivation.seconds() > (timedRepository.initialNavigationEstimatedTime - armSystem.mainWaitTime) && !startedMovingSlide) {
                     startedMovingSlide = true;
                     beginSlideUp();
                 }
-                if (trajectoryRepository.initialForward(hardware.drive, timeSinceStateActivation) && doneMovingSlide) {
+                if (timedRepository.initialForward(hardware.drive, timeSinceStateActivation) && doneMovingSlide) {
                     startedMovingSlide = false;
                     doneMovingSlide = false;
                     moveToState(AutomatedState.JUNCTION_STRAFE);
@@ -99,30 +97,34 @@ public class TimedAutomatedStateLayer extends Layer {
                 break;
 
             case JUNCTION_STRAFE:
-                if (trajectoryRepository.junctionStrafe(hardware.drive, timeSinceStateActivation)) {
+                if (timedRepository.junctionStrafe(hardware.drive, timeSinceStateActivation)) {
                     beginSlideDown();
                 }
                 break;
 
             case JUNCTION_BACK:
-                if (trajectoryRepository.junctionBackward(hardware.drive, timeSinceStateActivation)) {
-                    moveToState(AutomatedState.ROTATE_FACE_STACK);
+                if (timedRepository.junctionBackward(hardware.drive, timeSinceStateActivation)) {
+                    if (shouldReturnToPark()) {
+                        moveToState(AutomatedState.PARKING_LOCATION_MOVE);
+                    } else {
+                        moveToState(AutomatedState.ROTATE_FACE_STACK);
+                    }
                 }
                 break;
 
             case ROTATE_FACE_STACK:
-                if (trajectoryRepository.rotateFaceStack(hardware.drive, timeSinceStateActivation)) {
+                if (timedRepository.rotateFaceStack(hardware.drive, timeSinceStateActivation)) {
                     moveToState(AutomatedState.STACK_FORWARD);
                 }
                 break;
 
             case STACK_FORWARD:
-                if (timeSinceStateActivation.seconds() > (trajectoryRepository.coneStackMoveEstimatedTime - 0.6) && !startedMovingSlide) {
+                if (timeSinceStateActivation.seconds() > (timedRepository.coneStackMoveEstimatedTime - 0.6) && !startedMovingSlide) {
                     startedMovingSlide = true;
                     beginConeRetrieval();
                 }
 
-                if (trajectoryRepository.stackForward(hardware.drive, timeSinceStateActivation) && doneMovingSlide) {
+                if (timedRepository.stackForward(hardware.drive, timeSinceStateActivation) && doneMovingSlide) {
                     startedMovingSlide = false;
                     doneMovingSlide = false;
                     beginClip();
@@ -130,18 +132,18 @@ public class TimedAutomatedStateLayer extends Layer {
                 break;
 
             case STACK_BACK:
-                if (timeSinceStateActivation.seconds() > (trajectoryRepository.junctionMoveEstimatedTime - armSystem.mainWaitTime) && !startedMovingSlide) {
+                if (timeSinceStateActivation.seconds() > (timedRepository.junctionMoveEstimatedTime - armSystem.mainWaitTime) && !startedMovingSlide) {
                     startedMovingSlide = true;
                     beginSlideUp();
                 }
-                if (trajectoryRepository.stackBackward(hardware.drive, timeSinceStateActivation) && doneMovingSlide) {
+                if (timedRepository.stackBackward(hardware.drive, timeSinceStateActivation) && doneMovingSlide) {
                     startedMovingSlide = false;
                     doneMovingSlide = false;
                     beginSlideDown();
                 }
 
             case ROTATE_ALIGN_JUNCTION:
-                if (trajectoryRepository.rotateAlignJunction(hardware.drive, timeSinceStateActivation)) {
+                if (timedRepository.rotateAlignJunction(hardware.drive, timeSinceStateActivation)) {
                     moveToState(AutomatedState.JUNCTION_STRAFE);
                 }
                 break;
@@ -192,11 +194,7 @@ public class TimedAutomatedStateLayer extends Layer {
     }
 
     private void afterConeRelease() {
-            if (shouldReturnToPark()) {
-                moveToState(AutomatedState.PARKING_LOCATION_MOVE);
-            } else {
-                moveToState(AutomatedState.JUNCTION_BACK);
-            }
+        moveToState(AutomatedState.JUNCTION_BACK);
     }
 
     private void beginSlideUp() {

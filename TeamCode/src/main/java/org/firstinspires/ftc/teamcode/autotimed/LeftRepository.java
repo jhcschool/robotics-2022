@@ -1,70 +1,80 @@
 package org.firstinspires.ftc.teamcode.autotimed;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.CustomSleeve;
 import org.firstinspires.ftc.teamcode.drive.Drive;
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-public class LeftRepository extends TrajectoryRepository {
 
-    public static Pose2d INITIAL_POSITION = new Pose2d(40.5, 64.5, Math.toRadians(270));
-    public static Pose2d JUNCTION_POSITION = new Pose2d(24, 12.5, Math.toRadians(270));
-    public static Pose2d STACK_POSITION = new Pose2d(58, 14.5, Math.toRadians(0));
 
-    public LeftRepository() {
-        super(INITIAL_POSITION);
+public class LeftRepository extends TimedRepository {
+    private static final double MAX_POWER = 0.5;
+
+    private static final double INITIAL_FORWARD_TIME = 5.0;
+    private static final double JUNCTION_STRAFE_TIME = 2.0;
+    private static final double JUNCTION_BACKWARD_TIME = 2.0;
+    private static final double ROTATE_FACE_STACK_TIME = 2.0;
+    private static final double STACK_FORWARD_TIME = 5.0;
+    private static final double STACK_BACKWARD_TIME = 5.0;
+    private static final double ROTATE_ALIGN_JUNCTION_TIME = 2.0;
+
+    private static final double SLEEVE_TIME = 5.0;
+
+    @Override
+    public boolean initialForward(Drive drive, ElapsedTime timeSinceActivation) {
+        drive.setWeightedDrivePower(new Pose2d(0.0, MAX_POWER, 0.0));
+        return timeSinceActivation.seconds() > INITIAL_FORWARD_TIME;
     }
 
     @Override
-    public TrajectorySequence getConeStackMove(Drive drive) {
-        return drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                .setTangent(Math.toRadians(10))
-                .splineToSplineHeading(STACK_POSITION, Math.toRadians(-15))
-                .build();
+    public boolean junctionStrafe(Drive drive, ElapsedTime timeSinceActivation) {
+        drive.setWeightedDrivePower(new Pose2d(MAX_POWER, 0.0, 0.0));
+        return timeSinceActivation.seconds() > JUNCTION_STRAFE_TIME;
     }
 
     @Override
-    public TrajectorySequence getJunctionMove(Drive drive) {
-        return drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                .setTangent(Math.toRadians(165))
-                .splineToSplineHeading(JUNCTION_POSITION, Math.toRadians(190))
-                .build();
+    public boolean junctionBackward(Drive drive, ElapsedTime timeSinceActivation) {
+        drive.setWeightedDrivePower(new Pose2d(0.0, -MAX_POWER, 0.0));
+        return timeSinceActivation.seconds() > JUNCTION_BACKWARD_TIME;
     }
 
     @Override
-    public boolean canDoFourthCycle(CustomSleeve sleeve) {
-        if (sleeve == CustomSleeve.LEFT) return false;
-        return true;
+    public boolean rotateFaceStack(Drive drive, ElapsedTime timeSinceActivation) {
+        drive.setWeightedDrivePower(new Pose2d(0.0, 0.0, MAX_POWER));
+        return timeSinceActivation.seconds() > ROTATE_FACE_STACK_TIME;
     }
 
     @Override
-    public void build(Drive drive) {
-        initialNavigation = drive.trajectorySequenceBuilder(getInitialPose())
-                .setTangent(Math.toRadians(235))
-                .splineToLinearHeading(JUNCTION_POSITION, Math.toRadians(170))
-                .build();
+    public boolean stackForward(Drive drive, ElapsedTime timeSinceActivation) {
+        drive.setWeightedDrivePower(new Pose2d(0.0, MAX_POWER, 0.0));
+        return timeSinceActivation.seconds() > STACK_FORWARD_TIME;
+    }
 
-        {
-            parkingLocationMove.put(CustomSleeve.LEFT,
-                    drive.trajectorySequenceBuilder(JUNCTION_POSITION)
-//                            .strafeLeft(36)
-                            .lineToLinearHeading(new Pose2d(60, 17.75, Math.toRadians(270)))
-                            .build()
-            );
-            parkingLocationMove.put(CustomSleeve.CENTER,
-                    drive.trajectorySequenceBuilder(JUNCTION_POSITION)
-//                            .strafeLeft(12)
-                            .lineToLinearHeading(new Pose2d(36, 17.75, Math.toRadians(270)))
-                            .build()
-            );
-            parkingLocationMove.put(CustomSleeve.RIGHT,
-                    drive.trajectorySequenceBuilder(JUNCTION_POSITION)
-//                            .strafeRight(12)
-                            .lineToLinearHeading(new Pose2d(12, 17.75, Math.toRadians(270)))
-                            .build()
-            );
+    @Override
+    public boolean stackBackward(Drive drive, ElapsedTime timeSinceActivation) {
+        drive.setWeightedDrivePower(new Pose2d(0.0, -MAX_POWER, 0.0));
+        return timeSinceActivation.seconds() > STACK_BACKWARD_TIME;
+    }
+
+    @Override
+    public boolean rotateAlignJunction(Drive drive, ElapsedTime timeSinceActivation) {
+        drive.setWeightedDrivePower(new Pose2d(0.0, 0.0, -MAX_POWER));
+        return timeSinceActivation.seconds() > ROTATE_ALIGN_JUNCTION_TIME;
+    }
+
+    @Override
+    public boolean parkingLocationMove(Drive drive, ElapsedTime timeSinceActivation, CustomSleeve sleeveResult) {
+        switch (sleeveResult) {
+            case LEFT:
+                drive.setWeightedDrivePower(new Pose2d(0.0, MAX_POWER, 0.0));
+                return timeSinceActivation.seconds() > SLEEVE_TIME;
+            case RIGHT:
+                drive.setWeightedDrivePower(new Pose2d(0.0, -MAX_POWER, 0.0));
+                return timeSinceActivation.seconds() > SLEEVE_TIME;
+            case CENTER:
+            default:
+                return true;
         }
-
     }
 }

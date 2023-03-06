@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 import java.util.HashMap;
 
-public abstract class TrajectoryRepository {
+public abstract class TimedRepository {
     public abstract boolean initialForward(Drive drive, ElapsedTime timeSinceActivation);
     public abstract boolean junctionStrafe(Drive drive, ElapsedTime timeSinceActivation);
     public abstract boolean junctionBackward(Drive drive, ElapsedTime timeSinceActivation);

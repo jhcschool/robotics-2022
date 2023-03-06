@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.Application;
 import org.firstinspires.ftc.teamcode.PoseStorage;
 import org.firstinspires.ftc.teamcode.game.AllianceMember;
 
-@Autonomous(name = "RIGHT MAIN!!!", group = "Automated")
+@Autonomous(name = "Right timed", group = "Automated")
 public class RightAuto extends Application {
     @Override
     public void onInit() {
