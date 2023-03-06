@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.automated4;
+package org.firstinspires.ftc.teamcode.autotimed;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
