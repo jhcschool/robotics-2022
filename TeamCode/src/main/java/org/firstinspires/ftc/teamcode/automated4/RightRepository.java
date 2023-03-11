@@ -27,7 +27,7 @@ public class RightRepository extends TrajectoryRepository {
     }
 
     @Override
-    public TrajectorySequence getJunctionMove(Drive drive) {
+    public TrajectorySequence getJunctionMove(Drive drive, int currentCycle) {
         return drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                 .setTangent(Math.toRadians(10))
                 .splineToSplineHeading(JUNCTION_POSITION, Math.toRadians(-15))

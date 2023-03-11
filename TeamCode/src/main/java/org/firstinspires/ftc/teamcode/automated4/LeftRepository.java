@@ -10,7 +10,7 @@ public class LeftRepository extends TrajectoryRepository {
 
     public static Pose2d INITIAL_POSITION = new Pose2d(40.5, 64.5, Math.toRadians(270));
     public static Pose2d JUNCTION_POSITION = new Pose2d(24, 12.5, Math.toRadians(270));
-    public static Pose2d STACK_POSITION = new Pose2d(58, 14.5, Math.toRadians(0));
+    public static Pose2d STACK_POSITION = new Pose2d(58, 12.5, Math.toRadians(0));
 
     public LeftRepository() {
         super(INITIAL_POSITION);
@@ -25,10 +25,11 @@ public class LeftRepository extends TrajectoryRepository {
     }
 
     @Override
-    public TrajectorySequence getJunctionMove(Drive drive) {
+    public TrajectorySequence getJunctionMove(Drive drive, int currentCycle) {
+        Pose2d junctionPosition = new Pose2d(JUNCTION_POSITION.getX(), JUNCTION_POSITION.getY() + currentCycle * 0.4, JUNCTION_POSITION.getHeading());
         return drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                 .setTangent(Math.toRadians(165))
-                .splineToSplineHeading(JUNCTION_POSITION, Math.toRadians(190))
+                .splineToSplineHeading(junctionPosition, Math.toRadians(190))
                 .build();
     }
 
@@ -49,7 +50,7 @@ public class LeftRepository extends TrajectoryRepository {
             parkingLocationMove.put(CustomSleeve.LEFT,
                     drive.trajectorySequenceBuilder(JUNCTION_POSITION)
 //                            .strafeLeft(36)
-                            .lineToLinearHeading(new Pose2d(60, 17.75, Math.toRadians(270)))
+                            .lineToLinearHeading(new Pose2d(63, 17.75, Math.toRadians(270)))
                             .build()
             );
             parkingLocationMove.put(CustomSleeve.CENTER,

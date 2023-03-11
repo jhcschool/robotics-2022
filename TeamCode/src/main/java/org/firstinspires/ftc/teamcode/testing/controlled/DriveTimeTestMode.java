@@ -41,15 +41,20 @@ public class DriveTimeTestMode extends Mode {
         elapsedTime.reset();
     }
 
+    double lastTime = 0.0;
+
     @Override
     public void tick() {
         super.tick();
         telemetry.update();
         inputManager.update();
 
+        double deltaTime = elapsedTime.seconds() - lastTime;
+        lastTime = elapsedTime.seconds();
+
         if (state != State.IDLE) {
             if (elapsedTime.seconds() > modifiers.get(Modifier.TIME)) {
-                moveToState(State.STRAFE_LEFT);
+                moveToState(State.IDLE);
             }
         }
 
@@ -58,22 +63,22 @@ public class DriveTimeTestMode extends Mode {
                 drive.setMotorPowers(0.0, 0.0, 0.0, 0.0);
                 break;
             case FORWARD:
-                drive.setWeightedDrivePower(new Pose2d(0.0, modifiers.get(Modifier.POWER), 0.0));
-                break;
-            case STRAFE_LEFT:
-                drive.setWeightedDrivePower(new Pose2d(-modifiers.get(Modifier.POWER), 0.0, 0.0));
-                break;
-            case STRAFE_RIGHT:
                 drive.setWeightedDrivePower(new Pose2d(modifiers.get(Modifier.POWER), 0.0, 0.0));
                 break;
+            case STRAFE_LEFT:
+                drive.setWeightedDrivePower(new Pose2d(0, -modifiers.get(Modifier.POWER), 0.0));
+                break;
+            case STRAFE_RIGHT:
+                drive.setWeightedDrivePower(new Pose2d(0.0, modifiers.get(Modifier.POWER), 0.0));
+                break;
             case BACKWARD:
-                drive.setWeightedDrivePower(new Pose2d(0.0, -modifiers.get(Modifier.POWER), 0.0));
+                drive.setWeightedDrivePower(new Pose2d(-modifiers.get(Modifier.POWER), 0.0, 0.0));
                 break;
             case TURN_LEFT:
-                drive.setWeightedDrivePower(new Pose2d(0.0, 0.0, -modifiers.get(Modifier.POWER)));
+                drive.setWeightedDrivePower(new Pose2d(0.0, 0.0, modifiers.get(Modifier.POWER)));
                 break;
             case TURN_RIGHT:
-                drive.setWeightedDrivePower(new Pose2d(0.0, 0.0, modifiers.get(Modifier.POWER)));
+                drive.setWeightedDrivePower(new Pose2d(0.0, 0.0, -modifiers.get(Modifier.POWER)));
                 break;
 
         }
@@ -87,11 +92,15 @@ public class DriveTimeTestMode extends Mode {
                 moveToState(State.BACKWARD);
             if (inputManager.getButtonAction(Button.DPAD_LEFT) == ButtonAction.PRESS)
                 moveToState(State.STRAFE_LEFT);
+            if (inputManager.getButtonAction(Button.X) == ButtonAction.PRESS)
+                moveToState(State.TURN_LEFT);
+            if (inputManager.getButtonAction(Button.B) == ButtonAction.PRESS)
+                moveToState(State.TURN_RIGHT);
         }
 
-        if (inputManager.getButtonAction(Button.RIGHT_BUMPER) == ButtonAction.PRESS) {
+        if (inputManager.getButton(Button.RIGHT_BUMPER)) {
             double value = modifiers.get(modifier);
-            value += inputManager.getAxis(Axis.LEFT_STICK_X);
+            value += inputManager.getAxis(Axis.LEFT_STICK_X) * deltaTime;
             modifiers.put(modifier, value);
         }
 

@@ -13,16 +13,16 @@ public abstract class TrajectoryRepository {
     private final Pose2d initialPose;
 
     public abstract TrajectorySequence getConeStackMove(Drive drive);
-    public abstract TrajectorySequence getJunctionMove(Drive drive);
+    public abstract TrajectorySequence getJunctionMove(Drive drive, int currentCycle);
 
     public abstract boolean canDoFourthCycle(CustomSleeve sleeve);
 
     public TrajectorySequence initialNavigation = null;
     public HashMap<CustomSleeve, TrajectorySequence> parkingLocationMove = new HashMap<>();
 
-    public double initialNavigationEstimatedTime = 2.7; // estimated 4.2
-    public double coneStackMoveEstimatedTime = 2.3; // estimated 3.6
-    public double junctionMoveEstimatedTime = 2.3; // estimated 3.6
+    public double initialNavigationEstimatedTime = 4.0; // estimated 4.2
+    public double coneStackMoveEstimatedTime = 3.0; // estimated 3.6
+    public double junctionMoveEstimatedTime = 3.0; // estimated 3.6
 
     public TrajectoryRepository(Pose2d initialPose) {
         this.initialPose = initialPose;

@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 public class FastAutomatedStateLayer extends Layer {
 
     // ALERT!!!!!: Very bad code I made because time is limited
-    private static final double RETURN_TIME = 6;
+    private static final double RETURN_TIME = 9.5;
     private final TrajectoryRepository trajectoryRepository;
     private final Object buildSync = new Object();
     private Telemetry telemetry;
@@ -102,6 +102,8 @@ public class FastAutomatedStateLayer extends Layer {
         });
 
         sleeveResult = sleeveDetector.getResult();
+
+        armSystem.onStart();
     }
 
     @Override
@@ -197,7 +199,7 @@ public class FastAutomatedStateLayer extends Layer {
         moveToState(AutomatedState.SLIDE_UP_PAST_CONE);
         armSystem.liftPastCone(() -> {
                 moveToState(AutomatedState.JUNCTION_MOVE);
-                hardware.drive.followTrajectorySequenceAsync(trajectoryRepository.getJunctionMove(hardware.drive));
+                hardware.drive.followTrajectorySequenceAsync(trajectoryRepository.getJunctionMove(hardware.drive, cycle));
         });
     }
 

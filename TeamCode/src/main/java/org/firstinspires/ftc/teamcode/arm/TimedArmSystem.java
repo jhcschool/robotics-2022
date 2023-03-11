@@ -25,7 +25,7 @@ public class TimedArmSystem {
     private final DcMotorSimple slideArmMotor;
     private final ElapsedTime timeSinceActivation = new ElapsedTime();
     private Runnable endCallback;
-    private State currentState = State.CONSTANT;
+    private State currentState = State.INITIAL;
     private int stackedCones = 5;
 
     public TimedArmSystem(DcMotorSimple slideArmMotor) {
@@ -42,9 +42,19 @@ public class TimedArmSystem {
         this.downwardForce = downwardForce;
     }
 
+    public void onStart()
+    {
+        timeSinceActivation.reset();
+    }
+
 
     public void update() {
         switch (currentState) {
+            case INITIAL:
+                slideArmMotor.setPower(coneForce);
+                stateIfTime(0.05, State.MAINTAIN);
+                break;
+
             case CONSTANT:
                 slideArmMotor.setPower(constantForce);
                 break;
@@ -118,6 +128,7 @@ public class TimedArmSystem {
     }
 
     private enum State {
+        INITIAL,
         CONSTANT,
         MAINTAIN,
 

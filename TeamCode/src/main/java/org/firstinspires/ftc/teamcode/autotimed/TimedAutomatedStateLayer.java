@@ -162,6 +162,11 @@ public class TimedAutomatedStateLayer extends Layer {
 
     private void moveToState(AutomatedState automatedState) {
         currentState = automatedState;
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         timeSinceStateActivation.reset();
     }
 

@@ -11,21 +11,21 @@ public class RightyLucyDriveConstants implements DriveConstants {
     private static final PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0,
             getMotorVelocityFStatic(MAX_RPM / 60 * TICKS_PER_REV));
     private static final double WHEEL_RADIUS = 1.88976378; // in
-    private static final double GEAR_RATIO = 0.0533; // output (wheel) speed / input (motor) speed // reduced gear ratio = increased distance
+    private static final double GEAR_RATIO = 0.0518; // output (wheel) speed / input (motor) speed // reduced gear ratio = increased distance
 //     private static final double GEAR_RATIO = 0.0.0524505; // output (wheel) speed / input (motor) speed
     private static final double kV = 0.0158;
     private static final double TRACK_WIDTH = 9.9; // in
     private static final double kA = 0.0030;
     private static final double kStatic = 0.0725;
     private static final double MAX_VEL = 40;
-    private static final double MAX_ACCEL = 20;
-    private static final double MAX_ANG_VEL = 2.3;
-    private static final double MAX_ANG_ACCEL = 2.3;
+    private static final double MAX_ACCEL = 10;
+    private static final double MAX_ANG_VEL = 2;
+    private static final double MAX_ANG_ACCEL = 1.3;
 
-    private static final PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(20, 0, 1.6); // TODO: change back to 1.6 if terrible
-    private static final PIDCoefficients HEADING_PID = new PIDCoefficients(15, 0, 1.5);
+    private static final PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(20, 0, 1.5); // TODO: change back to 1.6 if terrible
+    private static final PIDCoefficients HEADING_PID = new PIDCoefficients(15, 0, 1.35);
 //    private static final double LATERAL_MULTIPLIER = 1.14949;
-    private static final double LATERAL_MULTIPLIER = 1.08; // the higher the value, the longer the distance it moves
+    private static final double LATERAL_MULTIPLIER = 1.082; // the higher the value, the longer the distance it moves
 
     private static double getMotorVelocityFStatic(double ticksPerSecond) {
         // see https://docs.google.com/document/d/1tyWrXDfMidwYyP_5H4mZyVgaEswhOC35gvdmP-V-5hA/edit#heading=h.61g9ixenznbx

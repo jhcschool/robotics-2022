@@ -11,25 +11,25 @@ import org.firstinspires.ftc.teamcode.drive.Drive;
 public class LeftRepository extends TimedRepository {
     private static final double MAX_POWER = 0.5;
 
-    private static final double INITIAL_FORWARD_TIME = 5.0;
-    private static final double JUNCTION_STRAFE_TIME = 2.0;
-    private static final double JUNCTION_BACKWARD_TIME = 2.0;
-    private static final double ROTATE_FACE_STACK_TIME = 2.0;
-    private static final double STACK_FORWARD_TIME = 5.0;
-    private static final double STACK_BACKWARD_TIME = 5.0;
-    private static final double ROTATE_ALIGN_JUNCTION_TIME = 2.0;
+    private static final double INITIAL_FORWARD_TIME = 1.4;
+    private static final double JUNCTION_STRAFE_TIME = 0.3;
+    private static final double JUNCTION_BACKWARD_TIME = 0.3;
+    private static final double ROTATE_FACE_STACK_TIME = 0.68;
+    private static final double STACK_FORWARD_TIME = 1.6;
+    private static final double STACK_BACKWARD_TIME = 1.6;
+    private static final double ROTATE_ALIGN_JUNCTION_TIME = 0.68;
 
-    private static final double SLEEVE_TIME = 5.0;
+    private static final double SLEEVE_TIME = 2.0;
 
     @Override
     public boolean initialForward(Drive drive, ElapsedTime timeSinceActivation) {
-        drive.setWeightedDrivePower(new Pose2d(0.0, MAX_POWER, 0.0));
+        drive.setWeightedDrivePower(new Pose2d(MAX_POWER, 0, 0.0));
         return timeSinceActivation.seconds() > INITIAL_FORWARD_TIME;
     }
 
     @Override
     public boolean junctionStrafe(Drive drive, ElapsedTime timeSinceActivation) {
-        drive.setWeightedDrivePower(new Pose2d(MAX_POWER, 0.0, 0.0));
+        drive.setWeightedDrivePower(new Pose2d(0.0, -MAX_POWER, 0.0));
         return timeSinceActivation.seconds() > JUNCTION_STRAFE_TIME;
     }
 
@@ -67,10 +67,10 @@ public class LeftRepository extends TimedRepository {
     public boolean parkingLocationMove(Drive drive, ElapsedTime timeSinceActivation, CustomSleeve sleeveResult) {
         switch (sleeveResult) {
             case LEFT:
-                drive.setWeightedDrivePower(new Pose2d(0.0, MAX_POWER, 0.0));
+                drive.setWeightedDrivePower(new Pose2d(-MAX_POWER, 0.0, 0.0));
                 return timeSinceActivation.seconds() > SLEEVE_TIME;
             case RIGHT:
-                drive.setWeightedDrivePower(new Pose2d(0.0, -MAX_POWER, 0.0));
+                drive.setWeightedDrivePower(new Pose2d(MAX_POWER, 0.0, 0.0));
                 return timeSinceActivation.seconds() > SLEEVE_TIME;
             case CENTER:
             default:
