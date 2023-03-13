@@ -97,13 +97,12 @@ public class FastAutomatedStateLayer extends Layer {
 
         moveToState(AutomatedState.CONE_CLIPPING);
         clipperSystem.beginClip(() -> {
+            armSystem.onStart();
             moveToState(AutomatedState.INITIAL_NAVIGATION);
             hardware.drive.followTrajectorySequenceAsync(trajectoryRepository.initialNavigation);
         });
 
         sleeveResult = sleeveDetector.getResult();
-
-        armSystem.onStart();
     }
 
     @Override
